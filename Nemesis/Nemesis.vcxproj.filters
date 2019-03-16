@@ -52,8 +52,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Exports.md">
+    <None Include="exports.def">
       <Filter>Source Files</Filter>
-    </Text>
+    </None>
   </ItemGroup>
 </Project>

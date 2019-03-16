@@ -1,3 +1,0 @@
-# Exports
-
-DumpProcess (Pid)
