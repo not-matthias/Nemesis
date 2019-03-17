@@ -1,11 +1,9 @@
-#include "Dump.h"
+#include "Dump.hpp"
 
-
-
-Dump::Dump()
+Dump::Dump(DWORD Pid)
 {
+	Memory *pMemory = new Memory(Pid);
 }
-
 
 Dump::~Dump()
 {

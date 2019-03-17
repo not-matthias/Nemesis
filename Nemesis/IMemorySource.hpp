@@ -9,8 +9,11 @@
 
 class IMemorySource 
 {
-public:
-	virtual void ReadMemory(DWORD Pid, DWORD_PTR StartAddress, DWORD_PTR EndAddress) = 0;
+private:
+	DWORD Pid;
 
-	// TODO: Maybe add ReadSections?
+public:
+	IMemorySource(DWORD Pid) = default;
+
+	virtual BOOL ReadMemory(DWORD_PTR StartAddress, DWORD_PTR EndAddress) = 0;
 };

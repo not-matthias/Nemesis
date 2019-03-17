@@ -20,13 +20,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DriverUtils.hpp" />
-    <ClInclude Include="Dump.h" />
+    <ClInclude Include="Dump.hpp" />
     <ClInclude Include="DumpUtils.hpp" />
-    <ClInclude Include="IMemorySource.h" />
+    <ClInclude Include="IMemorySource.hpp" />
     <ClInclude Include="Logger.hpp" />
-    <ClInclude Include="Memory.h" />
-    <ClInclude Include="MemorySource.h" />
-    <ClInclude Include="PEFile.h" />
+    <ClInclude Include="ProcessMemory.hpp" />
+    <ClInclude Include="UsermodeMemorySource.hpp" />
+    <ClInclude Include="PEFile.hpp" />
     <ClInclude Include="ProcessUtils.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -34,9 +34,10 @@
     <ClCompile Include="DllMain.cpp" />
     <ClCompile Include="Dump.cpp" />
     <ClCompile Include="DumpUtils.cpp" />
+    <ClCompile Include="IMemorySource.cpp" />
     <ClCompile Include="Logger.cpp" />
-    <ClCompile Include="Memory.cpp" />
-    <ClCompile Include="MemorySource.cpp" />
+    <ClCompile Include="ProcessMemory.cpp" />
+    <ClCompile Include="UsermodeMemorySource.cpp" />
     <ClCompile Include="PEFile.cpp" />
     <ClCompile Include="ProcessUtils.cpp" />
   </ItemGroup>
