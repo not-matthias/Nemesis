@@ -7,7 +7,7 @@
 #include <vector>
 #include <Windows.h>
 
-class Memory
+class ProcessMemory
 {
 private:
 	DWORD Pid;
@@ -16,10 +16,13 @@ private:
 	// TODO: Add list of memory sources here
 
 public:
-	Memory(DWORD Pid);
-	~Memory();
+	ProcessMemory(DWORD Pid);
+	~ProcessMemory();
 
-	BOOL ReadMemory(DWORD_PTR StartAddress, DWORD_PTR EndAddress);
-	// TODO: Read Headers
+	template <typename T> 
+	T ReadMemory(DWORD_PTR StartAddress);
+
+	PVOID ReadMemory(DWORD_PTR StartAddress, SIZE_T Size);
+
+	DWORD_PTR GetBaseAddress();
 };
-

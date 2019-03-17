@@ -66,6 +66,12 @@
     <ClInclude Include="ProcessMemory.hpp">
       <Filter>Header Files\Memory</Filter>
     </ClInclude>
+    <ClInclude Include="PESection.hpp">
+      <Filter>Header Files\PortableExecutable</Filter>
+    </ClInclude>
+    <ClInclude Include="FileWriter.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DllMain.cpp">
@@ -97,6 +103,15 @@
     </ClCompile>
     <ClCompile Include="ProcessMemory.cpp">
       <Filter>Source Files\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PESection.cpp">
+      <Filter>Source Files\PortableExecutable</Filter>
+    </ClCompile>
+    <ClCompile Include="FileWriter.cpp">
+      <Filter>Source Files\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

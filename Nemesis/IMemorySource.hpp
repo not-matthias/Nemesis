@@ -13,7 +13,12 @@ private:
 	DWORD Pid;
 
 public:
-	IMemorySource(DWORD Pid) = default;
+	IMemorySource(DWORD Pid);
 
-	virtual BOOL ReadMemory(DWORD_PTR StartAddress, DWORD_PTR EndAddress) = 0;
+	// TODO: Use template
+	//virtual BOOL ReadMemory(DWORD_PTR StartAddress, DWORD_PTR EndAddress) = 0;
+
+	virtual PVOID ReadMemory(DWORD_PTR StartAddress, SIZE_T Size) = 0;
+
+	virtual DWORD_PTR GetBaseAddress() = 0;
 };

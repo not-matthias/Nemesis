@@ -22,8 +22,10 @@
     <ClInclude Include="DriverUtils.hpp" />
     <ClInclude Include="Dump.hpp" />
     <ClInclude Include="DumpUtils.hpp" />
+    <ClInclude Include="FileWriter.h" />
     <ClInclude Include="IMemorySource.hpp" />
     <ClInclude Include="Logger.hpp" />
+    <ClInclude Include="PESection.hpp" />
     <ClInclude Include="ProcessMemory.hpp" />
     <ClInclude Include="UsermodeMemorySource.hpp" />
     <ClInclude Include="PEFile.hpp" />
@@ -34,8 +36,11 @@
     <ClCompile Include="DllMain.cpp" />
     <ClCompile Include="Dump.cpp" />
     <ClCompile Include="DumpUtils.cpp" />
+    <ClCompile Include="FileWriter.cpp" />
     <ClCompile Include="IMemorySource.cpp" />
     <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="PESection.cpp" />
     <ClCompile Include="ProcessMemory.cpp" />
     <ClCompile Include="UsermodeMemorySource.cpp" />
     <ClCompile Include="PEFile.cpp" />
@@ -65,13 +70,13 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
