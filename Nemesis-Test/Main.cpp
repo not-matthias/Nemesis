@@ -25,10 +25,9 @@ struct PROCESS {
 };
 struct DRIVER {
 	std::string DriverName;
-	int test;
 };
 
-typedef std::vector<PROCESS *> &(*GetProcessList)();
+typedef std::vector<PROCESS *> (*GetProcessList)();
 typedef std::vector<DRIVER *> (*GetDriverList)();
 
 int main()
@@ -49,40 +48,36 @@ int main()
 	//
 	// Function: GetProcessList
 	//
-	//GetProcessList fGetProcessList = (GetProcessList)GetProcAddress(hModule, "GetProcessList");
-	//if (fGetProcessList == NULL)
-	//{
-	//	std::cout << "[DEBUG] Failed to get function. (" << std::dec << GetLastError() << ")" << std::endl;
-	//	std::cin.get();
-	//	return EXIT_FAILURE;
-	//}
-	//std::cout << "[DEBUG] Function located at: 0x" << std::hex << fGetProcessList << std::endl;
+	GetProcessList fGetProcessList = (GetProcessList)GetProcAddress(hModule, "GetProcessList");
+	std::vector<PROCESS *> ProcessList = fGetProcessList();
 
-	//std::vector<PROCESS> ProcessList = fGetProcessList();
-	//std::cout << ProcessList.size() << std::endl;
+	std::cout << "[DEBUG] Function located at: 0x" << std::hex << fGetProcessList << std::endl;
+	std::cout << "Size: " << ProcessList.size() << std::endl;
 
-	//for (auto const& process : ProcessList)
-	//{
-	//	std::cout << process.ImageName.Buffer << std::endl;
-	//	std::cout << process.ProcessId << std::endl;
-	//}
+	for (auto process : ProcessList)
+	{
+		std::cout << "Element: " << std::endl;
+		std::cout << process->ImageName.Buffer << std::endl;
+		std::cout << std::dec << process->ProcessId << std::endl;
+		std::cout << std::endl;
+	}
+
 
 	//
 	// Function: GetDriverList
 	//
-	GetDriverList fGetDriverList = (GetDriverList)GetProcAddress(hModule, "GetDriverList");
-	std::vector<DRIVER *> DriverList = fGetDriverList();
+	//GetDriverList fGetDriverList = (GetDriverList)GetProcAddress(hModule, "GetDriverList");
+	//std::vector<DRIVER *> DriverList = fGetDriverList();
 
-	std::cout << "[DEBUG] Function located at: 0x" << std::hex << fGetDriverList << std::endl;
-	std::cout << "Size: " << DriverList.size() << std::endl;
+	//std::cout << "[DEBUG] Function located at: 0x" << std::hex << fGetDriverList << std::endl;
+	//std::cout << "Size: " << DriverList.size() << std::endl;
 
-	for (auto driver : DriverList)
-	{
-		std::cout << "Element: " << std::endl;
-		std::cout << driver->DriverName.c_str() << std::endl;
-		std::cout << std::dec << driver->test << std::endl;
-		std::cout << std::endl;
-	}
+	//for (auto driver : DriverList)
+	//{
+	//	std::cout << "Element: " << std::endl;
+	//	std::cout << driver->DriverName.c_str() << std::endl;
+	//	std::cout << std::endl;
+	//}
 
 
 

@@ -13,25 +13,52 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\Utils">
+    <Filter Include="Header Files\Exports">
       <UniqueIdentifier>{2949a235-804f-4e82-8543-47dab89973b2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Utils">
+    <Filter Include="Source Files\Exports">
       <UniqueIdentifier>{37ff615c-f7e7-42b0-946f-f03f0920a5fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Memory">
+      <UniqueIdentifier>{1305231e-e63b-4575-a51a-3958e3e55d2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Memory">
+      <UniqueIdentifier>{0a8e00df-b15a-4508-a681-0361d1965779}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PE">
+      <UniqueIdentifier>{38e4316a-cb29-4ee2-a466-92879d539125}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\PE">
+      <UniqueIdentifier>{70d5e972-a7a6-445d-97d3-aaa0a6c0c930}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ProcessUtils.hpp">
-      <Filter>Header Files\Utils</Filter>
+      <Filter>Header Files\Exports</Filter>
     </ClInclude>
     <ClInclude Include="DriverUtils.hpp">
-      <Filter>Header Files\Utils</Filter>
+      <Filter>Header Files\Exports</Filter>
     </ClInclude>
     <ClInclude Include="DumpUtils.hpp">
-      <Filter>Header Files\Utils</Filter>
+      <Filter>Header Files\Exports</Filter>
+    </ClInclude>
+    <ClInclude Include="Dump.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="PEFile.h">
+      <Filter>Header Files\PE</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySource.h">
+      <Filter>Header Files\Memory</Filter>
     </ClInclude>
     <ClInclude Include="Logger.hpp">
-      <Filter>Header Files\Utils</Filter>
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IMemorySource.h">
+      <Filter>Header Files\Memory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -39,16 +66,28 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ProcessUtils.cpp">
-      <Filter>Source Files\Utils</Filter>
+      <Filter>Source Files\Exports</Filter>
     </ClCompile>
     <ClCompile Include="DriverUtils.cpp">
-      <Filter>Source Files\Utils</Filter>
+      <Filter>Source Files\Exports</Filter>
     </ClCompile>
     <ClCompile Include="DumpUtils.cpp">
-      <Filter>Source Files\Utils</Filter>
+      <Filter>Source Files\Exports</Filter>
+    </ClCompile>
+    <ClCompile Include="Dump.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory.cpp">
+      <Filter>Source Files\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="MemorySource.cpp">
+      <Filter>Source Files\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="PEFile.cpp">
+      <Filter>Source Files\PE</Filter>
     </ClCompile>
     <ClCompile Include="Logger.cpp">
-      <Filter>Source Files\Utils</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
