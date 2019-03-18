@@ -12,9 +12,9 @@ ProcessMemory::~ProcessMemory()
 }
 
 template<typename T>
-inline T ProcessMemory::ReadMemory(DWORD_PTR StartAddress)
+T ProcessMemory::ReadMemory(DWORD_PTR StartAddress)
 {
-	return this->pMemorySource->ReadMemory(StartAddress, sizeof(T));
+	return reinterpret_cast<T>(this->pMemorySource->ReadMemory(StartAddress, sizeof(T)));
 }
 
 PVOID ProcessMemory::ReadMemory(DWORD_PTR StartAddress, SIZE_T Size)

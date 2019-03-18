@@ -23,7 +23,7 @@ Dump::Dump(DWORD Pid)
 	// Write to file
 	//
 	FileWriter FileWriter(&PEFile);
-	FileWriter.WriteToFile("dump.exe");
+	FileWriter.WriteToFile("D:/dump.exe");
 
 }
 

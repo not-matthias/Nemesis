@@ -72,7 +72,8 @@ VOID PEFile::SetSections()
 
 	for (WORD i = 0; i < GetSectionCount(); i++)
 	{
-		if (memcpy_s(&pSection->pSectionHeader, sizeof(IMAGE_SECTION_HEADER), pSectionHeader, sizeof(IMAGE_SECTION_HEADER)) != 0)
+		// TODO: Replace
+		if (memcpy_s(&pSection->SectionHeader, sizeof(IMAGE_SECTION_HEADER), pSectionHeader, sizeof(IMAGE_SECTION_HEADER)) != 0)
 		{
 			std::cout << "Failed to read section." << std::endl;
 		}

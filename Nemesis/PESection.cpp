@@ -3,7 +3,7 @@
 PESection::PESection()
 {
 	this->pData = 0;
-	this->pDataSize = 0;
+	this->DataSize = 0;
 	this->NormalSize = 0;
 }
 

@@ -11,6 +11,8 @@ class PEFile
 private:
 	ProcessMemory *pProcessMemory;
 
+
+public:
 	BYTE *pDosStub;
 	DWORD DosStubSize;
 
@@ -19,6 +21,7 @@ private:
 	PIMAGE_NT_HEADERS64 pNTHeader64;
 
 	std::vector<PESection *> Sections;
+
 
 public:
 	PEFile(ProcessMemory *pProcessMemory);
