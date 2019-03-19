@@ -15,7 +15,6 @@ Dump::Dump(DWORD Pid)
 
 	PEFile PEFile(&ProcessMemory);
 	PEFile.SetFileAlignment();
-	PEFile.SetEntryPoint(ProcessMemory.GetBaseAddress());
 	PEFile.AlignSectionHeaders();
 	PEFile.FixPEHeader();
 	PEFile.RemoveIAT();

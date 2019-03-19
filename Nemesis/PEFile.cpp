@@ -13,16 +13,15 @@ PEFile::PEFile(ProcessMemory *pProcessMemory)
 
 PEFile::~PEFile()
 {
-	// FIXME: Add cleanup here
-	//for (size_t i = 0; i < Sections.size(); i++)
-	//{
-	//	if (Sections[i]->pData)
-	//	{
-	//		delete[] Sections[i]->pData;
-	//	}
-	//}
+	for (size_t i = 0; i < Sections.size(); i++)
+	{
+		if (Sections[i].Content)
+		{
+			delete[] Sections[i].Content;
+		}
+	}
 
-	//Sections.clear();
+	Sections.clear();
 }
 
 //
