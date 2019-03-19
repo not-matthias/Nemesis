@@ -7,7 +7,7 @@ FileWriter::FileWriter(PEFile *pPEFile)
 
 FileWriter::~FileWriter()
 {
-	delete pPEFile;
+	//delete pPEFile;
 }
 
 BOOL FileWriter::WriteToFile(std::string FileName)
@@ -90,7 +90,7 @@ BOOL FileWriter::WriteToFile(std::string FileName)
 	dwWriteSize = sizeof(IMAGE_SECTION_HEADER);
 	for (WORD i = 0; i < pPEFile->GetSectionCount(); i++)
 	{
-		if (!WriteMemoryToFile(dwFileOffset, dwWriteSize, &pPEFile->Sections[i]->SectionHeader))
+		if (!WriteMemoryToFile(dwFileOffset, dwWriteSize, &pPEFile->Sections[i].SectionHeader))
 		{
 			return FALSE;
 		}
@@ -107,18 +107,18 @@ BOOL FileWriter::WriteToFile(std::string FileName)
 		// 
 		// Raw data not found
 		//
-		if (pPEFile->Sections[i]->SectionHeader.PointerToRawData == NULL)
+		if (pPEFile->Sections[i].SectionHeader.PointerToRawData == NULL)
 			continue;
 
 		//
 		// PointerToRawData > dwFileOffset => Padding needed
 		//
-		if (pPEFile->Sections[i]->SectionHeader.PointerToRawData > dwFileOffset)
+		if (pPEFile->Sections[i].SectionHeader.PointerToRawData > dwFileOffset)
 		{
 			//
 			// Calculate the padding
 			//
-			dwWriteSize = pPEFile->Sections[i]->SectionHeader.PointerToRawData - dwFileOffset;
+			dwWriteSize = pPEFile->Sections[i].SectionHeader.PointerToRawData - dwFileOffset;
 
 			//
 			// Write the padding
@@ -134,9 +134,9 @@ BOOL FileWriter::WriteToFile(std::string FileName)
 		//
 		// Write the section data
 		//
-		dwWriteSize = pPEFile->Sections[i]->DataSize;
+		dwWriteSize = pPEFile->Sections[i].DataSize;
 
-		if (!WriteMemoryToFile(pPEFile->Sections[i]->SectionHeader.PointerToRawData, dwWriteSize, pPEFile->Sections[i]->pData))
+		if (!WriteMemoryToFile(pPEFile->Sections[i].SectionHeader.PointerToRawData, dwWriteSize, pPEFile->Sections[i].Content))
 		{
 			return FALSE;
 		}
@@ -147,12 +147,12 @@ BOOL FileWriter::WriteToFile(std::string FileName)
 		//
 		// DataSize < SizeOfRawData => Padding needed
 		//
-		if (pPEFile->Sections[i]->DataSize < pPEFile->Sections[i]->SectionHeader.SizeOfRawData)
+		if (pPEFile->Sections[i].DataSize < pPEFile->Sections[i].SectionHeader.SizeOfRawData)
 		{
 			//
 			// Calculate the padding
 			//
-			dwWriteSize = pPEFile->Sections[i]->SectionHeader.SizeOfRawData - pPEFile->Sections[i]->DataSize;
+			dwWriteSize = pPEFile->Sections[i].SectionHeader.SizeOfRawData - pPEFile->Sections[i].DataSize;
 
 			//
 			// Write the padding
@@ -256,5 +256,3 @@ BOOL FileWriter::WriteZeroMemoryToFile(LONG Offset, DWORD Size)
 
 	return TRUE;
 }
-
-

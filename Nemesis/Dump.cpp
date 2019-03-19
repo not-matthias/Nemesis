@@ -14,8 +14,11 @@ Dump::Dump(DWORD Pid)
 	ProcessMemory ProcessMemory(Pid);
 
 	PEFile PEFile(&ProcessMemory);
-	PEFile.ReadPEHeader();
-	PEFile.SetSections();
+	PEFile.SetFileAlignment();
+	PEFile.SetEntryPoint(ProcessMemory.GetBaseAddress());
+	PEFile.AlignSectionHeaders();
+	PEFile.FixPEHeader();
+	PEFile.RemoveIAT();
 
 	std::cout << "Sections: " << PEFile.GetSectionCount() << std::endl;
 

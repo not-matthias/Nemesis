@@ -6,9 +6,9 @@ class PESection
 {
 public:
 	IMAGE_SECTION_HEADER SectionHeader;
-	BYTE *pData;
+	PVOID Content;
 	DWORD DataSize;
-	DWORD NormalSize;
+	DWORD InitialSize;
 
 	PESection();
 	~PESection();

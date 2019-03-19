@@ -4,7 +4,7 @@
 
 int main()
 {
-	Dump *pDump = new Dump(19992);
+	Dump *pDump = new Dump(5652);
 
 	std::cin.get();
 

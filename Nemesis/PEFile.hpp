@@ -3,14 +3,16 @@
 #include "ProcessMemory.hpp"
 #include "PESection.hpp"
 
+#include <algorithm>
 #include <vector>
 #include <Windows.h>
 
 class PEFile
 {
 private:
-	ProcessMemory *pProcessMemory;
+	const DWORD FileAlignmentConstant = 0x200;
 
+	ProcessMemory *pProcessMemory;
 
 public:
 	BYTE *pDosStub;
@@ -20,8 +22,15 @@ public:
 	PIMAGE_NT_HEADERS32 pNTHeader32;
 	PIMAGE_NT_HEADERS64 pNTHeader64;
 
-	std::vector<PESection *> Sections;
+	std::vector<PESection> Sections;
 
+private:
+	//
+	// Init Functions
+	//
+	VOID ReadPEHeader();
+	VOID SetPEHeaders(PVOID HeaderMemory, DWORD HeaderSize);
+	VOID SetSections();
 
 public:
 	PEFile(ProcessMemory *pProcessMemory);
@@ -30,9 +39,17 @@ public:
 	//
 	// Functions
 	//
-	VOID ReadPEHeader();
-	VOID SetPEHeaders(PVOID HeaderMemory, DWORD HeaderSize);
-	VOID SetSections();
+	VOID SetFileAlignment();
+	VOID SetEntryPoint(DWORD_PTR EntryPoint);
+	VOID AlignSectionHeaders();
+	VOID FixPEHeader();
+	VOID RemoveIAT();
+
+	VOID SetSectionSize(PESection &Section, const DWORD_PTR ReadOffset);
+	BOOL ReadSection(PESection &Section, const DWORD_PTR ReadOffset);
+
+	DWORD GetInstructionByteCount(BYTE *Data, DWORD Size);
+	DWORD AlignValue(DWORD BadValue, DWORD AlignTo);
 
 	//
 	// Checks
@@ -44,6 +61,7 @@ public:
 	//
 	// Getters
 	//
+	DWORD GetImageSize();
 	DWORD GetHeaderSize();
 	WORD GetSectionCount();
 };
