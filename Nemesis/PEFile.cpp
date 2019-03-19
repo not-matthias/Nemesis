@@ -315,7 +315,6 @@ VOID PEFile::SetSectionSize(PESection &Section, const DWORD_PTR SectionPointer)
 	DWORD_PTR CurrentOffset = SectionPointer + ReadSize - CurrentReadSize;
 	while (CurrentOffset >= SectionPointer)
 	{
-		// FIXME: Buffer is null for the seconds element
 		BYTE *Buffer = reinterpret_cast<BYTE *>(pProcessMemory->ReadMemory(CurrentOffset, CurrentReadSize));
 		DWORD CodeByteCount = GetInstructionByteCount(Buffer, CurrentReadSize);
 
