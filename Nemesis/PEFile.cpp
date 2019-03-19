@@ -294,7 +294,6 @@ VOID PEFile::RemoveIAT()
 	}
 }
 
-// WORKING
 VOID PEFile::SetSectionSize(PESection &Section, const DWORD_PTR SectionPointer)
 {
 	DWORD MaxReadSize = 100;
@@ -341,7 +340,6 @@ VOID PEFile::SetSectionSize(PESection &Section, const DWORD_PTR SectionPointer)
 	}
 }
 
-// WORKING
 BOOL PEFile::ReadSection(PESection &Section, const DWORD_PTR SectionPointer)
 {
 	DWORD MaxReadSize = 100;
