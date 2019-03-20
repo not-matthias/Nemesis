@@ -4,7 +4,8 @@
 
 int main()
 {
-	Dump *pDump = new Dump(8524);
+	Dump ProcessDump(24540);
+	
 
 	std::cin.get();
 

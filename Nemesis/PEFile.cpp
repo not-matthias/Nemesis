@@ -111,6 +111,95 @@ VOID PEFile::SetSections()
 	}
 }
 
+VOID PEFile::SetSectionSize(PESection &Section, const DWORD_PTR SectionPointer)
+{
+	DWORD MaxReadSize = 100;
+	DWORD ReadSize = Section.InitialSize;
+	DWORD CurrentReadSize = ReadSize % MaxReadSize;
+
+	//
+	// Check read size
+	//
+	if (CurrentReadSize == 0)
+	{
+		CurrentReadSize = MaxReadSize;
+	}
+
+	//
+	// Calculate the new section size
+	//
+	DWORD_PTR CurrentOffset = SectionPointer + ReadSize - CurrentReadSize;
+	while (CurrentOffset >= SectionPointer)
+	{
+		BYTE *Buffer = reinterpret_cast<BYTE *>(pProcessMemory->ReadMemory(CurrentOffset, CurrentReadSize));
+		DWORD CodeByteCount = GetInstructionByteCount(Buffer, CurrentReadSize);
+
+		if (CodeByteCount != 0)
+		{
+			CurrentOffset += CodeByteCount;
+
+			if (SectionPointer < CurrentOffset)
+			{
+				Section.DataSize = static_cast<DWORD>(CurrentOffset - SectionPointer);
+				Section.DataSize += 4;
+
+				if (Section.InitialSize < Section.DataSize)
+				{
+					Section.DataSize = Section.InitialSize;
+				}
+			}
+
+			break;
+		}
+
+		CurrentReadSize = MaxReadSize;
+		CurrentOffset -= CurrentReadSize;
+	}
+}
+
+BOOL PEFile::ReadSection(PESection &Section, const DWORD_PTR SectionPointer)
+{
+	DWORD MaxReadSize = 100;
+	DWORD ReadSize = Section.InitialSize;
+
+	//
+	// Check read offset (section without data is valid)
+	//
+	if (SectionPointer == NULL || ReadSize == 0)
+	{
+		return TRUE;
+	}
+
+	//
+	// 
+	//
+	if (ReadSize <= MaxReadSize)
+	{
+		Section.DataSize = ReadSize;
+		Section.Content = pProcessMemory->ReadMemory(static_cast<DWORD_PTR>(SectionPointer), ReadSize);
+		return TRUE;
+	}
+	else
+	{
+		//
+		// Set the new section
+		//
+		SetSectionSize(Section, SectionPointer);
+
+		//
+		//
+		//
+		if (Section.DataSize != 0)
+		{
+			Section.Content = pProcessMemory->ReadMemory(static_cast<DWORD_PTR>(SectionPointer), Section.DataSize);
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
+
 //
 // Functions
 //
@@ -293,93 +382,6 @@ VOID PEFile::RemoveIAT()
 	}
 }
 
-VOID PEFile::SetSectionSize(PESection &Section, const DWORD_PTR SectionPointer)
-{
-	DWORD MaxReadSize = 100;
-	DWORD ReadSize = Section.InitialSize;
-	DWORD CurrentReadSize = ReadSize % MaxReadSize;
-
-	//
-	// Check read size
-	//
-	if (CurrentReadSize == 0)
-	{
-		CurrentReadSize = MaxReadSize;
-	}
-
-	//
-	// Calculate the new section size
-	//
-	DWORD_PTR CurrentOffset = SectionPointer + ReadSize - CurrentReadSize;
-	while (CurrentOffset >= SectionPointer)
-	{
-		BYTE *Buffer = reinterpret_cast<BYTE *>(pProcessMemory->ReadMemory(CurrentOffset, CurrentReadSize));
-		DWORD CodeByteCount = GetInstructionByteCount(Buffer, CurrentReadSize);
-
-		if (CodeByteCount != 0)
-		{
-			CurrentOffset += CodeByteCount;
-
-			if (SectionPointer < CurrentOffset)
-			{
-				Section.DataSize = static_cast<DWORD>(CurrentOffset - SectionPointer);
-				Section.DataSize += 4;
-
-				if (Section.InitialSize < Section.DataSize)
-				{
-					Section.DataSize = Section.InitialSize;
-				}
-			}
-
-			break;
-		}
-
-		CurrentReadSize = MaxReadSize;
-		CurrentOffset -= CurrentReadSize;
-	}
-}
-
-BOOL PEFile::ReadSection(PESection &Section, const DWORD_PTR SectionPointer)
-{
-	DWORD MaxReadSize = 100;
-	DWORD ReadSize = Section.InitialSize;
-
-	//
-	// Check read offset (section without data is valid)
-	//
-	if (SectionPointer == NULL || ReadSize == 0)
-	{
-		return TRUE;
-	}
-
-	//
-	// 
-	//
-	if (ReadSize <= MaxReadSize)
-	{
-		Section.DataSize = ReadSize;
-		Section.Content = pProcessMemory->ReadMemory(static_cast<DWORD_PTR>(SectionPointer), ReadSize);
-		return TRUE;
-	}
-	else
-	{
-		//
-		// Set the new section
-		//
-		SetSectionSize(Section, SectionPointer);
-
-		//
-		//
-		//
-		if (Section.DataSize != 0)
-		{
-			Section.Content = pProcessMemory->ReadMemory(static_cast<DWORD_PTR>(SectionPointer), Section.DataSize);
-			return TRUE;
-		}
-	}
-
-	return FALSE;
-}
 
 DWORD PEFile::GetInstructionByteCount(BYTE * Data, DWORD Size)
 {

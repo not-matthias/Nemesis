@@ -10,11 +10,11 @@
 class PEFile
 {
 private:
-	const DWORD FileAlignmentConstant = 0x200;
-
 	ProcessMemory *pProcessMemory;
 
 public:
+	const DWORD FileAlignmentConstant = 0x200;
+
 	BYTE *pDosStub;
 	DWORD DosStubSize;
 
@@ -31,6 +31,8 @@ private:
 	VOID ReadPEHeader();
 	VOID SetPEHeaders(PVOID HeaderMemory, DWORD HeaderSize);
 	VOID SetSections();
+	VOID SetSectionSize(PESection &Section, const DWORD_PTR ReadOffset);
+	BOOL ReadSection(PESection &Section, const DWORD_PTR ReadOffset);
 
 public:
 	PEFile(ProcessMemory *pProcessMemory);
@@ -44,9 +46,6 @@ public:
 	VOID AlignSectionHeaders();
 	VOID FixPEHeader();
 	VOID RemoveIAT();
-
-	VOID SetSectionSize(PESection &Section, const DWORD_PTR ReadOffset);
-	BOOL ReadSection(PESection &Section, const DWORD_PTR ReadOffset);
 
 	DWORD GetInstructionByteCount(BYTE *Data, DWORD Size);
 	DWORD AlignValue(DWORD BadValue, DWORD AlignTo);
