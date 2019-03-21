@@ -1,7 +1,7 @@
 #pragma once
 
 #include "IMemorySource.hpp"
-#include "UsermodeMemorySource.hpp"
+#include "UsermodeMemory.hpp"
 
 #include <iostream>
 #include <vector>

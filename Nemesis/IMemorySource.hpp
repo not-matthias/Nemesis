@@ -9,7 +9,7 @@
 
 class IMemorySource 
 {
-private:
+protected:
 	DWORD Pid;
 
 public:

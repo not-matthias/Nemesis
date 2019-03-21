@@ -2,18 +2,20 @@
 
 #include "IMemorySource.hpp"
 #include "Logger.hpp"
+
+#include <iostream>
 #include <Psapi.h>
 #include <string>
 #include <Windows.h>
 
-class UsermodeMemorySource : public IMemorySource
+class UsermodeMemory : public IMemorySource
 {
 private:
 	HANDLE hProcess = NULL;
 
 public:
-	UsermodeMemorySource(DWORD Pid);
-	~UsermodeMemorySource();
+	UsermodeMemory(DWORD Pid);
+	~UsermodeMemory();
 
 	PVOID ReadMemory(DWORD_PTR StartAddress, SIZE_T Size);
 	DWORD_PTR GetBaseAddress();

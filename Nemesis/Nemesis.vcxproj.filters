@@ -37,6 +37,12 @@
     <Filter Include="Header Files\PortableExecutable">
       <UniqueIdentifier>{38e4316a-cb29-4ee2-a466-92879d539125}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Memory\Sources">
+      <UniqueIdentifier>{641155f1-f4d3-47e4-9c54-f60225bc01a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Memory\Sources">
+      <UniqueIdentifier>{0260222e-2d65-404b-bccd-b4d379d356b3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ProcessUtils.hpp">
@@ -54,9 +60,6 @@
     <ClInclude Include="IMemorySource.hpp">
       <Filter>Header Files\Memory</Filter>
     </ClInclude>
-    <ClInclude Include="UsermodeMemorySource.hpp">
-      <Filter>Header Files\Memory</Filter>
-    </ClInclude>
     <ClInclude Include="Dump.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -71,6 +74,12 @@
     </ClInclude>
     <ClInclude Include="FileWriter.h">
       <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="KernelMemory.hpp">
+      <Filter>Header Files\Memory\Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="UsermodeMemory.hpp">
+      <Filter>Header Files\Memory\Sources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -92,9 +101,6 @@
     <ClCompile Include="PEFile.cpp">
       <Filter>Source Files\PortableExecutable</Filter>
     </ClCompile>
-    <ClCompile Include="UsermodeMemorySource.cpp">
-      <Filter>Source Files\Memory</Filter>
-    </ClCompile>
     <ClCompile Include="IMemorySource.cpp">
       <Filter>Source Files\Memory</Filter>
     </ClCompile>
@@ -113,10 +119,17 @@
     <ClCompile Include="FileWriter.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="UsermodeMemory.cpp">
+      <Filter>Source Files\Memory\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="KernelMemory.cpp">
+      <Filter>Source Files\Memory\Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="exports.def">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>

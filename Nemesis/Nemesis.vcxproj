@@ -24,10 +24,11 @@
     <ClInclude Include="DumpUtils.hpp" />
     <ClInclude Include="FileWriter.h" />
     <ClInclude Include="IMemorySource.hpp" />
+    <ClInclude Include="KernelMemory.hpp" />
     <ClInclude Include="Logger.hpp" />
     <ClInclude Include="PESection.hpp" />
     <ClInclude Include="ProcessMemory.hpp" />
-    <ClInclude Include="UsermodeMemorySource.hpp" />
+    <ClInclude Include="UsermodeMemory.hpp" />
     <ClInclude Include="PEFile.hpp" />
     <ClInclude Include="ProcessUtils.hpp" />
   </ItemGroup>
@@ -38,15 +39,17 @@
     <ClCompile Include="DumpUtils.cpp" />
     <ClCompile Include="FileWriter.cpp" />
     <ClCompile Include="IMemorySource.cpp" />
+    <ClCompile Include="KernelMemory.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="PESection.cpp" />
     <ClCompile Include="ProcessMemory.cpp" />
-    <ClCompile Include="UsermodeMemorySource.cpp" />
+    <ClCompile Include="UsermodeMemory.cpp" />
     <ClCompile Include="PEFile.cpp" />
     <ClCompile Include="ProcessUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="cpp.hint" />
     <None Include="exports.def" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -1,8 +1,6 @@
-#include "UsermodeMemorySource.hpp"
+#include "UsermodeMemory.hpp"
 
-#include <iostream>
-
-UsermodeMemorySource::UsermodeMemorySource(DWORD Pid) : IMemorySource(Pid)
+UsermodeMemory::UsermodeMemory(DWORD Pid) : IMemorySource(Pid)
 {
 	this->hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, Pid);
 	if (this->hProcess == INVALID_HANDLE_VALUE)
@@ -11,13 +9,13 @@ UsermodeMemorySource::UsermodeMemorySource(DWORD Pid) : IMemorySource(Pid)
 	}
 }
 
-UsermodeMemorySource::~UsermodeMemorySource()
+UsermodeMemory::~UsermodeMemory()
 {
 	if (this->hProcess != INVALID_HANDLE_VALUE)
 		CloseHandle(this->hProcess);
 }
 
-PVOID UsermodeMemorySource::ReadMemory(DWORD_PTR StartAddress, SIZE_T Size)
+PVOID UsermodeMemory::ReadMemory(DWORD_PTR StartAddress, SIZE_T Size)
 {
 	if (this->hProcess == INVALID_HANDLE_VALUE)
 		return nullptr;
@@ -56,7 +54,7 @@ PVOID UsermodeMemorySource::ReadMemory(DWORD_PTR StartAddress, SIZE_T Size)
 	return Buffer;
 }
 
-DWORD_PTR UsermodeMemorySource::GetBaseAddress()
+DWORD_PTR UsermodeMemory::GetBaseAddress()
 {
 	//HMODULE hModules[1024];
 	TCHAR szFileName[MAX_PATH];

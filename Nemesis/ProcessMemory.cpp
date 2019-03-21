@@ -3,7 +3,7 @@
 ProcessMemory::ProcessMemory(DWORD Pid)
 {
 	this->Pid = Pid;
-	this->pMemorySource = new UsermodeMemorySource(Pid);
+	this->pMemorySource = new UsermodeMemory(Pid);
 }
 
 ProcessMemory::~ProcessMemory()
