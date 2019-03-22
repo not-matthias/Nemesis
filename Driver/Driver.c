@@ -1,8 +1,8 @@
 #include <ntddk.h>
 #include "ntos.h"
+#include "Logger.h"
 
-#pragma alloc_text( INIT, DriverEntry)
-#pragma alloc_text( PAGE, IoctlDevice)
+#define DEBUG
 
 //
 // IOCTLs
@@ -48,28 +48,42 @@ typedef struct _BASE_ADDRESS_REQUEST
 //
 // Helper function
 //
-NTSTATUS CopyVirtualMemory(PVOID pSrc, PVOID pDest, SIZE_T Size)
+NTSTATUS CopyVirtualMemory(HANDLE ProcessId, PVOID pSrc, PVOID pDest, SIZE_T Size)
 {
-	PEPROCESS Process;
-	PSIZE_T pBytesCopied;
+	PEPROCESS pProcess = NULL;
+	PSIZE_T pBytesCopied = NULL;
 
 	__try
 	{
-		if (NT_SUCCESS(MmCopyVirtualMemory(Process, pSrc, PsGetCurrentProcess(), pDest, Size, UserMode, pBytesCopied)))
+		//
+		// Open the process
+		//
+		if (NT_SUCCESS(PsLookupProcessByProcessId(ProcessId, &pProcess)))
 		{
-			return STATUS_SUCCESS;
+			//
+			// Read virtual memory
+			//
+			if (NT_SUCCESS(MmCopyVirtualMemory(pProcess, pSrc, PsGetCurrentProcess(), pDest, Size, UserMode, pBytesCopied)))
+			{
+				ObDereferenceObject(pProcess);
+				return STATUS_SUCCESS;
+			}
+			else
+			{
+				ObDereferenceObject(pProcess);
+				return STATUS_UNSUCCESSFUL;
+			}
 		}
 		else
 		{
 			return STATUS_UNSUCCESSFUL;
 		}
+		
 	}
 	__except (EXCEPTION_EXECUTE_HANDLER)
 	{
 		return STATUS_UNSUCCESSFUL;
 	}
-
-	return STATUS_UNSUCCESSFUL;
 }
 
 
@@ -81,6 +95,8 @@ NTSTATUS DeviceControl(
 	IN PIRP pIrp
 )
 {
+	UNREFERENCED_PARAMETER(pDeviceObject);
+
 	//
 	// Return values
 	//
@@ -93,6 +109,10 @@ NTSTATUS DeviceControl(
 	PIO_STACK_LOCATION pStack = IoGetCurrentIrpStackLocation(pIrp);
 	ULONG ControlCode = pStack->Parameters.DeviceIoControl.IoControlCode;
 
+	PREAD_REQUEST pReadRequest;
+	PBASE_ADDRESS_REQUEST pBaseAddressRequest;
+
+
 	//
 	// Handle the requests
 	//
@@ -102,8 +122,7 @@ NTSTATUS DeviceControl(
 		// IOCTL_READ_REQUEST
 		//
 	case IOCTL_READ_REQUEST:
-		PREAD_REQUEST pReadRequest = (PREAD_REQUEST)pIrp->AssociatedIrp.SystemBuffer;
-
+		pReadRequest = (PREAD_REQUEST)pIrp->AssociatedIrp.SystemBuffer;
 
 
 		break;
@@ -112,7 +131,7 @@ NTSTATUS DeviceControl(
 		// IOCTL_BASE_ADDRESS_REQUEST
 		//
 	case IOCTL_BASE_ADDRESS_REQUEST:
-		PBASE_ADDRESS_REQUEST pBaseAddressRequest = (PBASE_ADDRESS_REQUEST)pIrp->AssociatedIrp.SystemBuffer;
+		pBaseAddressRequest = (PBASE_ADDRESS_REQUEST)pIrp->AssociatedIrp.SystemBuffer;
 
 		if (pBaseAddressRequest != NULL)
 		{
@@ -121,7 +140,7 @@ NTSTATUS DeviceControl(
 			//
 			// Get the process
 			//
-			Status = PsLookupProcessByProcessId(reinterpret_cast<HANDLE>(pBaseAddressRequest->Pid), &pProcess);
+			Status = PsLookupProcessByProcessId((HANDLE)pBaseAddressRequest->Pid, &pProcess);
 
 			// 
 			// Check if found
@@ -174,10 +193,12 @@ NTSTATUS DriverEntry(
 	IN PUNICODE_STRING pRegistryPath
 )
 {
-	UNREFERENCED_PARAMETER(pDriverObject);
 	UNREFERENCED_PARAMETER(pRegistryPath);
 
 	pDriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = DeviceControl;
+
+	DbgPrint("Driver loaded.");
+	Log("Driver loaded.");
 
 	return STATUS_SUCCESS;
 }

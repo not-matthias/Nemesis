@@ -9,12 +9,13 @@ NTKERNELAPI NTSTATUS PsLookupProcessByProcessId(
 	OUT PEPROCESS *Process
 );
 
-NTKERNELAPI NTSTATUS NTAPI MmCopyVirtualMemory(
-	IN PEPROCESS FromProcess, 
-	IN PVOID FromAddress, 
-	IN PEPROCESS ToProcess, 
-	OUT PVOID ToAddress, 
-	IN SIZE_T BufferSize, 
-	IN KPROCESSOR_MODE PreviousMode, 
-	OUT PSIZE_T NumberOfBytesCopied
+NTKERNELAPI NTSTATUS NTAPI MmCopyVirtualMemory
+(
+	PEPROCESS SourceProcess,
+	PVOID SourceAddress,
+	PEPROCESS TargetProcess,
+	PVOID TargetAddress,
+	SIZE_T BufferSize,
+	KPROCESSOR_MODE PreviousMode,
+	PSIZE_T ReturnSize
 );

@@ -68,7 +68,7 @@ DWORD_PTR KernelMemory::GetBaseAddress()
 	//
 	if (DeviceIoControl(hDriver, IOCTL_BASE_ADDRESS_REQUEST, &BaseAddressRequest, sizeof(BaseAddressRequest), &BaseAddressRequest, sizeof(BaseAddressRequest), 0, 0))
 	{
-		return BaseAddressRequest.BaseAddress;
+		return reinterpret_cast<DWORD_PTR>(BaseAddressRequest.BaseAddress);
 	}
 	else
 	{
