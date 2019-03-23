@@ -10,6 +10,7 @@
 #define IOCTL_READ_REQUEST				CTL_CODE(FILE_DEVICE_UNKNOWN, 0x2222, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
 #define IOCTL_BASE_ADDRESS_REQUEST		CTL_CODE(FILE_DEVICE_UNKNOWN, 0x2223, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
 
+
 //
 // Structures
 //
@@ -45,6 +46,7 @@ typedef struct _BASE_ADDRESS_REQUEST
 	PVOID BaseAddress;
 } BASE_ADDRESS_REQUEST, *PBASE_ADDRESS_REQUEST;
 
+
 //
 // Helper function
 //
@@ -52,6 +54,8 @@ NTSTATUS CopyVirtualMemory(HANDLE ProcessId, PVOID pSrc, PVOID pDest, SIZE_T Siz
 {
 	PEPROCESS pProcess = NULL;
 	PSIZE_T pBytesCopied = NULL;
+
+	Log("Reading virtual memory.");
 
 	__try
 	{
@@ -63,25 +67,33 @@ NTSTATUS CopyVirtualMemory(HANDLE ProcessId, PVOID pSrc, PVOID pDest, SIZE_T Siz
 			//
 			// Read virtual memory
 			//
-			if (NT_SUCCESS(MmCopyVirtualMemory(pProcess, pSrc, PsGetCurrentProcess(), pDest, Size, UserMode, pBytesCopied)))
+			if (NT_SUCCESS(MmCopyVirtualMemory(pProcess, pSrc, PsGetCurrentProcess(), pDest, Size, KernelMode, pBytesCopied)))
 			{
+				Log("Successfully read virtual memory.");
+
 				ObDereferenceObject(pProcess);
 				return STATUS_SUCCESS;
 			}
 			else
 			{
+				Log("Failed to read virtual memory.");
+
 				ObDereferenceObject(pProcess);
 				return STATUS_UNSUCCESSFUL;
 			}
 		}
 		else
 		{
+			Log("Failed to lookup process.");
+
 			return STATUS_UNSUCCESSFUL;
 		}
-		
+
 	}
 	__except (EXCEPTION_EXECUTE_HANDLER)
 	{
+		Log("Something went wrong while reading virtual memory.");
+
 		return STATUS_UNSUCCESSFUL;
 	}
 }
@@ -100,7 +112,7 @@ NTSTATUS DeviceControl(
 	//
 	// Return values
 	//
-	NTSTATUS Status = STATUS_SUCCESS;
+	NTSTATUS Status = STATUS_UNSUCCESSFUL;
 	ULONG Bytes = 0;
 
 	//
@@ -124,7 +136,17 @@ NTSTATUS DeviceControl(
 	case IOCTL_READ_REQUEST:
 		pReadRequest = (PREAD_REQUEST)pIrp->AssociatedIrp.SystemBuffer;
 
-
+		//
+		// Check request data
+		//
+		if (pReadRequest != NULL && pReadRequest->TargetAddress < 0x7FFFFFFFFFFF)
+		{
+			//
+			// Read virtual memory
+			//
+			Status = CopyVirtualMemory((HANDLE)pReadRequest->Pid, (PVOID)&pReadRequest->TargetAddress, (PVOID)pReadRequest->BufferAddress, pReadRequest->BufferSize);
+			Bytes = sizeof(READ_REQUEST);
+		}
 		break;
 
 		//
@@ -133,6 +155,9 @@ NTSTATUS DeviceControl(
 	case IOCTL_BASE_ADDRESS_REQUEST:
 		pBaseAddressRequest = (PBASE_ADDRESS_REQUEST)pIrp->AssociatedIrp.SystemBuffer;
 
+		//
+		// Check request data
+		//
 		if (pBaseAddressRequest != NULL)
 		{
 			PEPROCESS pProcess;
@@ -143,19 +168,20 @@ NTSTATUS DeviceControl(
 			Status = PsLookupProcessByProcessId((HANDLE)pBaseAddressRequest->Pid, &pProcess);
 
 			// 
-			// Check if found
+			// Check if found (and return)
 			// 
 			if (!NT_SUCCESS(Status))
 			{
 				pBaseAddressRequest->BaseAddress = 0;
 				Status = STATUS_UNSUCCESSFUL;
-				goto EXIT;
+
+				break;
 			}
 
 			// 
 			// Get the base address
 			// 
-			PVOID BaseAddress = PsGetProcessSectionBaseAddress(pProcess);
+			PVOID pBaseAddress = PsGetProcessSectionBaseAddress(pProcess);
 
 			//
 			// Cleanup
@@ -165,9 +191,10 @@ NTSTATUS DeviceControl(
 			//
 			// Return data
 			//
-			pBaseAddressRequest->BaseAddress = BaseAddress;
+			pBaseAddressRequest->BaseAddress = pBaseAddress;
+			Status = STATUS_SUCCESS;
+			Bytes = sizeof(BASE_ADDRESS_REQUEST);
 		}
-
 		break;
 
 	default:
@@ -175,7 +202,6 @@ NTSTATUS DeviceControl(
 		Bytes = 0;
 	}
 
-EXIT:
 	pIrp->IoStatus.Status = Status;
 	pIrp->IoStatus.Information = Bytes;
 	IoCompleteRequest(pIrp, IO_NO_INCREMENT);
@@ -183,6 +209,18 @@ EXIT:
 	return Status;
 }
 
+
+//
+// Unload the driver
+//
+VOID DriverUnload(
+	PDRIVER_OBJECT pDriverObject
+)
+{
+	UNREFERENCED_PARAMETER(pDriverObject);
+
+	Log("Driver unloaded.");
+}
 
 
 //
@@ -196,8 +234,11 @@ NTSTATUS DriverEntry(
 	UNREFERENCED_PARAMETER(pRegistryPath);
 
 	pDriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = DeviceControl;
+	pDriverObject->DriverUnload = DriverUnload;
 
-	DbgPrint("Driver loaded.");
+	pDriverObject->Flags |= DO_DIRECT_IO;
+	pDriverObject->Flags &= ~DO_DEVICE_INITIALIZING;
+
 	Log("Driver loaded.");
 
 	return STATUS_SUCCESS;

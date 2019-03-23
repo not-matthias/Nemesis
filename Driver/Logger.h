@@ -5,11 +5,6 @@
 #define DEBUG
 
 //
-// Variables
-//
-PCSTR Prefix = "[Nemesis] ";
-
-//
 // Only print if DEBUG defined 
 //
 #ifdef DEBUG
@@ -17,19 +12,12 @@ PCSTR Prefix = "[Nemesis] ";
 VOID Log(PCSTR Format, ...)
 {
 	va_list args;
-	PSTR OutputFormat = "";
 
 	//
 	// Check the format
 	//
 	if (!Format)
 		return;
-
-	// 
-	// Craft the output format
-	// 
-	strcat(OutputFormat, Prefix);
-	strcat(OutputFormat, Format);
 
 	//
 	// Initialize the variable list
