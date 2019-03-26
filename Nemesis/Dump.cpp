@@ -4,10 +4,18 @@
 #include "PEFile.hpp"
 #include "FileWriter.h"
 
-Dump::Dump(DWORD Pid)
+Dump::Dump(DWORD Pid, std::string FileName)
 {
-	std::cout << "Dumping the process with the pid: " << Pid << std::endl;
+	this->Pid = Pid;
+	this->FileName = FileName;
+}
 
+Dump::~Dump()
+{
+}
+
+BOOL Dump::DumpProcess()
+{
 	//
 	// Dump the process
 	//
@@ -19,16 +27,17 @@ Dump::Dump(DWORD Pid)
 	PEFile.FixPEHeader();
 	PEFile.RemoveIAT();
 
-	std::cout << "Sections: " << PEFile.GetSectionCount() << std::endl;
-
 	//
 	// Write to file
 	//
 	FileWriter FileWriter(&PEFile);
-	FileWriter.WriteToFile("D:/dump.exe");
 
-}
-
-Dump::~Dump()
-{
+	if (FileWriter.WriteToFile(FileName))
+	{
+		return TRUE;
+	}
+	else
+	{
+		return FALSE;
+	}
 }

@@ -1,6 +1,6 @@
 #include "DriverUtils.hpp"
 
-std::vector<DRIVER *> DriverHelper::GetDriverList()
+std::vector<DRIVER *> GetDriverList()
 {
 	std::vector<DRIVER *> List;
 	NTSTATUS Status;

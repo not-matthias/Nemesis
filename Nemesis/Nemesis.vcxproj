@@ -41,7 +41,6 @@
     <ClCompile Include="IMemorySource.cpp" />
     <ClCompile Include="KernelMemory.cpp" />
     <ClCompile Include="Logger.cpp" />
-    <ClCompile Include="Main.cpp" />
     <ClCompile Include="PESection.cpp" />
     <ClCompile Include="ProcessMemory.cpp" />
     <ClCompile Include="UsermodeMemory.cpp" />

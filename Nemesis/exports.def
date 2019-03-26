@@ -1,3 +1,5 @@
 EXPORTS
 	GetProcessList @1
-	GetDriverList @2
+	GetDriverList @2	
+	StandardDump @3
+	CustomDump @4

@@ -1,12 +1,20 @@
 #pragma once
 
-struct _DUMP_OPTIONS
-{
+#include "Dump.hpp"
+#include "FileWriter.h"
+#include "PEFile.hpp"
 
-} DUMP_OPTIONS, *PDUMP_OPTIONS;
+#include <iostream>
+#include <Windows.h>
 
-namespace DumpHelper
+// TODO: Implement config
+typedef struct DUMP_OPTIONS
 {
 
 };
 
+
+// Standard config
+BOOL StandardDump(DWORD Pid, std::string FileName);
+
+BOOL CustomDump(DWORD Pid, std::string FileName, DUMP_OPTIONS DumpOptions);

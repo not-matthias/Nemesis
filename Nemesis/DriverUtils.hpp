@@ -28,10 +28,6 @@ typedef struct _RTL_PROCESS_MODULES
 
 struct DRIVER {
 	std::string DriverName;
-}; 
-
-namespace DriverHelper
-{
-	std::vector<DRIVER *> GetDriverList();
 };
 
+std::vector<DRIVER *> GetDriverList();

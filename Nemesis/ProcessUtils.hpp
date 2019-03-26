@@ -28,8 +28,4 @@ struct PROCESS
 	UNICODE_STRING			ImageName;
 };
 
-namespace ProcessHelper
-{
-	std::vector<PROCESS *> GetProcessList();
-};
-
+std::vector<PROCESS *> GetProcessList();

@@ -1,6 +1,6 @@
 #include "ProcessUtils.hpp"
 
-std::vector<PROCESS *> ProcessHelper::GetProcessList()
+std::vector<PROCESS *> GetProcessList()
 {
 	std::vector<PROCESS *> List;
 	PVOID pBuffer;
