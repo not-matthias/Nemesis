@@ -55,7 +55,7 @@ typedef struct _BASE_ADDRESS_REQUEST
 class KernelMemory : IMemorySource
 {
 private:
-	LPCSTR RegistryPath = "\\\\.\\KernelMemory";
+	LPCWSTR RegistryPath = L"\\\\.\\KernelMemory";
 	HANDLE hDriver = NULL;
 
 public:

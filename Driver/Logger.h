@@ -27,7 +27,7 @@ VOID Log(PCSTR Format, ...)
 	//
 	// Print it
 	// 
-	DbgPrint(Format, args);
+	DbgPrintEx(0, 0, Format, args);
 
 	//
 	// Stop useing the variable list

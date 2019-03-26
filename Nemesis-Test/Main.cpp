@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <vector>
 #include <Windows.h>
@@ -27,8 +28,8 @@ struct DRIVER {
 	std::string DriverName;
 };
 
-typedef std::vector<PROCESS *> (*GetProcessList)();
-typedef std::vector<DRIVER *> (*GetDriverList)();
+typedef std::vector<PROCESS *>(*GetProcessList)();
+typedef std::vector<DRIVER *>(*GetDriverList)();
 
 int main()
 {

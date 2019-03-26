@@ -48,6 +48,13 @@ typedef struct _BASE_ADDRESS_REQUEST
 
 
 //
+// Variables
+//
+PDEVICE_OBJECT g_pDeviceObject;
+UNICODE_STRING g_DeviceName, g_SymbolicLinkName;
+
+
+//
 // Helper function
 //
 NTSTATUS CopyVirtualMemory(HANDLE ProcessId, PVOID pSrc, PVOID pDest, SIZE_T Size)
@@ -217,11 +224,44 @@ VOID DriverUnload(
 	PDRIVER_OBJECT pDriverObject
 )
 {
-	UNREFERENCED_PARAMETER(pDriverObject);
+	//
+	// Delete the symbolic link
+	//
+	IoDeleteSymbolicLink(&g_SymbolicLinkName);
 
-	Log("Driver unloaded.");
+	//
+	// Delete the device object
+	//
+	IoDeleteDevice(pDriverObject->DeviceObject);
+
+	Log("Driver unloaded.\n");
 }
 
+
+NTSTATUS UnsupportedDispatch(PDEVICE_OBJECT pDeviceObject, PIRP pIrp)
+{
+	UNREFERENCED_PARAMETER(pDeviceObject);
+
+	pIrp->IoStatus.Status = STATUS_NOT_SUPPORTED;
+	IoCompleteRequest(pIrp, IO_NO_INCREMENT);
+	return pIrp->IoStatus.Status;
+}
+
+NTSTATUS CreateDispatch(PDEVICE_OBJECT pDeviceObject, PIRP pIrp)
+{
+	UNREFERENCED_PARAMETER(pDeviceObject);
+
+	IoCompleteRequest(pIrp, IO_NO_INCREMENT);
+	return pIrp->IoStatus.Status;
+}
+
+NTSTATUS CloseDispatch(PDEVICE_OBJECT pDeviceObject, PIRP pIrp)
+{
+	UNREFERENCED_PARAMETER(pDeviceObject);
+
+	IoCompleteRequest(pIrp, IO_NO_INCREMENT);
+	return pIrp->IoStatus.Status;
+}
 
 //
 // Entry Point
@@ -233,13 +273,50 @@ NTSTATUS DriverEntry(
 {
 	UNREFERENCED_PARAMETER(pRegistryPath);
 
+	//
+	// Initialize the variables
+	//
+	RtlInitUnicodeString(&g_DeviceName, L"\\Device\\KernelMemory");
+	RtlInitUnicodeString(&g_SymbolicLinkName, L"\\DosDevices\\KernelMemory");
+
+	//
+	// Create the device object
+	//
+	if (!NT_SUCCESS(IoCreateDevice(pDriverObject, 0, &g_DeviceName, FILE_DEVICE_UNKNOWN, FILE_DEVICE_SECURE_OPEN, FALSE, &g_pDeviceObject)))
+	{
+		Log("Failed to create device object.\n");
+		return STATUS_UNSUCCESSFUL;
+	}
+
+	//
+	// Create symbolic link
+	//
+	if (!NT_SUCCESS(IoCreateSymbolicLink(&g_SymbolicLinkName, &g_DeviceName)))
+	{
+		Log("Failed to create symbolic link.\n");
+		IoDeleteDevice(g_pDeviceObject);
+
+		return STATUS_UNSUCCESSFUL;
+	}
+
+	//
+	// Set major functions
+	//
+	for (ULONG i = 0; i <= IRP_MJ_MAXIMUM_FUNCTION; i++)
+		pDriverObject->MajorFunction[i] = &UnsupportedDispatch;
+
 	pDriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = DeviceControl;
+	pDriverObject->MajorFunction[IRP_MJ_CREATE] = &CreateDispatch;
+	pDriverObject->MajorFunction[IRP_MJ_CLOSE] = &CloseDispatch;
 	pDriverObject->DriverUnload = DriverUnload;
 
-	pDriverObject->Flags |= DO_DIRECT_IO;
+	//
+	// Set flags
+	//
+	pDriverObject->Flags |= DO_BUFFERED_IO;
 	pDriverObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
-	Log("Driver loaded.");
+	Log("Driver loaded.\n");
 
 	return STATUS_SUCCESS;
 }
