@@ -35,7 +35,7 @@
             // 
             // dumpButton
             // 
-            this.dumpButton.Location = new System.Drawing.Point(513, 63);
+            this.dumpButton.Location = new System.Drawing.Point(585, 63);
             this.dumpButton.Name = "dumpButton";
             this.dumpButton.Size = new System.Drawing.Size(75, 23);
             this.dumpButton.TabIndex = 0;
@@ -44,7 +44,7 @@
             // 
             // refreshButton
             // 
-            this.refreshButton.Location = new System.Drawing.Point(412, 63);
+            this.refreshButton.Location = new System.Drawing.Point(484, 63);
             this.refreshButton.Name = "refreshButton";
             this.refreshButton.Size = new System.Drawing.Size(75, 23);
             this.refreshButton.TabIndex = 2;
@@ -53,18 +53,19 @@
             // 
             // processListView
             // 
+            this.processListView.Alignment = System.Windows.Forms.ListViewAlignment.Default;
             this.processListView.Location = new System.Drawing.Point(23, 92);
             this.processListView.MultiSelect = false;
             this.processListView.Name = "processListView";
-            this.processListView.Size = new System.Drawing.Size(565, 399);
-            this.processListView.TabIndex = 3;
+            this.processListView.Size = new System.Drawing.Size(637, 385);
+            this.processListView.TabIndex = 0;
             this.processListView.UseCompatibleStateImageBehavior = false;
             // 
             // NemesisForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(611, 514);
+            this.ClientSize = new System.Drawing.Size(683, 500);
             this.Controls.Add(this.processListView);
             this.Controls.Add(this.refreshButton);
             this.Controls.Add(this.dumpButton);

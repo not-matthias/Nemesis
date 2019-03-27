@@ -1,10 +1,12 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace Nemesis
 {
     public partial class NemesisForm : MetroFramework.Forms.MetroForm
     {
-
         public NemesisForm()
         {
             InitializeComponent();
@@ -16,38 +18,80 @@ namespace Nemesis
             processListView.GridLines = false;
             processListView.FullRowSelect = true;
 
-            processListView.Columns.Add("Pid");
+            processListView.Columns.Add("Pid", 500);
             processListView.Columns.Add("Name");
 
-            //
-            // Load the process list
-            //
-            for (int counter = 1; counter <= 50; counter++)
-            {
-                string[] arr = new string[2];
-                ListViewItem itm;
-
-                arr[0] = "Pid";
-                arr[1] = "Name";
-                itm = new ListViewItem(arr);
-
-                processListView.Items.Add(itm);
-            }
+            // FIXME: Implement proper sorting
+            processListView.Sorting = SortOrder.Descending;
 
             //
-            // Auto resize the columns
+            // Set the process list
             //
-            processListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            setProcessList();
         }
 
         private void refreshButton_Click(object sender, System.EventArgs e)
         {
-            NemesisConnector.StandardDump(15044, "D:/Test.exe");
+            setProcessList();
         }
 
         private void dumpButton_Click(object sender, System.EventArgs e)
         {
 
+        }
+
+        private void setProcessList()
+        {
+            Process[] processlist = Process.GetProcesses();
+
+            //
+            // Clear the original list
+            //
+            processListView.Items.Clear();
+
+            //
+            // Load the process list
+            //
+            foreach (Process process in processlist)
+            {
+                try
+                {
+                    string Id = process.Id.ToString();
+                    string ModuleName = process.MainModule.ModuleName;
+
+                    ListViewItem listViewItem = new ListViewItem(Id);
+                    listViewItem.SubItems.Add(ModuleName);
+
+                    processListView.Items.Add(listViewItem);
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+
+            //
+            // Sort it per id
+            //
+            // processInfoList.Sort(delegate (ProcessInfo processInfo1, ProcessInfo processInfo2)
+            //{
+            //    if (processInfo1.Id > processInfo2.Id)
+            //    {
+            //        return 1;
+            //    }
+
+            //    if (processInfo1.Id < processInfo2.Id)
+            //    {
+            //        return -1;
+            //    }
+
+            //    return 0;
+            //});
+
+            //
+            // Auto resize the columns
+            //
+            processListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
         }
     }
 }
