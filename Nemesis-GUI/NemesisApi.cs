@@ -2,7 +2,7 @@
 
 namespace Nemesis
 {
-    internal class NemesisConnector
+    internal class NemesisApi
     {
         //TODO: Replace path
         [DllImport("D:\\Nemesis\\Nemesis\\x64\\Release\\Nemesis.dll")]

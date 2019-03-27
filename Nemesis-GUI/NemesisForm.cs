@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Forms;
 
@@ -7,6 +6,9 @@ namespace Nemesis
 {
     public partial class NemesisForm : MetroFramework.Forms.MetroForm
     {
+        // 
+        // Sets the process list
+        // 
         public NemesisForm()
         {
             InitializeComponent();
@@ -18,8 +20,8 @@ namespace Nemesis
             processListView.GridLines = false;
             processListView.FullRowSelect = true;
 
-            processListView.Columns.Add("Pid", 500);
-            processListView.Columns.Add("Name");
+            processListView.Columns.Add("Pid");
+            processListView.Columns.Add("ProcessName");
 
             //
             // Sort it ascending by pid
@@ -30,20 +32,62 @@ namespace Nemesis
             //
             // Set the process list
             //
-            setProcessList();
+            SetProcessList();
         }
 
-        private void refreshButton_Click(object sender, System.EventArgs e)
+        //
+        // Refreshes the process list
+        //
+        private void RefreshButton_Click(object sender, System.EventArgs e)
         {
-            setProcessList();
+            SetProcessList();
         }
 
-        private void dumpButton_Click(object sender, System.EventArgs e)
+        //
+        // Dumps the process
+        //
+        private void DumpButton_Click(object sender, EventArgs e)
         {
+            if(processListView.SelectedItems.Count > 0)
+            {
+                //
+                // Get the selected item
+                //
+                ListViewItem selectedItem = processListView.SelectedItems[0];
 
+                //
+                // Get the pid
+                //
+                int pid = int.Parse(selectedItem.SubItems[0].Text);
+                string processName = selectedItem.SubItems[1].Text;
+
+                //
+                // Create the dump file name
+                //
+                string fileName = $@"{System.IO.Path.GetDirectoryName(Application.ExecutablePath)}/{processName}_dump.exe" ;
+
+                MessageBox.Show(fileName);
+
+                //
+                // Dump it
+                //
+                bool status = NemesisApi.StandardDump(pid, fileName);
+
+                if(status)
+                {
+                    MessageBox.Show("Successfully dumped the process.");
+                }
+                else
+                {
+                    MessageBox.Show("Failed to dump the process.");
+                }
+            }
         }
 
-        private void setProcessList()
+        //
+        // Sets the process list in the ListView
+        //
+        private void SetProcessList()
         {
             Process[] processlist = Process.GetProcesses();
 
@@ -59,37 +103,28 @@ namespace Nemesis
             {
                 try
                 {
-                    string Id = process.Id.ToString();
-                    string ModuleName = process.MainModule.ModuleName;
+                    // 
+                    // Create strings
+                    // 
+                    string id = process.Id.ToString();
+                    string processName = process.ProcessName;
 
-                    ListViewItem listViewItem = new ListViewItem(Id);
-                    listViewItem.SubItems.Add(ModuleName);
+                    //
+                    // Create a ListViewItem
+                    //
+                    ListViewItem listViewItem = new ListViewItem(id);
+                    listViewItem.SubItems.Add(processName);
 
+                    //
+                    // Add it to the ListView
+                    //
                     processListView.Items.Add(listViewItem);
                 }
                 catch (Exception)
                 {
-
+                    
                 }
             }
-
-            //
-            // Sort it per id
-            //
-            // processInfoList.Sort(delegate (ProcessInfo processInfo1, ProcessInfo processInfo2)
-            //{
-            //    if (processInfo1.Id > processInfo2.Id)
-            //    {
-            //        return 1;
-            //    }
-
-            //    if (processInfo1.Id < processInfo2.Id)
-            //    {
-            //        return -1;
-            //    }
-
-            //    return 0;
-            //});
 
             //
             // Auto resize the columns

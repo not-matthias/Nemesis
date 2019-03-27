@@ -40,16 +40,16 @@
             this.dumpButton.Size = new System.Drawing.Size(75, 23);
             this.dumpButton.TabIndex = 0;
             this.dumpButton.Text = "Dump";
-            this.dumpButton.Click += new System.EventHandler(this.dumpButton_Click);
+            this.dumpButton.Click += new System.EventHandler(this.DumpButton_Click);
             // 
             // refreshButton
             // 
-            this.refreshButton.Location = new System.Drawing.Point(484, 63);
+            this.refreshButton.Location = new System.Drawing.Point(504, 63);
             this.refreshButton.Name = "refreshButton";
             this.refreshButton.Size = new System.Drawing.Size(75, 23);
             this.refreshButton.TabIndex = 2;
             this.refreshButton.Text = "Refresh";
-            this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
+            this.refreshButton.Click += new System.EventHandler(this.RefreshButton_Click);
             // 
             // processListView
             // 
