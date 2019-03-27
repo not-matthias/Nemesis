@@ -103,6 +103,7 @@
     <Compile Include="NemesisForm.Designer.cs">
       <DependentUpon>NemesisForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PidSorter.cs" />
     <Compile Include="ProcessInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

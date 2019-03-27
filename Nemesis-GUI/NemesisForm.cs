@@ -21,8 +21,11 @@ namespace Nemesis
             processListView.Columns.Add("Pid", 500);
             processListView.Columns.Add("Name");
 
-            // FIXME: Implement proper sorting
-            processListView.Sorting = SortOrder.Descending;
+            //
+            // Sort it ascending by pid
+            //
+            processListView.Sorting = SortOrder.Ascending;
+            processListView.ListViewItemSorter = new PidSorter();
 
             //
             // Set the process list
