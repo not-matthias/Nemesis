@@ -17,11 +17,23 @@ Dump::~Dump()
 BOOL Dump::DumpProcess()
 {
 	//
-	// Dump the process
+	// Create the memory wrapper
 	//
 	ProcessMemory ProcessMemory(Pid);
+	if (!ProcessMemory.IsValid())
+	{
+		return FALSE;
+	}
 
+	//
+	// Create and initialize the pe file
+	//
 	PEFile PEFile(&ProcessMemory);
+	if (!PEFile.Initialize())
+	{
+		return FALSE;
+	}
+
 	PEFile.SetFileAlignment();
 	PEFile.AlignSectionHeaders();
 	PEFile.FixPEHeader();
@@ -31,7 +43,6 @@ BOOL Dump::DumpProcess()
 	// Write to file
 	//
 	FileWriter FileWriter(&PEFile);
-
 	if (FileWriter.WriteToFile(FileName))
 	{
 		return TRUE;

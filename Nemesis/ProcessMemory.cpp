@@ -8,9 +8,11 @@ ProcessMemory::ProcessMemory(DWORD Pid)
 
 ProcessMemory::~ProcessMemory()
 {
-	delete pMemorySource;
 }
 
+//
+// Functions
+//
 template<typename T>
 T ProcessMemory::ReadMemory(DWORD_PTR StartAddress)
 {
@@ -22,7 +24,18 @@ PVOID ProcessMemory::ReadMemory(DWORD_PTR StartAddress, SIZE_T Size)
 	return this->pMemorySource->ReadMemory(StartAddress, Size);
 }
 
+//
+// Getters
+//
 DWORD_PTR ProcessMemory::GetBaseAddress()
 {
 	return pMemorySource->GetBaseAddress();
+}
+
+//
+// Checks
+//
+BOOL ProcessMemory::IsValid()
+{
+	return pMemorySource != nullptr;
 }

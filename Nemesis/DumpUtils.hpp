@@ -13,8 +13,7 @@ typedef struct DUMP_OPTIONS
 
 };
 
-
 // Standard config
-BOOL StandardDump(DWORD Pid, std::string FileName);
+BOOL StandardDump(DWORD Pid, LPCSTR FileName);
 
-BOOL CustomDump(DWORD Pid, std::string FileName, DUMP_OPTIONS DumpOptions);
+BOOL CustomDump(DWORD Pid, LPCSTR FileName, DUMP_OPTIONS DumpOptions);

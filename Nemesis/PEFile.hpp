@@ -28,7 +28,7 @@ private:
 	//
 	// Init Functions
 	//
-	VOID ReadPEHeader();
+	BOOL ReadPEHeader();
 	VOID SetPEHeaders(PVOID HeaderMemory, DWORD HeaderSize);
 	VOID SetSections();
 	VOID SetSectionSize(PESection &Section, const DWORD_PTR ReadOffset);
@@ -41,6 +41,8 @@ public:
 	//
 	// Functions
 	//
+	BOOL Initialize();
+
 	VOID SetFileAlignment();
 	VOID SetEntryPoint(DWORD_PTR EntryPoint);
 	VOID AlignSectionHeaders();

@@ -19,10 +19,21 @@ public:
 	ProcessMemory(DWORD Pid);
 	~ProcessMemory();
 
+	//
+	// Functions
+	//
 	template <typename T> 
 	T ReadMemory(DWORD_PTR StartAddress);
 
 	PVOID ReadMemory(DWORD_PTR StartAddress, SIZE_T Size);
 
+	//
+	// Getters
+	//
 	DWORD_PTR GetBaseAddress();
+
+	//
+	// Checks
+	//
+	BOOL IsValid();
 };

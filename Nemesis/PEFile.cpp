@@ -3,12 +3,6 @@
 PEFile::PEFile(ProcessMemory *pProcessMemory)
 {
 	this->pProcessMemory = pProcessMemory;
-
-	//
-	// Initialize the PEFile
-	//
-	ReadPEHeader();
-	SetSections();
 }
 
 PEFile::~PEFile()
@@ -27,7 +21,25 @@ PEFile::~PEFile()
 //
 // Init Functions
 //
-VOID PEFile::ReadPEHeader()
+BOOL PEFile::Initialize()
+{
+	//
+	// Read the header from the memory
+	//
+	if (!ReadPEHeader())
+	{
+		return FALSE;
+	}
+	
+	//
+	// Set the sections from the memory
+	//
+	SetSections();
+
+	return TRUE;
+}
+
+BOOL PEFile::ReadPEHeader()
 {
 	DWORD HeaderSize = GetHeaderSize();
 
@@ -37,9 +49,20 @@ VOID PEFile::ReadPEHeader()
 	PVOID HeaderMemory = pProcessMemory->ReadMemory(pProcessMemory->GetBaseAddress(), HeaderSize);
 
 	//
+	// Check if valid
+	//
+	if (HeaderMemory == nullptr)
+	{
+		return FALSE;
+	}
+
+	//
 	// Set the pe header
 	//
 	SetPEHeaders(HeaderMemory, HeaderSize);
+
+
+	return TRUE;
 }
 
 VOID PEFile::SetPEHeaders(PVOID HeaderMemory, DWORD HeaderSize)

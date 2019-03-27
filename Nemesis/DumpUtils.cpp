@@ -1,26 +1,45 @@
 #include "DumpUtils.hpp"
 
-BOOL StandardDump(DWORD Pid, std::string FileName)
+BOOL StandardDump(DWORD Pid, LPCSTR FileName)
 {
 	//
 	// Create the classes
 	//
-	Dump Dump(24540, FileName);
+	Dump Dump(Pid, FileName);
 	
 	//
 	// Dump it
 	//
-	return Dump.DumpProcess();
+	if (Dump.DumpProcess())
+	{
+		return TRUE;
+	}
+	else
+	{
+		return FALSE;
+	}
 }
 
-BOOL CustomDump(DWORD Pid, std::string FileName, DUMP_OPTIONS DumpOptions)
+BOOL CustomDump(DWORD Pid, LPCSTR FileName, DUMP_OPTIONS DumpOptions)
 {
 	//
-	// Dump the process
+	// Create the memory wrapper
 	//
 	ProcessMemory ProcessMemory(Pid);
+	if (!ProcessMemory.IsValid())
+	{
+		return FALSE;
+	}
 
+	//
+	// Create and initialize the pe file
+	//
 	PEFile PEFile(&ProcessMemory);
+	if (!PEFile.Initialize())
+	{
+		return FALSE;
+	}
+
 	PEFile.SetFileAlignment();
 	PEFile.AlignSectionHeaders();
 	PEFile.FixPEHeader();
@@ -30,7 +49,6 @@ BOOL CustomDump(DWORD Pid, std::string FileName, DUMP_OPTIONS DumpOptions)
 	// Write to file
 	//
 	FileWriter FileWriter(&PEFile);
-
 	if (FileWriter.WriteToFile(FileName))
 	{
 		return TRUE;
