@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Nemesis.Utils;
+using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 
@@ -32,22 +33,6 @@ namespace Nemesis
             //Purple
             //Red
             //Yellow
-
-            //
-            // Set some properties
-            //
-            processListView.View = View.Details;
-            processListView.GridLines = false;
-            processListView.FullRowSelect = true;
-
-            processListView.Columns.Add("Pid");
-            processListView.Columns.Add("ProcessName");
-
-            //
-            // Sort it ascending by pid
-            //
-            processListView.Sorting = SortOrder.Ascending;
-            processListView.ListViewItemSorter = new PidSorter();
 
             //
             // Set the process list
@@ -135,47 +120,7 @@ namespace Nemesis
         //
         private void SetProcessList()
         {
-            Process[] processlist = Process.GetProcesses();
-
-            //
-            // Clear the original list
-            //
-            processListView.Items.Clear();
-
-            //
-            // Load the process list
-            //
-            foreach (Process process in processlist)
-            {
-                try
-                {
-                    // 
-                    // Create strings
-                    // 
-                    string id = process.Id.ToString();
-                    string processName = process.ProcessName;
-
-                    //
-                    // Create a ListViewItem
-                    //
-                    ListViewItem listViewItem = new ListViewItem(id);
-                    listViewItem.SubItems.Add(processName);
-
-                    //
-                    // Add it to the ListView
-                    //
-                    processListView.Items.Add(listViewItem);
-                }
-                catch (Exception)
-                {
-
-                }
-            }
-
-            //
-            // Auto resize the columns
-            //
-            processListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            processListView.LoadProcesses();
         }
     }
 }

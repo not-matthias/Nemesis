@@ -30,9 +30,9 @@
         {
             this.dumpButton = new MetroFramework.Controls.MetroButton();
             this.refreshButton = new MetroFramework.Controls.MetroButton();
-            this.processListView = new System.Windows.Forms.ListView();
             this.metroButton1 = new MetroFramework.Controls.MetroButton();
             this.metroButton2 = new MetroFramework.Controls.MetroButton();
+            this.processListView = new Nemesis.ProcessListView();
             this.SuspendLayout();
             // 
             // dumpButton
@@ -53,16 +53,6 @@
             this.refreshButton.Text = "Refresh";
             this.refreshButton.Click += new System.EventHandler(this.RefreshButton_Click);
             // 
-            // processListView
-            // 
-            this.processListView.Alignment = System.Windows.Forms.ListViewAlignment.Default;
-            this.processListView.Location = new System.Drawing.Point(23, 79);
-            this.processListView.MultiSelect = false;
-            this.processListView.Name = "processListView";
-            this.processListView.Size = new System.Drawing.Size(637, 318);
-            this.processListView.TabIndex = 0;
-            this.processListView.UseCompatibleStateImageBehavior = false;
-            // 
             // metroButton1
             // 
             this.metroButton1.Location = new System.Drawing.Point(104, 403);
@@ -79,6 +69,19 @@
             this.metroButton2.TabIndex = 4;
             this.metroButton2.Text = "Config";
             // 
+            // processListView
+            // 
+            this.processListView.Alignment = System.Windows.Forms.ListViewAlignment.Default;
+            this.processListView.FullRowSelect = true;
+            this.processListView.Location = new System.Drawing.Point(23, 79);
+            this.processListView.MultiSelect = false;
+            this.processListView.Name = "processListView";
+            this.processListView.Size = new System.Drawing.Size(637, 318);
+            this.processListView.Sorting = System.Windows.Forms.SortOrder.Ascending;
+            this.processListView.TabIndex = 0;
+            this.processListView.UseCompatibleStateImageBehavior = false;
+            this.processListView.View = System.Windows.Forms.View.Details;
+            // 
             // NemesisForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -89,6 +92,7 @@
             this.Controls.Add(this.processListView);
             this.Controls.Add(this.refreshButton);
             this.Controls.Add(this.dumpButton);
+            this.MaximizeBox = false;
             this.Name = "NemesisForm";
             this.Resizable = false;
             this.Text = "Nemesis";
@@ -100,7 +104,7 @@
 
         private MetroFramework.Controls.MetroButton dumpButton;
         private MetroFramework.Controls.MetroButton refreshButton;
-        private System.Windows.Forms.ListView processListView;
+        private ProcessListView processListView;
         private MetroFramework.Controls.MetroButton metroButton1;
         private MetroFramework.Controls.MetroButton metroButton2;
     }
