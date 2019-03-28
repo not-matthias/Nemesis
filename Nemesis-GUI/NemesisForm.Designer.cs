@@ -70,6 +70,7 @@
             this.Controls.Add(this.refreshButton);
             this.Controls.Add(this.dumpButton);
             this.Name = "NemesisForm";
+            this.Resizable = false;
             this.Text = "Nemesis";
             this.ResumeLayout(false);
 

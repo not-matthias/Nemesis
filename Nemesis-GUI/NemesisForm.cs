@@ -49,7 +49,7 @@ namespace Nemesis
         private void DumpButton_Click(object sender, EventArgs e)
         {
             if(processListView.SelectedItems.Count > 0)
-            {
+            { 
                 //
                 // Get the selected item
                 //
@@ -66,7 +66,30 @@ namespace Nemesis
                 //
                 string fileName = $@"{System.IO.Path.GetDirectoryName(Application.ExecutablePath)}/{processName}_dump.exe" ;
 
-                MessageBox.Show(fileName);
+                //
+                // Open the dialog
+                //
+                SaveFileDialog saveFile = new SaveFileDialog();
+
+                // 
+                // Set the default name
+                // 
+                saveFile.FileName = $@"{processName}_dump.exe";
+
+                // 
+                // Set the filters
+                // 
+                saveFile.Filter = "Executable File (.exe)|*.exe";
+
+                //
+                // Show the dialog
+                //
+                if (saveFile.ShowDialog() == DialogResult.OK)
+                {
+                    MessageBox.Show(saveFile.FileName);
+                    //string fileName = savefile.FileName;
+                }
+
 
                 //
                 // Dump it
