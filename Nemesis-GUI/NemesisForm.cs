@@ -14,6 +14,26 @@ namespace Nemesis
             InitializeComponent();
 
             //
+            // Set the metro color
+            //
+            Style = MetroFramework.MetroColorStyle.Default;
+            //Default
+            //Black
+            //White
+            //Silver
+            //Blue
+            //Green
+            //Lime
+            //Teal
+            //Orange
+            //Brown
+            //Pink
+            //Magenta
+            //Purple
+            //Red
+            //Yellow
+
+            //
             // Set some properties
             //
             processListView.View = View.Details;
@@ -48,8 +68,8 @@ namespace Nemesis
         //
         private void DumpButton_Click(object sender, EventArgs e)
         {
-            if(processListView.SelectedItems.Count > 0)
-            { 
+            if (processListView.SelectedItems.Count > 0)
+            {
                 //
                 // Get the selected item
                 //
@@ -64,7 +84,8 @@ namespace Nemesis
                 //
                 // Create the dump file name
                 //
-                string fileName = $@"{System.IO.Path.GetDirectoryName(Application.ExecutablePath)}/{processName}_dump.exe" ;
+                string fileName = $@"{System.IO.Path.GetDirectoryName(Application.ExecutablePath)}/{processName}_dump.exe";
+
 
                 //
                 // Open the dialog
@@ -96,9 +117,11 @@ namespace Nemesis
                 //
                 bool status = NemesisApi.StandardDump(pid, fileName);
 
-                if(status)
+                if (status)
                 {
                     MessageBox.Show("Successfully dumped the process.");
+
+                    // TODO: Ask if add path to config?
                 }
                 else
                 {
@@ -145,7 +168,7 @@ namespace Nemesis
                 }
                 catch (Exception)
                 {
-                    
+
                 }
             }
 
