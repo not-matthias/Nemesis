@@ -18,7 +18,6 @@ namespace Nemesis
 
             DoubleBuffered = true;
             Sorting = SortOrder.Ascending;
-
         }
 
         //
@@ -62,7 +61,6 @@ namespace Nemesis
             //
             ListViewItemSorter = new ProcessSorter(sortColumnIndex, Sorting);
         }
-
 
         //
         // Sort the columns on click

@@ -1,6 +1,4 @@
-﻿using Nemesis.Utils;
-using System;
-using System.Diagnostics;
+﻿using System;
 using System.Windows.Forms;
 
 namespace Nemesis
@@ -37,16 +35,13 @@ namespace Nemesis
             //
             // Set the process list
             //
-            SetProcessList();
+            processListView.LoadProcesses();
         }
 
         //
         // Refreshes the process list
         //
-        private void RefreshButton_Click(object sender, System.EventArgs e)
-        {
-            SetProcessList();
-        }
+        private void RefreshButton_Click(object sender, EventArgs e) => processListView.LoadProcesses();
 
         //
         // Dumps the process
@@ -113,14 +108,6 @@ namespace Nemesis
                     MessageBox.Show("Failed to dump the process.");
                 }
             }
-        }
-
-        //
-        // Sets the process list in the ListView
-        //
-        private void SetProcessList()
-        {
-            processListView.LoadProcesses();
         }
     }
 }
