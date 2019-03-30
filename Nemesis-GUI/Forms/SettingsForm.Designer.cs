@@ -39,7 +39,7 @@
             this.metroLabel5 = new MetroFramework.Controls.MetroLabel();
             this.fileName = new MetroFramework.Controls.MetroTextBox();
             this.metroLabel6 = new MetroFramework.Controls.MetroLabel();
-            this.addTimestampToggle = new MetroFramework.Controls.MetroToggle();
+            this.addTimestampFolderToggle = new MetroFramework.Controls.MetroToggle();
             this.metroLabel4 = new MetroFramework.Controls.MetroLabel();
             this.askForLocationToggle = new MetroFramework.Controls.MetroToggle();
             this.metroLabel7 = new MetroFramework.Controls.MetroLabel();
@@ -194,15 +194,15 @@
             this.metroLabel6.TabIndex = 14;
             this.metroLabel6.Text = "Add timestamp:";
             // 
-            // addTimestampToggle
+            // addTimestampFolderToggle
             // 
-            this.addTimestampToggle.AutoSize = true;
-            this.addTimestampToggle.Location = new System.Drawing.Point(207, 176);
-            this.addTimestampToggle.Name = "addTimestampToggle";
-            this.addTimestampToggle.Size = new System.Drawing.Size(80, 17);
-            this.addTimestampToggle.TabIndex = 15;
-            this.addTimestampToggle.Text = "Off";
-            this.addTimestampToggle.UseSelectable = true;
+            this.addTimestampFolderToggle.AutoSize = true;
+            this.addTimestampFolderToggle.Location = new System.Drawing.Point(207, 176);
+            this.addTimestampFolderToggle.Name = "addTimestampFolderToggle";
+            this.addTimestampFolderToggle.Size = new System.Drawing.Size(80, 17);
+            this.addTimestampFolderToggle.TabIndex = 15;
+            this.addTimestampFolderToggle.Text = "Off";
+            this.addTimestampFolderToggle.UseSelectable = true;
             // 
             // metroLabel4
             // 
@@ -229,9 +229,9 @@
             this.metroLabel7.AutoSize = true;
             this.metroLabel7.Location = new System.Drawing.Point(23, 174);
             this.metroLabel7.Name = "metroLabel7";
-            this.metroLabel7.Size = new System.Drawing.Size(103, 19);
+            this.metroLabel7.Size = new System.Drawing.Size(157, 19);
             this.metroLabel7.TabIndex = 14;
-            this.metroLabel7.Text = "Add timestamp:";
+            this.metroLabel7.Text = "Create timestamp folder:";
             // 
             // SettingsForm
             // 
@@ -241,7 +241,7 @@
             this.ClientSize = new System.Drawing.Size(530, 300);
             this.Controls.Add(this.askForLocationToggle);
             this.Controls.Add(this.metroLabel4);
-            this.Controls.Add(this.addTimestampToggle);
+            this.Controls.Add(this.addTimestampFolderToggle);
             this.Controls.Add(this.metroLabel7);
             this.Controls.Add(this.metroLabel6);
             this.Controls.Add(this.fileName);
@@ -278,7 +278,7 @@
         private MetroFramework.Controls.MetroLabel metroLabel5;
         private MetroFramework.Controls.MetroTextBox fileName;
         private MetroFramework.Controls.MetroLabel metroLabel6;
-        private MetroFramework.Controls.MetroToggle addTimestampToggle;
+        private MetroFramework.Controls.MetroToggle addTimestampFolderToggle;
         private MetroFramework.Controls.MetroLabel metroLabel4;
         private MetroFramework.Controls.MetroToggle askForLocationToggle;
         private MetroFramework.Controls.MetroLabel metroLabel7;

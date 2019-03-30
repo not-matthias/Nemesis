@@ -6,9 +6,27 @@ namespace Nemesis
 {
     public partial class SettingsForm : MetroForm
     {
+        //
+        // Sets the values from the config
+        //
         public SettingsForm()
         {
             InitializeComponent();
+
+            //
+            // TextFields
+            //
+            dumpLocation.Text = Config.GetValue("dump_location");
+            fileName.Text = Config.GetValue("file_name");
+
+            //
+            // Toggles
+            //
+            // TODO: Find a better way
+            customDumpLocationToggle.Checked = Config.GetValue("custom_dump_location") == "On" ? true : false;
+            createFolderToggle.Checked = Config.GetValue("create_process_folder") == "On" ? true : false;
+            addTimestampFolderToggle.Checked = Config.GetValue("create_timestamp_folder") == "On" ? true : false;
+            askForLocationToggle.Checked = Config.GetValue("ask_for_location") == "On" ? true : false;
         }
 
         //
@@ -20,8 +38,8 @@ namespace Nemesis
             Config.SetValue("file_name", fileName.Text);
 
             Config.SetValue("custom_dump_location", customDumpLocationToggle.Text);
-            Config.SetValue("create_folder", createFolderToggle.Text);
-            Config.SetValue("add_timestamp", addTimestampToggle.Text);
+            Config.SetValue("create_process_folder", createFolderToggle.Text);
+            Config.SetValue("create_timestamp_folder", addTimestampFolderToggle.Text);
             Config.SetValue("ask_for_location", askForLocationToggle.Text);
 
             Close();

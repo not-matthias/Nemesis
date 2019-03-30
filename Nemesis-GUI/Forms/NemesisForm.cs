@@ -29,64 +29,87 @@ namespace Nemesis
         //
         private void DumpButton_Click(object sender, EventArgs e)
         {
+
             if (processListView.SelectedItems.Count > 0)
             {
-                //
-                // Get the selected item
-                //
                 ListViewItem selectedItem = processListView.SelectedItems[0];
-
-                //
-                // Get the pid
-                //
-                int pid = int.Parse(selectedItem.SubItems[0].Text);
+                int processId = int.Parse(selectedItem.SubItems[0].Text);
                 string processName = selectedItem.SubItems[1].Text;
 
-                //
-                // Create the dump file name
-                //
-                string fileName = $@"{System.IO.Path.GetDirectoryName(Application.ExecutablePath)}/{processName}_dump.exe";
-
+                string path = "";
 
                 //
-                // Open the dialog
+                // Create process folder
                 //
-                SaveFileDialog saveFile = new SaveFileDialog();
-
-                // 
-                // Set the default name
-                // 
-                saveFile.FileName = $@"{processName}_dump.exe";
-
-                // 
-                // Set the filters
-                // 
-                saveFile.Filter = "Executable File (.exe)|*.exe";
-
-                //
-                // Show the dialog
-                //
-                if (saveFile.ShowDialog() == DialogResult.OK)
+                if (Config.GetValue("create_process_folder") == "On")
                 {
-                    MessageBox.Show(saveFile.FileName);
-                    //string fileName = savefile.FileName;
+                    path += processName + "/";
+                    System.IO.Directory.CreateDirectory(path);
+                }
+
+                //
+                // Create timestamp folder
+                //
+                if (Config.GetValue("create_timestamp_folder") == "On")
+                {
+                    path += DateTime.Now.ToString("MM.dd.yyyy HH:mm:ss") + "/";
+                    System.IO.Directory.CreateDirectory(path);
+                }
+
+                //
+                // Ask for location
+                //
+                if (Config.GetValue("ask_for_location") == "On")
+                {
+                    //
+                    // Open the dialog
+                    //
+                    SaveFileDialog saveFile = new SaveFileDialog
+                    {
+                        // 
+                        // Set the default name
+                        // 
+                        FileName = $@"{processName}{Config.GetValue("file_name")}",
+
+                        // 
+                        // Set the filters
+                        // 
+                        Filter = "Executable File (.exe)|*.exe"
+                    };
+
+                    //
+                    // Show the dialog
+                    //
+                    if (saveFile.ShowDialog() == DialogResult.OK)
+                    {
+                        path = saveFile.FileName;
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+
+                //
+                // Use custom dump location
+                //
+                if ((path = Config.GetValue("custom_dump_location")) == "On")
+                {
+                    path += $@"/{processName}{Config.GetValue("file_name")}";
                 }
 
 
                 //
                 // Dump it
                 //
-                bool status = NemesisApi.StandardDump(pid, fileName);
-
+                bool status = NemesisApi.StandardDump(processId, path);
                 if (status)
                 {
-                    MessageBox.Show("Successfully dumped the process.");
-
-                    // TODO: Ask if add path to config?
+                    MessageBox.Show("Successfully dumped the process.", "Success");
                 }
                 else
                 {
-                    MessageBox.Show("Failed to dump the process.");
+                    MessageBox.Show("Failed to dump the process.", "Failure");
                 }
             }
         }
@@ -129,7 +152,7 @@ namespace Nemesis
             //
             // Ctrl+R = Refresh
             //
-            if(keyData == (Keys.Control | Keys.R))
+            if (keyData == (Keys.Control | Keys.R))
             {
                 RefreshButton_Click(null, null);
             }
@@ -137,12 +160,16 @@ namespace Nemesis
             //
             // Ctrl+Alt+S
             //
-            if(keyData == (Keys.Control | Keys.Alt | Keys.S))
+            if (keyData == (Keys.Control | Keys.Alt | Keys.S))
             {
                 SettingsButton_Click(null, null);
             }
 
             return base.ProcessCmdKey(ref msg, keyData);
         }
+
+
+
+
     }
 }
