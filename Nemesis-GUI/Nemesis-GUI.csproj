@@ -97,23 +97,41 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Utils\Config.cs" />
-    <Compile Include="Utils\NemesisApi.cs" />
-    <Compile Include="NemesisForm.cs">
+    <Compile Include="Forms\AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="NemesisForm.Designer.cs">
+    <Compile Include="Forms\AboutForm.Designer.cs">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SettingsForm.Designer.cs">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\Config.cs" />
+    <Compile Include="Utils\NemesisApi.cs" />
+    <Compile Include="Forms\NemesisForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\NemesisForm.Designer.cs">
       <DependentUpon>NemesisForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Utils\ProcessSorter.cs" />
     <Compile Include="Utils\ProcessListItem.cs" />
-    <Compile Include="ProcessListView.cs">
+    <Compile Include="Utils\ProcessListView.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="NemesisForm.resx">
+    <EmbeddedResource Include="Forms\AboutForm.resx">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\NemesisForm.resx">
       <DependentUpon>NemesisForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SettingsForm.resx">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

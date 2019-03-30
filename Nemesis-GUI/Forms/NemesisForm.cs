@@ -1,9 +1,10 @@
-﻿using System;
+﻿using MetroFramework.Forms;
+using System;
 using System.Windows.Forms;
 
 namespace Nemesis
 {
-    public partial class NemesisForm : MetroFramework.Forms.MetroForm
+    public partial class NemesisForm : MetroForm
     {
         // 
         // Sets the process list
@@ -108,6 +109,24 @@ namespace Nemesis
                     MessageBox.Show("Failed to dump the process.");
                 }
             }
+        }
+
+        //
+        // Opens the about window
+        //
+        private void AboutButton_Click(object sender, EventArgs e)
+        {
+            AboutForm aboutForm = new AboutForm();
+            aboutForm.ShowDialog();
+        }
+
+        //
+        // Opens the settings window
+        //
+        private void SettingsButton_Click(object sender, EventArgs e)
+        {
+            SettingsForm settingsForm = new SettingsForm();
+            settingsForm.ShowDialog();
         }
     }
 }
