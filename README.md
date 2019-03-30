@@ -1,5 +1,6 @@
 # Nemesis
-A customizable process dumper library.
+The first customizable process dumper library.
+
 
 
 ## Features
@@ -8,21 +9,22 @@ A customizable process dumper library.
 - Dump sections (TODO)
 - Dump custom memory region (TODO)
 - PE Rebuild
-- Extensible
-  - Custom memory sources (kernel, usermode, ...)
-  - Custom gui (TODO)
+- Custom memory sources (kernel, usermode, ...)
 
-## Usage
+## GUI Features 
+- Simple and intuitive design
+- Custom dump name
+- Custom dump directory location
+- Sortable process list
+- Keybinds 
 
-## Motivation
+## Keybinds
+<kbd>CTRL+D</kbd> - Dumps the selected process
 
-## Custom GUI
+<kbd>CTRL+R</kbd> - Refresh the processes
 
-## Custom memory sources
+<kbd>CTRL+ALT+S</kbd> - Opens the settings
 
 ## References
 - https://github.com/NtQuery/Scylla/
 - https://github.com/EquiFox/KsDumper
-- https://github.com/Zer0Mem0ry/ntoskrnl
-- https://msdn.microsoft.com
-- https://unknowncheats.me
