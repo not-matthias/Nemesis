@@ -1,6 +1,7 @@
 ﻿using MetroFramework.Controls;
 using MetroFramework.Forms;
 using System;
+using System.Windows.Forms;
 
 namespace Nemesis.Forms
 {
@@ -14,6 +15,17 @@ namespace Nemesis.Forms
             InitializeComponent();
 
             //
+            // Set default values the first time
+            //
+            if(Config.GetValue("first_time_started") == null)
+            {
+                Config.SetValue("file_name", "_dump.exe");
+                Config.SetValue("ask_for_location", "On");
+
+                Config.SetValue("first_time_started", ".");
+            }
+
+            //
             // TextFields
             //
             dumpLocation.Text = Config.GetValue("dump_location");
@@ -25,7 +37,7 @@ namespace Nemesis.Forms
             // TODO: Find a better way
             customDumpLocationToggle.Checked = Config.GetValue("custom_dump_location") == "On" ? true : false;
             createFolderToggle.Checked = Config.GetValue("create_process_folder") == "On" ? true : false;
-            addTimestampFolderToggle.Checked = Config.GetValue("create_timestamp_folder") == "On" ? true : false;
+            createTimestampFolderToggle.Checked = Config.GetValue("create_timestamp_folder") == "On" ? true : false;
             askForLocationToggle.Checked = Config.GetValue("ask_for_location") == "On" ? true : false;
         }
 
@@ -39,7 +51,7 @@ namespace Nemesis.Forms
 
             Config.SetValue("custom_dump_location", customDumpLocationToggle.Text);
             Config.SetValue("create_process_folder", createFolderToggle.Text);
-            Config.SetValue("create_timestamp_folder", addTimestampFolderToggle.Text);
+            Config.SetValue("create_timestamp_folder", createTimestampFolderToggle.Text);
             Config.SetValue("ask_for_location", askForLocationToggle.Text);
 
             Close();
@@ -68,6 +80,38 @@ namespace Nemesis.Forms
         }
 
         //
+        // Enables the process folder option
+        //
+        private void CreateFolderToggle_CheckedChanged(object sender, EventArgs e)
+        {
+            MetroToggle toggle = (MetroToggle)sender;
+
+            //
+            // Disable "ask for location" if enabled
+            //
+            if (toggle.Checked)
+            {
+                askForLocationToggle.Checked = false;
+            }
+        }
+
+        //
+        // Enables the timestamp folder option
+        //
+        private void CreateTimestampFolderToggle_CheckedChanged(object sender, EventArgs e)
+        {
+            MetroToggle toggle = (MetroToggle)sender;
+
+            //
+            // Disable "ask for location" if enabled
+            //
+            if (toggle.Checked)
+            {
+                askForLocationToggle.Checked = false;
+            }
+        }
+
+        //
         // Enables ask for location option
         // 
         private void AskForLocationToggle_CheckedChanged(object sender, EventArgs e)
@@ -80,8 +124,15 @@ namespace Nemesis.Forms
             if (toggle.Checked)
             {
                 dumpLocation.Clear();
+
+                //
+                // Can't have generated folders when having this option enabled
+                //
                 customDumpLocationToggle.Checked = false;
+                createFolderToggle.Checked = false;
+                createTimestampFolderToggle.Checked = false;
             }
         }
+
     }
 }
