@@ -110,5 +110,39 @@ namespace Nemesis
             settingsForm.ShowDialog();
             settingsForm.Dispose();
         }
+
+        //
+        // Shortcuts
+        //
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            //
+            // Ctrl+D = Dump
+            //
+            if (keyData == (Keys.Control | Keys.D))
+            {
+                DumpButton_Click(null, null);
+
+                return true;
+            }
+
+            //
+            // Ctrl+R = Refresh
+            //
+            if(keyData == (Keys.Control | Keys.R))
+            {
+                RefreshButton_Click(null, null);
+            }
+
+            //
+            // Ctrl+Alt+S
+            //
+            if(keyData == (Keys.Control | Keys.Alt | Keys.S))
+            {
+                SettingsButton_Click(null, null);
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
     }
 }

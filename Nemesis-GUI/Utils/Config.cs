@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Configuration;
 
 namespace Nemesis
 {
-    class Config
+    internal class Config
     {
         //
         // Sets the specified value in the config
         //
-        private static void SetValue(string key, string value)
+        public static void SetValue(string key, string value)
         {
             //
             // Get the config file
@@ -46,6 +41,6 @@ namespace Nemesis
         //
         // Retrieves the specified value from the config
         //
-        private static string GetValue(string key) => ConfigurationManager.AppSettings[key];
+        public static string GetValue(string key) => ConfigurationManager.AppSettings[key];
     }
 }
