@@ -1,6 +1,6 @@
-﻿namespace Nemesis
+﻿namespace Nemesis.Forms
 {
-    partial class NemesisForm
+    partial class Nemesis
     {
         /// <summary>
         /// Required designer variable.
@@ -32,7 +32,7 @@
             this.refreshButton = new MetroFramework.Controls.MetroButton();
             this.settingsButton = new MetroFramework.Controls.MetroButton();
             this.aboutButton = new MetroFramework.Controls.MetroButton();
-            this.processListView = new Nemesis.ProcessListView();
+            this.processListView = new ProcessListView();
             this.SuspendLayout();
             // 
             // dumpButton

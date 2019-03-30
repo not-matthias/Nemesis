@@ -1,15 +1,16 @@
 ﻿using MetroFramework.Forms;
 using System;
+using System.IO;
 using System.Windows.Forms;
 
-namespace Nemesis
+namespace Nemesis.Forms
 {
-    public partial class NemesisForm : MetroForm
+    public partial class Nemesis : MetroForm
     {
         // 
         // Sets the process list
         // 
-        public NemesisForm()
+        public Nemesis()
         {
             InitializeComponent();
 
@@ -29,32 +30,15 @@ namespace Nemesis
         //
         private void DumpButton_Click(object sender, EventArgs e)
         {
-
             if (processListView.SelectedItems.Count > 0)
             {
                 ListViewItem selectedItem = processListView.SelectedItems[0];
+
                 int processId = int.Parse(selectedItem.SubItems[0].Text);
                 string processName = selectedItem.SubItems[1].Text;
 
                 string path = "";
 
-                //
-                // Create process folder
-                //
-                if (Config.GetValue("create_process_folder") == "On")
-                {
-                    path += processName + "/";
-                    System.IO.Directory.CreateDirectory(path);
-                }
-
-                //
-                // Create timestamp folder
-                //
-                if (Config.GetValue("create_timestamp_folder") == "On")
-                {
-                    path += DateTime.Now.ToString("MM.dd.yyyy HH:mm:ss") + "/";
-                    System.IO.Directory.CreateDirectory(path);
-                }
 
                 //
                 // Ask for location
@@ -93,24 +77,79 @@ namespace Nemesis
                 //
                 // Use custom dump location
                 //
-                if ((path = Config.GetValue("custom_dump_location")) == "On")
+                if ((Config.GetValue("custom_dump_location")) == "On")
                 {
-                    path += $@"/{processName}{Config.GetValue("file_name")}";
-                }
+                    string dump_location = Config.GetValue("dump_location");
 
+                    //
+                    // Absolute path
+                    //
+                    if (Path.IsPathRooted(path))
+                    {
+                        path = dump_location;
+                    }
+
+                    //
+                    // Relative path
+                    //
+                    if (!Path.IsPathRooted(path))
+                    {
+                        path = $@"{Path.GetDirectoryName(Application.ExecutablePath)}/{dump_location}";
+                    }
+
+                    //
+                    // Create process folder
+                    //
+                    if (Config.GetValue("create_process_folder") == "On")
+                    {
+                        path += $@"{processName}/";
+                    }
+
+                    //
+                    // Create timestamp folder
+                    //
+                    if (Config.GetValue("create_timestamp_folder") == "On")
+                    {
+                        path += $@"{DateTime.Now.ToString("dd-MM-yyyy HH-mm-ss")}/";
+                    }
+
+                    //
+                    // Create the directories (in case they are not existing)
+                    //
+                    try
+                    {
+                        Directory.CreateDirectory(path);
+                        path += $@"/{processName}{Config.GetValue("file_name")}";
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("Custom path is invalid. Make sure the path is correct.", "Warning");
+                        return;
+                    }
+
+                }
 
                 //
                 // Dump it
                 //
-                bool status = NemesisApi.StandardDump(processId, path);
-                if (status)
+                try
                 {
-                    MessageBox.Show("Successfully dumped the process.", "Success");
+                    bool status = NemesisApi.StandardDump(processId, path);
+                    if (status)
+                    {
+                        MessageBox.Show("Successfully dumped the process.", "Success");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Failed to dump the process.", "Warning");
+                    }
                 }
-                else
+                catch(Exception)
                 {
-                    MessageBox.Show("Failed to dump the process.", "Failure");
+                    MessageBox.Show("Nemesis threw an exception.", "Warning");
                 }
+
+               
             }
         }
 
@@ -119,9 +158,9 @@ namespace Nemesis
         //
         private void AboutButton_Click(object sender, EventArgs e)
         {
-            AboutForm aboutForm = new AboutForm();
-            aboutForm.ShowDialog();
-            aboutForm.Dispose();
+            About about = new About();
+            about.ShowDialog();
+            about.Dispose();
         }
 
         //
@@ -129,9 +168,9 @@ namespace Nemesis
         //
         private void SettingsButton_Click(object sender, EventArgs e)
         {
-            SettingsForm settingsForm = new SettingsForm();
-            settingsForm.ShowDialog();
-            settingsForm.Dispose();
+            Settings settings = new Settings();
+            settings.ShowDialog();
+            settings.Dispose();
         }
 
         //
@@ -167,9 +206,5 @@ namespace Nemesis
 
             return base.ProcessCmdKey(ref msg, keyData);
         }
-
-
-
-
     }
 }

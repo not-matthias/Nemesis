@@ -2,14 +2,14 @@
 using MetroFramework.Forms;
 using System;
 
-namespace Nemesis
+namespace Nemesis.Forms
 {
-    public partial class SettingsForm : MetroForm
+    public partial class Settings : MetroForm
     {
         //
         // Sets the values from the config
         //
-        public SettingsForm()
+        public Settings()
         {
             InitializeComponent();
 

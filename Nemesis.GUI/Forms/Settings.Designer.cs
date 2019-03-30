@@ -1,6 +1,6 @@
-﻿namespace Nemesis
+﻿namespace Nemesis.Forms
 {
-    partial class SettingsForm
+    partial class Settings
     {
         /// <summary>
         /// Required designer variable.
