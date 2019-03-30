@@ -1,5 +1,5 @@
 # Nemesis
-The first customizable process dumper library.
+A customizable process dumper library.
 
 
 
