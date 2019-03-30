@@ -1,29 +1,37 @@
 # Nemesis
 A customizable process dumper library.
 
+## Nemesis 
 
-
-## Features
+### Features
 - Dump x86 or x64 processes 
-- Dump x86 or x64 drivers
+- Dump x86 or x64 drivers (TODO)
 - Dump sections (TODO)
 - Dump custom memory region (TODO)
 - PE Rebuild
 - Custom memory sources (kernel, usermode, ...)
 
-## GUI Features 
+### Exports
+TODO
+
+--- 
+
+## User Interface
+### Features 
 - Simple and intuitive design
 - Custom dump name
 - Custom dump directory location
 - Sortable process list
-- Keybinds 
+- Keyboard shortcuts
 
-## Keyboard Shortcuts
+### Keyboard Shortcuts
 <kbd>CTRL+D</kbd> - Dumps the selected process
 
 <kbd>CTRL+R</kbd> - Refresh the processes
 
 <kbd>CTRL+ALT+S</kbd> - Opens the settings
+
+---
 
 ## References
 - https://github.com/NtQuery/Scylla/
