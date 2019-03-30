@@ -18,7 +18,7 @@ A customizable process dumper library.
 - Sortable process list
 - Keybinds 
 
-## Keybinds
+## Keyboard Shortcuts
 <kbd>CTRL+D</kbd> - Dumps the selected process
 
 <kbd>CTRL+R</kbd> - Refresh the processes
