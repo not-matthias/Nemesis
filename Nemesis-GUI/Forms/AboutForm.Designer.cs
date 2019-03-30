@@ -79,7 +79,6 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BorderStyle = MetroFramework.Drawing.MetroBorderStyle.FixedSingle;
             this.ClientSize = new System.Drawing.Size(530, 300);
             this.Controls.Add(this.metroLabel6);
             this.Controls.Add(this.metroLabel5);
@@ -90,6 +89,7 @@
             this.MinimizeBox = false;
             this.Name = "AboutForm";
             this.Resizable = false;
+            this.ShadowType = MetroFramework.Forms.MetroFormShadowType.AeroShadow;
             this.ShowInTaskbar = false;
             this.Text = "About";
             this.ResumeLayout(false);

@@ -34,12 +34,12 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BorderStyle = MetroFramework.Drawing.MetroBorderStyle.FixedSingle;
             this.ClientSize = new System.Drawing.Size(530, 300);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "SettingsForm";
             this.Resizable = false;
+            this.ShadowType = MetroFramework.Forms.MetroFormShadowType.AeroShadow;
             this.Text = "Settings";
             this.ResumeLayout(false);
 

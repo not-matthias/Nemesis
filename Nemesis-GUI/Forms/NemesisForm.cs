@@ -14,26 +14,6 @@ namespace Nemesis
             InitializeComponent();
 
             //
-            // Set the metro color
-            //
-            Style = MetroFramework.MetroColorStyle.Default;
-            //Default
-            //Black
-            //White
-            //Silver
-            //Blue
-            //Green
-            //Lime
-            //Teal
-            //Orange
-            //Brown
-            //Pink
-            //Magenta
-            //Purple
-            //Red
-            //Yellow
-
-            //
             // Set the process list
             //
             processListView.LoadProcesses();
@@ -118,6 +98,7 @@ namespace Nemesis
         {
             AboutForm aboutForm = new AboutForm();
             aboutForm.ShowDialog();
+            aboutForm.Dispose();
         }
 
         //
@@ -127,6 +108,7 @@ namespace Nemesis
         {
             SettingsForm settingsForm = new SettingsForm();
             settingsForm.ShowDialog();
+            settingsForm.Dispose();
         }
     }
 }

@@ -42,6 +42,7 @@
             this.dumpButton.Size = new System.Drawing.Size(75, 23);
             this.dumpButton.TabIndex = 0;
             this.dumpButton.Text = "Dump";
+            this.dumpButton.UseSelectable = true;
             this.dumpButton.Click += new System.EventHandler(this.DumpButton_Click);
             // 
             // refreshButton
@@ -51,6 +52,7 @@
             this.refreshButton.Size = new System.Drawing.Size(75, 23);
             this.refreshButton.TabIndex = 2;
             this.refreshButton.Text = "Refresh";
+            this.refreshButton.UseSelectable = true;
             this.refreshButton.Click += new System.EventHandler(this.RefreshButton_Click);
             // 
             // settingsButton
@@ -60,6 +62,7 @@
             this.settingsButton.Size = new System.Drawing.Size(75, 23);
             this.settingsButton.TabIndex = 3;
             this.settingsButton.Text = "Settings";
+            this.settingsButton.UseSelectable = true;
             this.settingsButton.Click += new System.EventHandler(this.SettingsButton_Click);
             // 
             // aboutButton
@@ -69,6 +72,7 @@
             this.aboutButton.Size = new System.Drawing.Size(75, 23);
             this.aboutButton.TabIndex = 4;
             this.aboutButton.Text = "About";
+            this.aboutButton.UseSelectable = true;
             this.aboutButton.Click += new System.EventHandler(this.AboutButton_Click);
             // 
             // processListView
