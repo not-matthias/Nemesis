@@ -1,7 +1,7 @@
 # Nemesis
 A customizable process dumper library.
 
-![alt](https://user-images.githubusercontent.com/26800596/55280336-a85b6200-5324-11e9-9863-08caf2e8cb7d.jpg)
+![alt](https://user-images.githubusercontent.com/26800596/55280408-94fcc680-5325-11e9-945b-912a16b1ed5d.jpg)
 
 ## Features
 - Dump x86 or x64 processes 
