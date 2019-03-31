@@ -88,7 +88,7 @@
             this.processListView.UseCompatibleStateImageBehavior = false;
             this.processListView.View = System.Windows.Forms.View.Details;
             // 
-            // NemesisForm
+            // Nemesis
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -99,8 +99,9 @@
             this.Controls.Add(this.refreshButton);
             this.Controls.Add(this.dumpButton);
             this.MaximizeBox = false;
-            this.Name = "NemesisForm";
+            this.Name = "Nemesis";
             this.Resizable = false;
+            this.ShadowType = MetroFramework.Forms.MetroFormShadowType.AeroShadow;
             this.Text = "Nemesis";
             this.ResumeLayout(false);
 
