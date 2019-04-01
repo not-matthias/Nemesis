@@ -1,4 +1,4 @@
-#include "FileWriter.h"
+#include "FileWriter.hpp"
 
 FileWriter::FileWriter(PEFile *pPEFile)
 {

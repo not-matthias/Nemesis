@@ -72,14 +72,14 @@
     <ClInclude Include="PESection.hpp">
       <Filter>Header Files\PortableExecutable</Filter>
     </ClInclude>
-    <ClInclude Include="FileWriter.h">
-      <Filter>Header Files\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="KernelMemory.hpp">
       <Filter>Header Files\Memory\Sources</Filter>
     </ClInclude>
     <ClInclude Include="UsermodeMemory.hpp">
       <Filter>Header Files\Memory\Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="FileWriter.hpp">
+      <Filter>Header Files\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

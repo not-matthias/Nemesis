@@ -22,7 +22,7 @@
     <ClInclude Include="DriverUtils.hpp" />
     <ClInclude Include="Dump.hpp" />
     <ClInclude Include="DumpUtils.hpp" />
-    <ClInclude Include="FileWriter.h" />
+    <ClInclude Include="FileWriter.hpp" />
     <ClInclude Include="IMemorySource.hpp" />
     <ClInclude Include="KernelMemory.hpp" />
     <ClInclude Include="Logger.hpp" />
