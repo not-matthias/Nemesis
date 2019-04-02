@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{20312010-AB4F-4DC7-93DA-C82EBED127A5}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>Nemesis</RootNamespace>
     <AssemblyName>Nemesis</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
@@ -72,6 +72,12 @@
     <Compile Include="Forms\Nemesis.Designer.cs">
       <DependentUpon>Nemesis.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ProcessInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ProcessInfo.Designer.cs">
+      <DependentUpon>ProcessInfo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Settings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -89,6 +95,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\Nemesis.resx">
       <DependentUpon>Nemesis.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProcessInfo.resx">
+      <DependentUpon>ProcessInfo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Settings.resx">
       <DependentUpon>Settings.cs</DependentUpon>

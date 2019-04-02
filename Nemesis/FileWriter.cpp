@@ -1,16 +1,21 @@
 #include "FileWriter.hpp"
 
-FileWriter::FileWriter(PEFile *pPEFile)
+//
+// Standard constructor
+//
+FileWriter::FileWriter(std::string FileName)
 {
-	this->pPEFile = pPEFile;
+	this->FileName = FileName;
 }
 
 FileWriter::~FileWriter()
 {
-	//delete pPEFile;
 }
 
-BOOL FileWriter::WriteToFile(std::string FileName)
+//
+// Write the PEFile to the file
+//
+BOOL FileWriter::WriteToFile(PEFile *pPEFile)
 {
 	DWORD dwFileOffset = 0, dwWriteSize = 0;
 
@@ -198,6 +203,48 @@ BOOL FileWriter::WriteToFile(std::string FileName)
 	return TRUE;
 }
 
+//
+// Writes the buffer to a new file
+//
+BOOL FileWriter::WriteMemoryToNewFile(DWORD Size, LPCVOID Buffer)
+{
+	//
+	// Create the file
+	//
+	hFile = CreateFile(FileName.c_str(), GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	if (hFile == INVALID_HANDLE_VALUE)
+	{
+		return FALSE;
+	}
+
+	//
+	// Write the buffer to the file
+	//
+	if (WriteMemoryToFile(0, Size, Buffer))
+	{
+		return FALSE;
+	}
+
+	//
+	// Set EOL
+	//
+	SetEndOfFile(hFile);
+
+
+	//
+	// Close the handle
+	//
+	if (hFile != INVALID_HANDLE_VALUE)
+	{
+		CloseHandle(hFile);
+	}
+
+	return TRUE;
+}
+
+//
+// Write a buffer to a specific location
+//
 BOOL FileWriter::WriteMemoryToFile(LONG Offset, DWORD Size, LPCVOID Buffer)
 {
 	DWORD lpNumberOfBytesWritten = 0;
@@ -229,6 +276,9 @@ BOOL FileWriter::WriteMemoryToFile(LONG Offset, DWORD Size, LPCVOID Buffer)
 	return TRUE;
 }
 
+//
+// Write zero memory
+//
 BOOL FileWriter::WriteZeroMemoryToFile(LONG Offset, DWORD Size)
 {
 	PVOID Buffer = calloc(Size, 1);

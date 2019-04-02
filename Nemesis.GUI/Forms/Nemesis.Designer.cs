@@ -87,6 +87,7 @@
             this.processListView.TabIndex = 0;
             this.processListView.UseCompatibleStateImageBehavior = false;
             this.processListView.View = System.Windows.Forms.View.Details;
+            this.processListView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ProcessListView_MouseDoubleClick);
             // 
             // Nemesis
             // 

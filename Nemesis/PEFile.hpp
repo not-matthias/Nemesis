@@ -11,6 +11,7 @@ class PEFile
 {
 private:
 	ProcessMemory *pProcessMemory;
+	DWORD_PTR BaseAddress;
 
 public:
 	const DWORD FileAlignmentConstant = 0x200;
@@ -36,6 +37,7 @@ private:
 
 public:
 	PEFile(ProcessMemory *pProcessMemory);
+	PEFile(ProcessMemory *pProcessMemory, DWORD_PTR BaseAddress);
 	~PEFile();
 
 	//

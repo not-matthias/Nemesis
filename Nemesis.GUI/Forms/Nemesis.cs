@@ -174,6 +174,23 @@ namespace Nemesis.Forms
         }
 
         //
+        // Opens the process information window
+        //
+        private void ProcessListView_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (processListView.SelectedItems.Count > 0)
+            {
+                ListViewItem listViewItem = (ListViewItem)sender;
+                
+
+
+                ProcessInfo processInfo = new ProcessInfo();
+                processInfo.ShowDialog();
+                processInfo.Dispose();
+            }
+        }
+
+        //
         // Shortcuts
         //
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)

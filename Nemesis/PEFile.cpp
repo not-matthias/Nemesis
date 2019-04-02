@@ -1,8 +1,21 @@
 #include "PEFile.hpp"
 
+//
+// Parse the main module
+//
 PEFile::PEFile(ProcessMemory *pProcessMemory)
 {
 	this->pProcessMemory = pProcessMemory;
+	this->BaseAddress = pProcessMemory->GetBaseAddress();
+}
+
+//
+// Parse a custom module
+//
+PEFile::PEFile(ProcessMemory *pProcessMemory, DWORD_PTR BaseAddress)
+{
+	this->pProcessMemory = pProcessMemory;
+	this->BaseAddress = BaseAddress;
 }
 
 PEFile::~PEFile()
@@ -46,7 +59,7 @@ BOOL PEFile::ReadPEHeader()
 	//
 	// Get the pe header
 	//
-	PVOID HeaderMemory = pProcessMemory->ReadMemory(pProcessMemory->GetBaseAddress(), HeaderSize);
+	PVOID HeaderMemory = pProcessMemory->ReadMemory(BaseAddress, HeaderSize);
 
 	//
 	// Check if valid
@@ -116,7 +129,7 @@ VOID PEFile::SetSections()
 		// 
 		// Calculate the offset
 		// 
-		DWORD_PTR ReadOffset = pProcessMemory->GetBaseAddress() + pSectionHeader->VirtualAddress;
+		DWORD_PTR ReadOffset = BaseAddress + pSectionHeader->VirtualAddress;
 
 		//
 		// Read the section
@@ -243,7 +256,7 @@ VOID PEFile::SetEntryPoint(DWORD_PTR EntryPoint)
 	//
 	// Calculate the RVA
 	//
-	DWORD EntryPointRVA = (DWORD)(EntryPoint - pProcessMemory->GetBaseAddress());
+	DWORD EntryPointRVA = (DWORD)(EntryPoint - BaseAddress);
 
 	//
 	// Set the entry point
@@ -339,7 +352,7 @@ VOID PEFile::FixPEHeader()
 		pNTHeader32->OptionalHeader.NumberOfRvaAndSizes = IMAGE_NUMBEROF_DIRECTORY_ENTRIES;
 		pNTHeader32->FileHeader.SizeOfOptionalHeader = sizeof(IMAGE_OPTIONAL_HEADER32);
 		pNTHeader32->OptionalHeader.SizeOfImage = GetImageSize();
-		pNTHeader32->OptionalHeader.ImageBase = static_cast<DWORD>(pProcessMemory->GetBaseAddress());
+		pNTHeader32->OptionalHeader.ImageBase = static_cast<DWORD>(BaseAddress);
 		pNTHeader32->OptionalHeader.SizeOfHeaders = AlignValue(dwSize + pNTHeader32->FileHeader.SizeOfOptionalHeader +
 			(GetSectionCount() * sizeof(IMAGE_SECTION_HEADER)), pNTHeader32->OptionalHeader.FileAlignment);
 	}
@@ -363,7 +376,7 @@ VOID PEFile::FixPEHeader()
 		pNTHeader64->OptionalHeader.NumberOfRvaAndSizes = IMAGE_NUMBEROF_DIRECTORY_ENTRIES;
 		pNTHeader64->FileHeader.SizeOfOptionalHeader = sizeof(IMAGE_OPTIONAL_HEADER64);
 		pNTHeader64->OptionalHeader.SizeOfImage = GetImageSize();
-		pNTHeader64->OptionalHeader.ImageBase = static_cast<DWORD>(pProcessMemory->GetBaseAddress());
+		pNTHeader64->OptionalHeader.ImageBase = static_cast<DWORD>(BaseAddress);
 		pNTHeader64->OptionalHeader.SizeOfHeaders = AlignValue(dwSize + pNTHeader64->FileHeader.SizeOfOptionalHeader +
 			(GetSectionCount() * sizeof(IMAGE_SECTION_HEADER)), pNTHeader64->OptionalHeader.FileAlignment);
 	}

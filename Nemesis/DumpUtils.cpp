@@ -20,6 +20,45 @@ BOOL StandardDump(DWORD Pid, LPCSTR FileName)
 	}
 }
 
+BOOL DumpModule(DWORD Pid, DWORD_PTR BaseAddress, LPCSTR FileName)
+{
+	//
+	// Create the memory wrapper
+	//
+	ProcessMemory ProcessMemory(Pid);
+	if (!ProcessMemory.IsValid())
+	{
+		return FALSE;
+	}
+
+	//
+	// Create and initialize the pe file
+	//
+	PEFile PEFile(&ProcessMemory, BaseAddress);
+	if (!PEFile.Initialize())
+	{
+		return FALSE;
+	}
+
+	PEFile.SetFileAlignment();
+	PEFile.AlignSectionHeaders();
+	PEFile.FixPEHeader();
+	PEFile.RemoveIAT();
+	
+	//
+	// Write to file
+	//
+	FileWriter FileWriter(FileName);
+	if (FileWriter.WriteToFile(&PEFile))
+	{
+		return TRUE;
+	}
+	else
+	{
+		return FALSE;
+	}
+}
+
 BOOL CustomDump(DWORD Pid, LPCSTR FileName, DUMP_OPTIONS DumpOptions)
 {
 	//
@@ -48,8 +87,8 @@ BOOL CustomDump(DWORD Pid, LPCSTR FileName, DUMP_OPTIONS DumpOptions)
 	//
 	// Write to file
 	//
-	FileWriter FileWriter(&PEFile);
-	if (FileWriter.WriteToFile(FileName))
+	FileWriter FileWriter(FileName);
+	if (FileWriter.WriteToFile(&PEFile))
 	{
 		return TRUE;
 	}

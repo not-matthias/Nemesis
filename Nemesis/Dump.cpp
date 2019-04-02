@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include "PEFile.hpp"
-#include "FileWriter.h"
+#include "FileWriter.hpp"
 
 Dump::Dump(DWORD Pid, std::string FileName)
 {
@@ -42,8 +42,8 @@ BOOL Dump::DumpProcess()
 	//
 	// Write to file
 	//
-	FileWriter FileWriter(&PEFile);
-	if (FileWriter.WriteToFile(FileName))
+	FileWriter FileWriter(FileName);
+	if (FileWriter.WriteToFile(&PEFile))
 	{
 		return TRUE;
 	}
