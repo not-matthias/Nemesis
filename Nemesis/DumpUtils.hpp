@@ -3,6 +3,7 @@
 #include "Dump.hpp"
 #include "FileWriter.hpp"
 #include "PEFile.hpp"
+#include "PEMemory.hpp"
 
 #include <iostream>
 #include <Windows.h>
@@ -27,5 +28,3 @@ BOOL DumpModule(DWORD Pid, DWORD_PTR BaseAddress, LPCSTR FileName);
 // Dumps a specific memory region
 //
 BOOL DumpMemory(DWORD Pid, DWORD_PTR BaseAddress, DWORD Size, LPCSTR FileName);
-
-BOOL CustomDump(DWORD Pid, LPCSTR FileName, DUMP_OPTIONS DumpOptions);

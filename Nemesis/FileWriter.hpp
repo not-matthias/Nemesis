@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PEFile.hpp"
+#include "PEMemory.hpp"
 
 #include <vector>
 
@@ -15,7 +16,7 @@ public:
 	~FileWriter();
 
 	BOOL WriteToFile(PEFile *pPEFile);
-	BOOL WriteMemoryToNewFile(DWORD Size, LPCVOID Buffer);
+	BOOL WriteToFile(PEMemory *pPEMemory);
 	BOOL WriteMemoryToFile(LONG Offset, DWORD Size, LPCVOID Buffer);
 	BOOL WriteZeroMemoryToFile(LONG Offset, DWORD Size);
 };

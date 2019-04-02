@@ -206,7 +206,7 @@ BOOL FileWriter::WriteToFile(PEFile *pPEFile)
 //
 // Writes the buffer to a new file
 //
-BOOL FileWriter::WriteMemoryToNewFile(DWORD Size, LPCVOID Buffer)
+BOOL FileWriter::WriteToFile(PEMemory *pPEMemory)
 {
 	//
 	// Create the file
@@ -220,7 +220,7 @@ BOOL FileWriter::WriteMemoryToNewFile(DWORD Size, LPCVOID Buffer)
 	//
 	// Write the buffer to the file
 	//
-	if (WriteMemoryToFile(0, Size, Buffer))
+	if (WriteMemoryToFile(0, pPEMemory->Size, pPEMemory->Buffer))
 	{
 		return FALSE;
 	}

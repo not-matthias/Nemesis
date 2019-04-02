@@ -81,6 +81,9 @@
     <ClInclude Include="FileWriter.hpp">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="PEMemory.hpp">
+      <Filter>Header Files\PortableExecutable</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DllMain.cpp">
@@ -124,6 +127,9 @@
     </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PEMemory.cpp">
+      <Filter>Source Files\PortableExecutable</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

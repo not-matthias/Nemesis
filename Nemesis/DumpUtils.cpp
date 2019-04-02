@@ -6,7 +6,7 @@ BOOL StandardDump(DWORD Pid, LPCSTR FileName)
 	// Create the classes
 	//
 	Dump Dump(Pid, FileName);
-	
+
 	//
 	// Dump it
 	//
@@ -44,7 +44,7 @@ BOOL DumpModule(DWORD Pid, DWORD_PTR BaseAddress, LPCSTR FileName)
 	PEFile.AlignSectionHeaders();
 	PEFile.FixPEHeader();
 	PEFile.RemoveIAT();
-	
+
 	//
 	// Write to file
 	//
@@ -59,7 +59,7 @@ BOOL DumpModule(DWORD Pid, DWORD_PTR BaseAddress, LPCSTR FileName)
 	}
 }
 
-BOOL CustomDump(DWORD Pid, LPCSTR FileName, DUMP_OPTIONS DumpOptions)
+BOOL DumpMemory(DWORD Pid, DWORD_PTR StartAddress, DWORD Size, LPCSTR FileName)
 {
 	//
 	// Create the memory wrapper
@@ -71,24 +71,19 @@ BOOL CustomDump(DWORD Pid, LPCSTR FileName, DUMP_OPTIONS DumpOptions)
 	}
 
 	//
-	// Create and initialize the pe file
+	// Create and initialize the memory
 	//
-	PEFile PEFile(&ProcessMemory);
-	if (!PEFile.Initialize())
+	PEMemory PEMemory(&ProcessMemory, StartAddress, Size);
+	if (!PEMemory.Initialize())
 	{
 		return FALSE;
 	}
-
-	PEFile.SetFileAlignment();
-	PEFile.AlignSectionHeaders();
-	PEFile.FixPEHeader();
-	PEFile.RemoveIAT();
 
 	//
 	// Write to file
 	//
 	FileWriter FileWriter(FileName);
-	if (FileWriter.WriteToFile(&PEFile))
+	if (FileWriter.WriteToFile(&PEMemory))
 	{
 		return TRUE;
 	}

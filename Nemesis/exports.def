@@ -3,4 +3,3 @@ EXPORTS
 	GetDriverList @2	
 	StandardDump @3
 	DumpModule @4
-	CustomDump @5
