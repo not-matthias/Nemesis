@@ -19,8 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DriverUtils.hpp" />
-    <ClInclude Include="DumpUtils.hpp" />
+    <ClInclude Include="DumpExport.hpp" />
     <ClInclude Include="FileWriter.hpp" />
     <ClInclude Include="IMemorySource.hpp" />
     <ClInclude Include="KernelMemory.hpp" />
@@ -30,12 +29,10 @@
     <ClInclude Include="ProcessMemory.hpp" />
     <ClInclude Include="UsermodeMemory.hpp" />
     <ClInclude Include="Module.hpp" />
-    <ClInclude Include="ProcessUtils.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DriverUtils.cpp" />
     <ClCompile Include="DllMain.cpp" />
-    <ClCompile Include="DumpUtils.cpp" />
+    <ClCompile Include="DumpExport.cpp" />
     <ClCompile Include="FileWriter.cpp" />
     <ClCompile Include="IMemorySource.cpp" />
     <ClCompile Include="KernelMemory.cpp" />
@@ -46,7 +43,6 @@
     <ClCompile Include="ProcessMemory.cpp" />
     <ClCompile Include="UsermodeMemory.cpp" />
     <ClCompile Include="Module.cpp" />
-    <ClCompile Include="ProcessUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <Windows.h>
 
-#include "DumpUtils.hpp"
+#include "DumpExport.hpp"
 
 int main()
 {
