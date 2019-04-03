@@ -1,49 +1,50 @@
-#include "PEFile.hpp"
+#include "Module.hpp"
+#include <iostream>
 
 //
 // Parse the main module
 //
-PEFile::PEFile(ProcessMemory *pProcessMemory)
+Module::Module(ProcessMemory* process_memory)
 {
-	this->pProcessMemory = pProcessMemory;
-	this->BaseAddress = pProcessMemory->GetBaseAddress();
+	this->process_memory_ = process_memory;
+	this->base_address_ = process_memory->GetBaseAddress();
 }
 
 //
 // Parse a custom module
 //
-PEFile::PEFile(ProcessMemory *pProcessMemory, DWORD_PTR BaseAddress)
+Module::Module(ProcessMemory* process_memory, DWORD_PTR base_address)
 {
-	this->pProcessMemory = pProcessMemory;
-	this->BaseAddress = BaseAddress;
+	this->process_memory_ = process_memory;
+	this->base_address_ = base_address;
 }
 
-PEFile::~PEFile()
+Module::~Module()
 {
-	for (size_t i = 0; i < Sections.size(); i++)
+	for (size_t i = 0; i < sections_.size(); i++)
 	{
-		if (Sections[i].Content)
+		if (sections_[i].Content)
 		{
-			delete[] Sections[i].Content;
+			delete[] sections_[i].Content;
 		}
 	}
 
-	Sections.clear();
+	sections_.clear();
 }
 
 //
 // Init Functions
 //
-BOOL PEFile::Initialize()
+auto Module::Initialize() -> BOOL
 {
 	//
 	// Read the header from the memory
 	//
-	if (!ReadPEHeader())
+	if (!ReadHeader())
 	{
 		return FALSE;
 	}
-	
+
 	//
 	// Set the sections from the memory
 	//
@@ -52,14 +53,14 @@ BOOL PEFile::Initialize()
 	return TRUE;
 }
 
-BOOL PEFile::ReadPEHeader()
+auto Module::ReadHeader() -> BOOL
 {
-	DWORD HeaderSize = GetHeaderSize();
+	const auto HeaderSize = GetHeaderSize();
 
 	//
 	// Get the pe header
 	//
-	PVOID HeaderMemory = pProcessMemory->ReadMemory(BaseAddress, HeaderSize);
+	const auto HeaderMemory = process_memory_->ReadMemory(base_address_, HeaderSize);
 
 	//
 	// Check if valid
@@ -72,51 +73,52 @@ BOOL PEFile::ReadPEHeader()
 	//
 	// Set the pe header
 	//
-	SetPEHeaders(HeaderMemory, HeaderSize);
-
+	SetHeader(HeaderMemory, HeaderSize);
 
 	return TRUE;
 }
 
-VOID PEFile::SetPEHeaders(PVOID HeaderMemory, DWORD HeaderSize)
+auto Module::SetHeader(PVOID const header_memory, const DWORD header_size) -> VOID
 {
-	pDosHeader = (PIMAGE_DOS_HEADER)HeaderMemory;
+	dos_header_ = static_cast<PIMAGE_DOS_HEADER>(header_memory);
 
 	//
 	// Malformed PE
 	//
-	if (pDosHeader->e_lfanew > 0 && pDosHeader->e_lfanew < static_cast<LONG>(HeaderSize))
+	if (dos_header_->e_lfanew > 0 && dos_header_->e_lfanew < static_cast<LONG>(header_size))
 	{
-		pNTHeader32 = (PIMAGE_NT_HEADERS32)((DWORD_PTR)pDosHeader + pDosHeader->e_lfanew);
-		pNTHeader64 = (PIMAGE_NT_HEADERS64)((DWORD_PTR)pDosHeader + pDosHeader->e_lfanew);
+		nt_header32_ = reinterpret_cast<PIMAGE_NT_HEADERS32>(reinterpret_cast<DWORD_PTR>(dos_header_) + dos_header_->
+			e_lfanew);
+		nt_header64_ = reinterpret_cast<PIMAGE_NT_HEADERS64>(reinterpret_cast<DWORD_PTR>(dos_header_) + dos_header_->
+			e_lfanew);
 
-		if (pDosHeader->e_lfanew > sizeof(IMAGE_DOS_HEADER))
+		if (dos_header_->e_lfanew > sizeof(IMAGE_DOS_HEADER))
 		{
-			DosStubSize = pDosHeader->e_lfanew - sizeof(IMAGE_DOS_HEADER);
-			pDosStub = (BYTE *)((DWORD_PTR)pDosHeader + sizeof(IMAGE_DOS_HEADER));
+			dos_stub_size_ = dos_header_->e_lfanew - sizeof(IMAGE_DOS_HEADER);
+			dos_stub_ = reinterpret_cast<BYTE *>(reinterpret_cast<DWORD_PTR>(dos_header_) + sizeof(IMAGE_DOS_HEADER));
 		}
-		else if (pDosHeader->e_lfanew < sizeof(IMAGE_DOS_HEADER))
+		else if (dos_header_->e_lfanew < sizeof(IMAGE_DOS_HEADER))
 		{
-			pDosHeader->e_lfanew = sizeof(IMAGE_DOS_HEADER);
+			dos_header_->e_lfanew = sizeof(IMAGE_DOS_HEADER);
 		}
 	}
-
 }
 
-VOID PEFile::SetSections()
+auto Module::SetSections() -> VOID
 {
 	PIMAGE_SECTION_HEADER pSectionHeader = IMAGE_FIRST_SECTION(pNTHeader32);
 	PESection Section;
 
-	Sections.clear();
-	Sections.reserve(GetSectionCount());
+	sections_.clear();
+	sections_.reserve(GetSectionCount());
 
 	for (WORD i = 0; i < GetSectionCount(); i++)
 	{
 		//
 		// Read section
 		//
-		if (memcpy_s(&Section.SectionHeader, sizeof(IMAGE_SECTION_HEADER), pSectionHeader, sizeof(IMAGE_SECTION_HEADER)) != 0)
+		if (memcpy_s(&Section.SectionHeader, sizeof(IMAGE_SECTION_HEADER), pSectionHeader,
+		             sizeof(IMAGE_SECTION_HEADER)) != 0)
 		{
 			std::cout << "Failed to read section." << std::endl;
 		}
@@ -129,7 +131,7 @@ VOID PEFile::SetSections()
 		// 
 		// Calculate the offset
 		// 
-		DWORD_PTR ReadOffset = BaseAddress + pSectionHeader->VirtualAddress;
+		DWORD_PTR ReadOffset = base_address_ + pSectionHeader->VirtualAddress;
 
 		//
 		// Read the section
@@ -142,15 +144,15 @@ VOID PEFile::SetSections()
 		//
 		// Add it to the list
 		//
-		Sections.push_back(Section);
+		sections_.push_back(Section);
 		pSectionHeader++;
 	}
 }
 
-VOID PEFile::SetSectionSize(PESection &Section, const DWORD_PTR SectionPointer)
+auto Module::SetSectionSize(PESection& section, const DWORD_PTR section_pointer) const -> VOID
 {
 	DWORD MaxReadSize = 100;
-	DWORD ReadSize = Section.InitialSize;
+	DWORD ReadSize = section.InitialSize;
 	DWORD CurrentReadSize = ReadSize % MaxReadSize;
 
 	//
@@ -164,24 +166,24 @@ VOID PEFile::SetSectionSize(PESection &Section, const DWORD_PTR SectionPointer)
 	//
 	// Calculate the new section size
 	//
-	DWORD_PTR CurrentOffset = SectionPointer + ReadSize - CurrentReadSize;
-	while (CurrentOffset >= SectionPointer)
+	DWORD_PTR CurrentOffset = section_pointer + ReadSize - CurrentReadSize;
+	while (CurrentOffset >= section_pointer)
 	{
-		BYTE *Buffer = reinterpret_cast<BYTE *>(pProcessMemory->ReadMemory(CurrentOffset, CurrentReadSize));
+		BYTE* Buffer = reinterpret_cast<BYTE *>(process_memory_->ReadMemory(CurrentOffset, CurrentReadSize));
 		DWORD CodeByteCount = GetInstructionByteCount(Buffer, CurrentReadSize);
 
 		if (CodeByteCount != 0)
 		{
 			CurrentOffset += CodeByteCount;
 
-			if (SectionPointer < CurrentOffset)
+			if (section_pointer < CurrentOffset)
 			{
-				Section.DataSize = static_cast<DWORD>(CurrentOffset - SectionPointer);
-				Section.DataSize += 4;
+				section.DataSize = static_cast<DWORD>(CurrentOffset - section_pointer);
+				section.DataSize += 4;
 
-				if (Section.InitialSize < Section.DataSize)
+				if (section.InitialSize < section.DataSize)
 				{
-					Section.DataSize = Section.InitialSize;
+					section.DataSize = section.InitialSize;
 				}
 			}
 
@@ -193,15 +195,15 @@ VOID PEFile::SetSectionSize(PESection &Section, const DWORD_PTR SectionPointer)
 	}
 }
 
-BOOL PEFile::ReadSection(PESection &Section, const DWORD_PTR SectionPointer)
+auto Module::ReadSection(PESection& section, const DWORD_PTR section_pointer) const -> BOOL
 {
-	DWORD MaxReadSize = 100;
-	DWORD ReadSize = Section.InitialSize;
+	const DWORD MaxReadSize = 100;
+	const auto ReadSize = section.InitialSize;
 
 	//
 	// Check read offset (section without data is valid)
 	//
-	if (SectionPointer == NULL || ReadSize == 0)
+	if (section_pointer == NULL || ReadSize == 0)
 	{
 		return TRUE;
 	}
@@ -211,25 +213,22 @@ BOOL PEFile::ReadSection(PESection &Section, const DWORD_PTR SectionPointer)
 	//
 	if (ReadSize <= MaxReadSize)
 	{
-		Section.DataSize = ReadSize;
-		Section.Content = pProcessMemory->ReadMemory(static_cast<DWORD_PTR>(SectionPointer), ReadSize);
+		section.DataSize = ReadSize;
+		section.Content = process_memory_->ReadMemory(static_cast<DWORD_PTR>(section_pointer), ReadSize);
 		return TRUE;
 	}
-	else
-	{
-		//
-		// Set the new section
-		//
-		SetSectionSize(Section, SectionPointer);
+	//
+	// Set the new section
+	//
+	SetSectionSize(section, section_pointer);
 
-		//
-		//
-		//
-		if (Section.DataSize != 0)
-		{
-			Section.Content = pProcessMemory->ReadMemory(static_cast<DWORD_PTR>(SectionPointer), Section.DataSize);
-			return TRUE;
-		}
+	//
+	//
+	//
+	if (section.DataSize != 0)
+	{
+		section.Content = process_memory_->ReadMemory(static_cast<DWORD_PTR>(section_pointer), section.DataSize);
+		return TRUE;
 	}
 
 	return FALSE;
@@ -239,60 +238,60 @@ BOOL PEFile::ReadSection(PESection &Section, const DWORD_PTR SectionPointer)
 //
 // Functions
 //
-VOID PEFile::SetFileAlignment()
+auto Module::SetFileAlignment() const -> VOID
 {
-	if (IsPE32())
+	if (Is32Bit())
 	{
-		pNTHeader32->OptionalHeader.FileAlignment = FileAlignmentConstant;
+		nt_header32_->OptionalHeader.FileAlignment = FileAlignmentConstant;
 	}
 	else
 	{
-		pNTHeader64->OptionalHeader.FileAlignment = FileAlignmentConstant;
+		nt_header64_->OptionalHeader.FileAlignment = FileAlignmentConstant;
 	}
 }
 
-VOID PEFile::SetEntryPoint(DWORD_PTR EntryPoint)
+auto Module::SetEntryPoint(DWORD_PTR entry_point) const -> VOID
 {
 	//
 	// Calculate the RVA
 	//
-	DWORD EntryPointRVA = (DWORD)(EntryPoint - BaseAddress);
+	DWORD EntryPointRVA = (DWORD)(entry_point - base_address_);
 
 	//
 	// Set the entry point
 	// 
-	if (IsPE32())
+	if (Is32Bit())
 	{
-		pNTHeader32->OptionalHeader.AddressOfEntryPoint = EntryPointRVA;
+		nt_header32_->OptionalHeader.AddressOfEntryPoint = EntryPointRVA;
 	}
 	else
 	{
-		pNTHeader64->OptionalHeader.AddressOfEntryPoint = EntryPointRVA;
+		nt_header64_->OptionalHeader.AddressOfEntryPoint = EntryPointRVA;
 	}
 }
 
-VOID PEFile::AlignSectionHeaders()
+auto Module::AlignSectionHeaders() -> VOID
 {
 	DWORD SectionAlignment = 0, FileAlignment = 0, NewFileSize = 0;
 
 	//
 	// Initialize the variables
 	//
-	if (IsPE32())
+	if (Is32Bit())
 	{
-		SectionAlignment = pNTHeader32->OptionalHeader.SectionAlignment;
-		FileAlignment = pNTHeader32->OptionalHeader.FileAlignment;
+		SectionAlignment = nt_header32_->OptionalHeader.SectionAlignment;
+		FileAlignment = nt_header32_->OptionalHeader.FileAlignment;
 	}
 	else
 	{
-		SectionAlignment = pNTHeader64->OptionalHeader.SectionAlignment;
-		FileAlignment = pNTHeader64->OptionalHeader.FileAlignment;
+		SectionAlignment = nt_header64_->OptionalHeader.SectionAlignment;
+		FileAlignment = nt_header64_->OptionalHeader.FileAlignment;
 	}
 
 	//
 	// Sort by PointerToRawData (ascending)
 	//
-	std::sort(Sections.begin(), Sections.end(), [](const PESection & a, const PESection & b) -> bool
+	std::sort(sections_.begin(), sections_.end(), [](const PESection& a, const PESection& b) -> bool
 	{
 		return a.SectionHeader.PointerToRawData < b.SectionHeader.PointerToRawData;
 	});
@@ -300,7 +299,9 @@ VOID PEFile::AlignSectionHeaders()
 	//
 	// Calculate the new file size
 	//
-	NewFileSize = pDosHeader->e_lfanew + sizeof(DWORD) + sizeof(IMAGE_FILE_HEADER) + pNTHeader32->FileHeader.SizeOfOptionalHeader + (GetSectionCount() * sizeof(IMAGE_SECTION_HEADER));
+	NewFileSize = dos_header_->e_lfanew + sizeof(DWORD) + sizeof(IMAGE_FILE_HEADER) + nt_header32_
+	                                                                                 ->FileHeader.SizeOfOptionalHeader +
+		(GetSectionCount() * sizeof(IMAGE_SECTION_HEADER));
 
 	//
 	// Align the section values
@@ -308,95 +309,99 @@ VOID PEFile::AlignSectionHeaders()
 	for (WORD i = 0; i < GetSectionCount(); i++)
 	{
 		// VirtualAddress and VirtualSize
-		Sections[i].SectionHeader.VirtualAddress = AlignValue(Sections[i].SectionHeader.VirtualAddress, SectionAlignment);
-		Sections[i].SectionHeader.Misc.VirtualSize = AlignValue(Sections[i].SectionHeader.Misc.VirtualSize, SectionAlignment);
+		sections_[i].SectionHeader.VirtualAddress = AlignValue(sections_[i].SectionHeader.VirtualAddress,
+		                                                      SectionAlignment);
+		sections_[i].SectionHeader.Misc.VirtualSize = AlignValue(sections_[i].SectionHeader.Misc.VirtualSize,
+		                                                        SectionAlignment);
 
 		// PointerToRawData and SizeOfRawData
-		Sections[i].SectionHeader.PointerToRawData = AlignValue(NewFileSize, FileAlignment);
-		Sections[i].SectionHeader.SizeOfRawData = AlignValue(Sections[i].DataSize, FileAlignment);
+		sections_[i].SectionHeader.PointerToRawData = AlignValue(NewFileSize, FileAlignment);
+		sections_[i].SectionHeader.SizeOfRawData = AlignValue(sections_[i].DataSize, FileAlignment);
 
 		// NewFileSize
-		NewFileSize = Sections[i].SectionHeader.PointerToRawData + Sections[i].SectionHeader.SizeOfRawData;
+		NewFileSize = sections_[i].SectionHeader.PointerToRawData + sections_[i].SectionHeader.SizeOfRawData;
 	}
 
 	//
 	// Sort by VirtualAddress (ascending)
 	//
-	std::sort(Sections.begin(), Sections.end(), [](const PESection & a, const PESection & b) -> bool
+	std::sort(sections_.begin(), sections_.end(), [](const PESection& a, const PESection& b) -> bool
 	{
 		return a.SectionHeader.VirtualAddress < b.SectionHeader.VirtualAddress;
 	});
 }
 
-VOID PEFile::FixPEHeader()
+auto Module::FixHeader() -> VOID
 {
-	DWORD dwSize = pDosHeader->e_lfanew + sizeof(DWORD) + sizeof(IMAGE_FILE_HEADER);
+	DWORD dwSize = dos_header_->e_lfanew + sizeof(DWORD) + sizeof(IMAGE_FILE_HEADER);
 
-	if (IsPE32())
+	if (Is32Bit())
 	{
 		//
 		// Remove import directories
 		//
-		pNTHeader32->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT].VirtualAddress = 0;
-		pNTHeader32->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT].Size = 0;
+		nt_header32_->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT].VirtualAddress = 0;
+		nt_header32_->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT].Size = 0;
 
-		for (DWORD i = pNTHeader32->OptionalHeader.NumberOfRvaAndSizes; i < IMAGE_NUMBEROF_DIRECTORY_ENTRIES; i++)
+		for (DWORD i = nt_header32_->OptionalHeader.NumberOfRvaAndSizes; i < IMAGE_NUMBEROF_DIRECTORY_ENTRIES; i++)
 		{
-			pNTHeader32->OptionalHeader.DataDirectory[i].Size = 0;
-			pNTHeader32->OptionalHeader.DataDirectory[i].VirtualAddress = 0;
+			nt_header32_->OptionalHeader.DataDirectory[i].Size = 0;
+			nt_header32_->OptionalHeader.DataDirectory[i].VirtualAddress = 0;
 		}
 
 		// 
 		// Set the sizes and base address
 		// 
-		pNTHeader32->OptionalHeader.NumberOfRvaAndSizes = IMAGE_NUMBEROF_DIRECTORY_ENTRIES;
-		pNTHeader32->FileHeader.SizeOfOptionalHeader = sizeof(IMAGE_OPTIONAL_HEADER32);
-		pNTHeader32->OptionalHeader.SizeOfImage = GetImageSize();
-		pNTHeader32->OptionalHeader.ImageBase = static_cast<DWORD>(BaseAddress);
-		pNTHeader32->OptionalHeader.SizeOfHeaders = AlignValue(dwSize + pNTHeader32->FileHeader.SizeOfOptionalHeader +
-			(GetSectionCount() * sizeof(IMAGE_SECTION_HEADER)), pNTHeader32->OptionalHeader.FileAlignment);
+		nt_header32_->OptionalHeader.NumberOfRvaAndSizes = IMAGE_NUMBEROF_DIRECTORY_ENTRIES;
+		nt_header32_->FileHeader.SizeOfOptionalHeader = sizeof(IMAGE_OPTIONAL_HEADER32);
+		nt_header32_->OptionalHeader.SizeOfImage = GetImageSize();
+		nt_header32_->OptionalHeader.ImageBase = static_cast<DWORD>(base_address_);
+		nt_header32_->OptionalHeader.SizeOfHeaders = AlignValue(dwSize + nt_header32_->FileHeader.SizeOfOptionalHeader +
+		                                                       (GetSectionCount() * sizeof(IMAGE_SECTION_HEADER)),
+		                                                       nt_header32_->OptionalHeader.FileAlignment);
 	}
 	else
 	{
 		//
 		// Remove import directories
 		//
-		pNTHeader64->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT].VirtualAddress = 0;
-		pNTHeader64->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT].Size = 0;
+		nt_header64_->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT].VirtualAddress = 0;
+		nt_header64_->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT].Size = 0;
 
-		for (DWORD i = pNTHeader64->OptionalHeader.NumberOfRvaAndSizes; i < IMAGE_NUMBEROF_DIRECTORY_ENTRIES; i++)
+		for (DWORD i = nt_header64_->OptionalHeader.NumberOfRvaAndSizes; i < IMAGE_NUMBEROF_DIRECTORY_ENTRIES; i++)
 		{
-			pNTHeader64->OptionalHeader.DataDirectory[i].Size = 0;
-			pNTHeader64->OptionalHeader.DataDirectory[i].VirtualAddress = 0;
+			nt_header64_->OptionalHeader.DataDirectory[i].Size = 0;
+			nt_header64_->OptionalHeader.DataDirectory[i].VirtualAddress = 0;
 		}
 
 		// 
 		// Set the sizes and base address
 		// 
-		pNTHeader64->OptionalHeader.NumberOfRvaAndSizes = IMAGE_NUMBEROF_DIRECTORY_ENTRIES;
-		pNTHeader64->FileHeader.SizeOfOptionalHeader = sizeof(IMAGE_OPTIONAL_HEADER64);
-		pNTHeader64->OptionalHeader.SizeOfImage = GetImageSize();
-		pNTHeader64->OptionalHeader.ImageBase = static_cast<DWORD>(BaseAddress);
-		pNTHeader64->OptionalHeader.SizeOfHeaders = AlignValue(dwSize + pNTHeader64->FileHeader.SizeOfOptionalHeader +
-			(GetSectionCount() * sizeof(IMAGE_SECTION_HEADER)), pNTHeader64->OptionalHeader.FileAlignment);
+		nt_header64_->OptionalHeader.NumberOfRvaAndSizes = IMAGE_NUMBEROF_DIRECTORY_ENTRIES;
+		nt_header64_->FileHeader.SizeOfOptionalHeader = sizeof(IMAGE_OPTIONAL_HEADER64);
+		nt_header64_->OptionalHeader.SizeOfImage = GetImageSize();
+		nt_header64_->OptionalHeader.ImageBase = static_cast<DWORD>(base_address_);
+		nt_header64_->OptionalHeader.SizeOfHeaders = AlignValue(dwSize + nt_header64_->FileHeader.SizeOfOptionalHeader +
+		                                                       (GetSectionCount() * sizeof(IMAGE_SECTION_HEADER)),
+		                                                       nt_header64_->OptionalHeader.FileAlignment);
 	}
 }
 
-VOID PEFile::RemoveIAT()
+auto Module::RemoveIat() -> VOID
 {
 	DWORD IATSearchAddress = 0;
 
-	if (IsPE32())
+	if (Is32Bit())
 	{
-		IATSearchAddress = pNTHeader32->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IAT].VirtualAddress;
-		pNTHeader32->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IAT].VirtualAddress = 0;
-		pNTHeader32->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IAT].Size = 0;
+		IATSearchAddress = nt_header32_->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IAT].VirtualAddress;
+		nt_header32_->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IAT].VirtualAddress = 0;
+		nt_header32_->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IAT].Size = 0;
 	}
 	else
 	{
-		IATSearchAddress = pNTHeader64->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IAT].VirtualAddress;
-		pNTHeader64->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IAT].VirtualAddress = 0;
-		pNTHeader64->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IAT].Size = 0;
+		IATSearchAddress = nt_header64_->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IAT].VirtualAddress;
+		nt_header64_->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IAT].VirtualAddress = 0;
+		nt_header64_->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IAT].Size = 0;
 	}
 
 	//
@@ -406,25 +411,26 @@ VOID PEFile::RemoveIAT()
 	{
 		for (WORD i = 0; i < GetSectionCount(); i++)
 		{
-			if ((Sections[i].SectionHeader.VirtualAddress <= IATSearchAddress) &&
-				((Sections[i].SectionHeader.VirtualAddress + Sections[i].SectionHeader.Misc.VirtualSize) > IATSearchAddress))
+			if ((sections_[i].SectionHeader.VirtualAddress <= IATSearchAddress) &&
+				((sections_[i].SectionHeader.VirtualAddress + sections_[i].SectionHeader.Misc.VirtualSize) >
+					IATSearchAddress))
 			{
 				//
 				// Section must be read and writable
 				//
-				Sections[i].SectionHeader.Characteristics |= IMAGE_SCN_MEM_READ | IMAGE_SCN_MEM_WRITE;
+				sections_[i].SectionHeader.Characteristics |= IMAGE_SCN_MEM_READ | IMAGE_SCN_MEM_WRITE;
 			}
 		}
 	}
 }
 
 
-DWORD PEFile::GetInstructionByteCount(BYTE * Data, DWORD Size)
+auto Module::GetInstructionByteCount(const BYTE* data, const DWORD size) -> DWORD
 {
 	//
 	// Check if null
 	//
-	if (Data == nullptr)
+	if (data == nullptr)
 	{
 		return 0;
 	}
@@ -432,9 +438,9 @@ DWORD PEFile::GetInstructionByteCount(BYTE * Data, DWORD Size)
 	//
 	// Calculate instruction count
 	//
-	for (int i = (Size - 1); i >= 0; i--)
+	for (int i = (size - 1); i >= 0; i--)
 	{
-		if (Data[i] != 0)
+		if (data[i] != 0)
 		{
 			return i + 1;
 		}
@@ -443,24 +449,24 @@ DWORD PEFile::GetInstructionByteCount(BYTE * Data, DWORD Size)
 	return 0;
 }
 
-DWORD PEFile::AlignValue(DWORD BadValue, DWORD AlignTo)
+auto Module::AlignValue(const DWORD bad_value, const DWORD align_to) -> DWORD
 {
-	return (((BadValue + AlignTo - 1) / AlignTo) * AlignTo);
+	return (((bad_value + align_to - 1) / align_to) * align_to);
 }
 
 
 //
 // Checks
 //
-BOOL PEFile::IsValidPeFile()
+auto Module::IsValidPeFile() const -> BOOL
 {
-	if (pDosHeader)
+	if (dos_header_)
 	{
-		if (pDosHeader->e_magic == IMAGE_DOS_SIGNATURE)
+		if (dos_header_->e_magic == IMAGE_DOS_SIGNATURE)
 		{
-			if (pNTHeader32)
+			if (nt_header32_)
 			{
-				if (pNTHeader32->Signature == IMAGE_NT_SIGNATURE)
+				if (nt_header32_->Signature == IMAGE_NT_SIGNATURE)
 				{
 					return true;
 				}
@@ -471,21 +477,21 @@ BOOL PEFile::IsValidPeFile()
 	return false;
 }
 
-BOOL PEFile::IsPE64()
+auto Module::Is64Bit() const -> BOOL
 {
 	if (IsValidPeFile())
 	{
-		return (pNTHeader32->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR64_MAGIC);
+		return (nt_header32_->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR64_MAGIC);
 	}
 
 	return FALSE;
 }
 
-BOOL PEFile::IsPE32()
+auto Module::Is32Bit() const -> BOOL
 {
 	if (IsValidPeFile())
 	{
-		return (pNTHeader32->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR32_MAGIC);
+		return (nt_header32_->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR32_MAGIC);
 	}
 
 	return FALSE;
@@ -495,27 +501,28 @@ BOOL PEFile::IsPE32()
 //
 // Getters
 //
-DWORD PEFile::GetImageSize()
+auto Module::GetImageSize() -> DWORD
 {
 	DWORD lastVirtualOffset = 0, lastVirtualSize = 0;
 	for (WORD i = 0; i < GetSectionCount(); i++)
 	{
-		if ((Sections[i].SectionHeader.VirtualAddress + Sections[i].SectionHeader.Misc.VirtualSize) > (lastVirtualOffset + lastVirtualSize))
+		if ((sections_[i].SectionHeader.VirtualAddress + sections_[i].SectionHeader.Misc.VirtualSize) > (lastVirtualOffset
+			+ lastVirtualSize))
 		{
-			lastVirtualOffset = Sections[i].SectionHeader.VirtualAddress;
-			lastVirtualSize = Sections[i].SectionHeader.Misc.VirtualSize;
+			lastVirtualOffset = sections_[i].SectionHeader.VirtualAddress;
+			lastVirtualSize = sections_[i].SectionHeader.Misc.VirtualSize;
 		}
 	}
 
 	return lastVirtualSize + lastVirtualOffset;
 }
 
-DWORD PEFile::GetHeaderSize()
+auto Module::GetHeaderSize() const -> DWORD
 {
 	return sizeof(IMAGE_DOS_HEADER) + 0x300 + sizeof(IMAGE_NT_HEADERS64);
 }
 
-WORD PEFile::GetSectionCount()
+auto Module::GetSectionCount() const -> WORD
 {
-	return pNTHeader32->FileHeader.NumberOfSections;
+	return nt_header32_->FileHeader.NumberOfSections;
 }

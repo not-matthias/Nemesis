@@ -2,7 +2,7 @@
 
 #include "ProcessMemory.hpp"
 
-class PEMemory
+class Memory
 {
 private:
 	ProcessMemory *pProcessMemory;
@@ -12,8 +12,8 @@ public:
 	DWORD Size;
 	PVOID Buffer;
 
-	PEMemory(ProcessMemory *pProcessMemory, DWORD_PTR StartAddress, DWORD Size);
-	~PEMemory();
+	Memory(ProcessMemory *pProcessMemory, DWORD_PTR StartAddress, DWORD Size);
+	~Memory();
 
 	BOOL Initialize();
 };

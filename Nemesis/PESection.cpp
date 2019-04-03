@@ -1,12 +1,11 @@
-#include "PESection.hpp"
+#include "Section.hpp"
 
-PESection::PESection()
+Section::Section()
 {
-	this->Content = 0;
-	this->DataSize = 0;
-	this->InitialSize = 0;
+	this->content_ = nullptr;
+	this->data_size_ = 0;
+	this->initial_size_ = 0;
 }
 
-PESection::~PESection()
-{
-}
+Section::~Section()
+= default;

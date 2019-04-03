@@ -1,58 +1,58 @@
 #include "KernelMemory.hpp"
 
-KernelMemory::KernelMemory(DWORD Pid) : IMemorySource(Pid)
+KernelMemory::KernelMemory(const DWORD process_id) : IMemorySource(process_id)
 {
 	//
 	// Create connection to the driver
 	//
-	hDriver = CreateFileW(RegistryPath, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, NULL, NULL);
+	driver_handle = CreateFileW(registry_path, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, NULL, nullptr);
 }
 
 KernelMemory::~KernelMemory()
 {
-	if (hDriver != INVALID_HANDLE_VALUE)
+	if (driver_handle != INVALID_HANDLE_VALUE)
 	{
-		CloseHandle(hDriver);
+		CloseHandle(driver_handle);
 	}
 }
 
-PVOID KernelMemory::ReadMemory(DWORD_PTR StartAddress, SIZE_T Size)
+auto KernelMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size) -> PVOID
 {
 	//
 	// Checks
 	//
-	if (hDriver == INVALID_HANDLE_VALUE)
+	if (driver_handle == INVALID_HANDLE_VALUE)
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	//
 	// Create the struct
 	//
-	READ_REQUEST ReadRequest;
-	ReadRequest.Pid = Pid;
-	ReadRequest.TargetAddress = StartAddress;
-	ReadRequest.BufferSize = Size;
+	READ_REQUEST read_request;
+	read_request.process_id = process_id;
+	read_request.target_address = start_address;
+	read_request.buffer_size = size;
 
 	//
 	// Send the struct
 	//
-	if (DeviceIoControl(hDriver, IOCTL_READ_REQUEST, &ReadRequest, sizeof(ReadRequest), &ReadRequest, sizeof(ReadRequest), 0, 0))
+	if (DeviceIoControl(driver_handle, IOCTL_READ_REQUEST, &read_request, sizeof(read_request), &read_request, sizeof(read_request), 0, 0))
 	{
-		return ReadRequest.BufferAddress;
+		return read_request.BufferAddress;
 	}
 	else
 	{
-		return NULL;
+		return nullptr;
 	}
 }
 
-DWORD_PTR KernelMemory::GetBaseAddress()
+auto KernelMemory::GetBaseAddress() -> DWORD_PTR
 {
 	//
 	// Checks
 	//
-	if (hDriver == INVALID_HANDLE_VALUE)
+	if (driver_handle == INVALID_HANDLE_VALUE)
 	{
 		return NULL;
 	}
@@ -61,12 +61,12 @@ DWORD_PTR KernelMemory::GetBaseAddress()
 	// Create the struct
 	//
 	BASE_ADDRESS_REQUEST BaseAddressRequest;
-	BaseAddressRequest.Pid = Pid;
+	BaseAddressRequest.Pid = process_id;
 
 	//
 	// Send the struct
 	//
-	if (DeviceIoControl(hDriver, IOCTL_BASE_ADDRESS_REQUEST, &BaseAddressRequest, sizeof(BaseAddressRequest), &BaseAddressRequest, sizeof(BaseAddressRequest), 0, 0))
+	if (DeviceIoControl(driver_handle, IOCTL_BASE_ADDRESS_REQUEST, &BaseAddressRequest, sizeof(BaseAddressRequest), &BaseAddressRequest, sizeof(BaseAddressRequest), 0, 0))
 	{
 		return reinterpret_cast<DWORD_PTR>(BaseAddressRequest.BaseAddress);
 	}

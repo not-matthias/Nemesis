@@ -1,30 +1,18 @@
 #pragma once
 
-#include "Dump.hpp"
-#include "FileWriter.hpp"
-#include "PEFile.hpp"
-#include "PEMemory.hpp"
-
-#include <iostream>
 #include <Windows.h>
 
-// TODO: Implement config
-typedef struct DUMP_OPTIONS
-{
-
-};
-
 // 
-// Dumps the main module (e.g. process.exe)
+// Dumps the main Module (e.g. process.exe)
 // 
-BOOL StandardDump(DWORD Pid, LPCSTR FileName);
+BOOL DumpMainModule(DWORD process_id, LPCSTR file_name);
 
 //
-// Dumps a specific module (e.g. kernel32.dll)
+// Dumps a specific Module (e.g. kernel32.dll)
 //
-BOOL DumpModule(DWORD Pid, DWORD_PTR BaseAddress, LPCSTR FileName);
+auto DumpModule(DWORD process_id, DWORD_PTR base_address, LPCSTR file_name) -> BOOL;
 
 //
-// Dumps a specific memory region
+// Dumps a specific Memory region
 //
-BOOL DumpMemory(DWORD Pid, DWORD_PTR BaseAddress, DWORD Size, LPCSTR FileName);
+auto DumpMemory(DWORD process_id, DWORD_PTR start_address, DWORD size, LPCSTR file_name) -> BOOL;

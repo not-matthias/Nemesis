@@ -1,22 +1,16 @@
 #pragma once
 
 #include "IMemorySource.hpp"
-#include "Logger.hpp"
-
-#include <iostream>
-#include <Psapi.h>
-#include <string>
 #include <Windows.h>
 
-class UsermodeMemory : public IMemorySource
+class UsermodeMemory final : public IMemorySource
 {
-private:
-	HANDLE hProcess = NULL;
+	HANDLE process_handle = nullptr;
 
 public:
-	UsermodeMemory(DWORD Pid);
-	~UsermodeMemory();
+	explicit UsermodeMemory(DWORD process_id);
+	virtual ~UsermodeMemory();
 
-	PVOID ReadMemory(DWORD_PTR StartAddress, SIZE_T Size);
-	DWORD_PTR GetBaseAddress();
+	auto ReadMemory(DWORD_PTR start_address, SIZE_T size) -> PVOID override;
+	auto GetBaseAddress() -> DWORD_PTR override;
 };

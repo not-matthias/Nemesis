@@ -1,23 +1,13 @@
 #include "Dump.hpp"
 
 #include <iostream>
-#include "PEFile.hpp"
+#include "Module.hpp"
 #include "FileWriter.hpp"
 
-Dump::Dump(DWORD Pid, std::string FileName)
-{
-	this->Pid = Pid;
-	this->FileName = FileName;
-}
-
-Dump::~Dump()
-{
-}
-
-BOOL Dump::DumpProcess()
+auto Dump::DumpProcess() const -> BOOL
 {
 	//
-	// Create the memory wrapper
+	// Create the Memory wrapper
 	//
 	ProcessMemory ProcessMemory(Pid);
 	if (!ProcessMemory.IsValid())
@@ -28,7 +18,7 @@ BOOL Dump::DumpProcess()
 	//
 	// Create and initialize the pe file
 	//
-	PEFile PEFile(&ProcessMemory);
+	Module PEFile(&ProcessMemory);
 	if (!PEFile.Initialize())
 	{
 		return FALSE;
@@ -36,8 +26,8 @@ BOOL Dump::DumpProcess()
 
 	PEFile.SetFileAlignment();
 	PEFile.AlignSectionHeaders();
-	PEFile.FixPEHeader();
-	PEFile.RemoveIAT();
+	PEFile.FixHeader();
+	PEFile.RemoveIat();
 
 	//
 	// Write to file

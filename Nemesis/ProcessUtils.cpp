@@ -1,52 +1,52 @@
 #include "ProcessUtils.hpp"
+#include "Logger.hpp"
 
-std::vector<PROCESS *> GetProcessList()
+auto GetProcessList() -> std::vector<PROCESS*>
 {
-	std::vector<PROCESS *> List;
-	PVOID pBuffer;
-	NTSTATUS Status;
-	PSYSTEM_PROCESS_INFO pSystemProcessInfo = { 0 };
+	std::vector<PROCESS*> process_list;
+	NTSTATUS status;
+	PSYSTEM_PROCESS_INFO system_process_info = { nullptr };
 
 	//
-	// Allocate memory for the list
+	// Allocate Memory for the list
 	//
-	pBuffer = VirtualAlloc(NULL, 1024 * 1024, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
-	if (!pBuffer)
+	auto const buffer = VirtualAlloc(nullptr, 1024 * 1024, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+	if (!buffer)
 	{
-		Logger::Log("Failed to allocate buffer.\n");
+		logger::Log("Failed to allocate memory_buffer.\n");
 		goto EXIT;
 	}
 
-	pSystemProcessInfo = (PSYSTEM_PROCESS_INFO)pBuffer;
+	system_process_info = static_cast<PSYSTEM_PROCESS_INFO>(buffer);
 
 	//
 	// Get the process list
 	//
-	if (!NT_SUCCESS(Status = NtQuerySystemInformation(SystemProcessInformation, pSystemProcessInfo, 1024 * 1024, NULL)))
+	if (!NT_SUCCESS(status = NtQuerySystemInformation(SystemProcessInformation, system_process_info, 1024 * 1024, NULL)))
 	{
-		Logger::Log("Unable to query process list (%#x)\n", Status);
+		logger::Log("Unable to query process list (%#x)\n", status);
 		goto EXIT;
 	}
 
 	//
 	// Loop over the processes
 	//
-	while (pSystemProcessInfo->NextEntryOffset)
+	while (system_process_info->next_entry_offset)
 	{
-		PROCESS *pProcess = new PROCESS;
-		pProcess->ImageName = pSystemProcessInfo->ImageName;
-		pProcess->ProcessId = pSystemProcessInfo->ProcessId;
+		auto process = new PROCESS;
+		process->image_name = system_process_info->image_name;
+		process->process_id = system_process_info->process_id;
 
 		// Add the process to the list
-		List.push_back(pProcess);
+		process_list.push_back(process);
 
 		// Calculate the address of the next entry
-		pSystemProcessInfo = (PSYSTEM_PROCESS_INFO)((LPBYTE)pSystemProcessInfo + pSystemProcessInfo->NextEntryOffset);
+		system_process_info = reinterpret_cast<PSYSTEM_PROCESS_INFO>(reinterpret_cast<LPBYTE>(system_process_info) + system_process_info->next_entry_offset);
 	}
 
 EXIT:
-	// Free the buffer
-	VirtualFree(pBuffer, 0, MEM_RELEASE);
+	// Free the memory_buffer
+	VirtualFree(buffer, 0, MEM_RELEASE);
 
-	return List;
+	return process_list;
 }

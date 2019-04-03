@@ -1,27 +1,27 @@
 #pragma once
 
 #include "ProcessMemory.hpp"
-#include "PESection.hpp"
+#include "Section.hpp"
 
 #include <vector>
 #include <Windows.h>
 
 class Module
 {
-	ProcessMemory *process_memory_;
-	DWORD_PTR base_address_;
+	ProcessMemory *process_memory;
+	DWORD_PTR base_address;
 
 public:
 	const DWORD kFileAlignmentConstant = 0x200;
 
-	BYTE *dos_stub_;
-	DWORD dos_stub_size_;
+	BYTE *dos_stub;
+	DWORD dos_stub_size;
 	
-	PIMAGE_DOS_HEADER dos_header_;
-	PIMAGE_NT_HEADERS32 nt_header32_;
-	PIMAGE_NT_HEADERS64 nt_header64_;
+	PIMAGE_DOS_HEADER dos_header;
+	PIMAGE_NT_HEADERS32 nt_header32;
+	PIMAGE_NT_HEADERS64 nt_header64;
 
-	std::vector<PESection> sections_;
+	std::vector<Section> sections;
 
 private:
 	//
@@ -30,11 +30,11 @@ private:
 	auto ReadHeader() -> BOOL;
 	auto SetHeader(PVOID header_memory, DWORD header_size) -> VOID;
 	auto SetSections() -> VOID;
-	auto SetSectionSize(PESection& section, DWORD_PTR section_pointer) const -> VOID;
-	auto ReadSection(PESection& section, DWORD_PTR section_pointer) const -> BOOL;
+	auto SetSectionSize(Section& section, DWORD_PTR section_pointer) const -> VOID;
+	auto ReadSection(Section& section, DWORD_PTR section_pointer) const -> BOOL;
 
 public:
-	Module(ProcessMemory* process_memory);
+	explicit Module(ProcessMemory* process_memory);
 	Module(ProcessMemory *process_memory, DWORD_PTR base_address);
 	~Module();
 
@@ -63,7 +63,7 @@ public:
 	// Getters
 	//
 	auto GetImageSize() -> DWORD;
-	auto GetHeaderSize() const -> DWORD;
 	auto GetSectionCount() const -> WORD;
+	static auto GetHeaderSize()->DWORD;
 };
 

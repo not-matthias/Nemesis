@@ -1,13 +1,13 @@
-#include "PEMemory.hpp"
+#include "Memory.hpp"
 
-PEMemory::PEMemory(ProcessMemory * pProcessMemory, DWORD_PTR StartAddress, DWORD Size)
+Memory::Memory(ProcessMemory * pProcessMemory, DWORD_PTR StartAddress, DWORD Size)
 {
 	this->pProcessMemory = pProcessMemory;
 	this->StartAddress = StartAddress;
 	this->Size = Size;
 }
 
-PEMemory::~PEMemory()
+Memory::~Memory()
 {
 	if (Buffer != nullptr)
 	{
@@ -15,7 +15,7 @@ PEMemory::~PEMemory()
 	}
 }
 
-BOOL PEMemory::Initialize()
+BOOL Memory::Initialize()
 {
 	//
 	// Get the memory

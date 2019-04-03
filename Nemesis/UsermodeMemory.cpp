@@ -1,40 +1,43 @@
 #include "UsermodeMemory.hpp"
+#include <iostream>
+#include "Logger.hpp"
+#include <Psapi.h>
 
-UsermodeMemory::UsermodeMemory(DWORD Pid) : IMemorySource(Pid)
+UsermodeMemory::UsermodeMemory(DWORD process_id) : IMemorySource(process_id)
 {
-	this->hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, Pid);
-	if (this->hProcess == INVALID_HANDLE_VALUE)
+	this->process_handle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, process_id);
+	if (this->process_handle == INVALID_HANDLE_VALUE)
 	{
-		Logger::Log("Failed to open process.");
+		logger::Log("Failed to open process.");
 	}
 }
 
 UsermodeMemory::~UsermodeMemory()
 {
-	if (this->hProcess != INVALID_HANDLE_VALUE)
-		CloseHandle(this->hProcess);
+	if (this->process_handle != INVALID_HANDLE_VALUE)
+		CloseHandle(this->process_handle);
 }
 
-PVOID UsermodeMemory::ReadMemory(DWORD_PTR StartAddress, SIZE_T Size)
+auto UsermodeMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size) -> PVOID
 {
-	if (this->hProcess == INVALID_HANDLE_VALUE)
+	if (this->process_handle == INVALID_HANDLE_VALUE)
 		return nullptr;
 
-	BYTE *Buffer = new BYTE[Size];
-	SIZE_T BytesRead;
-	DWORD OldProtect;
+	const auto buffer = new BYTE[size];
+	SIZE_T bytes_read;
+	DWORD old_protect;
 
 	// 
 	// ReadProcessMemory
 	// 
-	if (!ReadProcessMemory(hProcess, reinterpret_cast<LPCVOID>(StartAddress), Buffer, Size, &BytesRead))
+	if (!ReadProcessMemory(process_handle, reinterpret_cast<LPCVOID>(start_address), buffer, size, &bytes_read))
 	{
 		std::cout << "[1] Failed to read process memory." << std::endl;
 
 		//
 		// RPM Failed - Disable page protection
 		//
-		if (!VirtualProtectEx(hProcess, reinterpret_cast<LPVOID>(StartAddress), Size, PAGE_READWRITE, &OldProtect))
+		if (!VirtualProtectEx(process_handle, reinterpret_cast<LPVOID>(start_address), size, PAGE_READWRITE, &old_protect))
 		{
 			std::cout << "[2] Failed to VirtualProtectEx" << std::endl;
 			return nullptr;
@@ -43,50 +46,49 @@ PVOID UsermodeMemory::ReadMemory(DWORD_PTR StartAddress, SIZE_T Size)
 		// 
 		// ReadProcessMemory
 		// 
-		if (!ReadProcessMemory(hProcess, reinterpret_cast<LPCVOID>(StartAddress), Buffer, Size, &BytesRead))
+		if (!ReadProcessMemory(process_handle, reinterpret_cast<LPCVOID>(start_address), buffer, size, &bytes_read))
 		{
 			std::cout << "[3] Failed to read process memory." << std::endl;
 		}
 
-		VirtualProtectEx(hProcess, (LPVOID)StartAddress, Size, OldProtect, &OldProtect);
+		VirtualProtectEx(process_handle, reinterpret_cast<LPVOID>(start_address), size, old_protect, &old_protect);
 	}
 
-	return Buffer;
+	return buffer;
 }
 
-DWORD_PTR UsermodeMemory::GetBaseAddress()
+auto UsermodeMemory::GetBaseAddress() -> DWORD_PTR
 {
-	//HMODULE hModules[1024];
-	TCHAR szFileName[MAX_PATH];
-	TCHAR szModuleName[MAX_PATH];
-	HMODULE *hModules = NULL;
-	DWORD cbNeeded;
-	DWORD cModules;
-	DWORD_PTR BaseAddress = NULL;
+	TCHAR file_name[MAX_PATH] = {};
+	TCHAR module_name[MAX_PATH];
+	HMODULE *module_handle = nullptr;
+	DWORD needed;
+	DWORD modules;
+	DWORD_PTR base_address = NULL;
 
 	//
-	// Set the hModules size
+	// Set the hModules memory_size
 	//
-	EnumProcessModules(hProcess, hModules, 0, &cModules);
-	hModules = new HMODULE[cModules / sizeof(HMODULE)];
+	EnumProcessModules(process_handle, module_handle, 0, &modules);
+	module_handle = new HMODULE[modules / sizeof(HMODULE)];
 
 	//
-	// Get the module name
+	// Get the Module name
 	//
-	GetModuleBaseName(hProcess, NULL, szFileName, sizeof(szFileName));
+	GetModuleBaseName(process_handle, nullptr, file_name, sizeof(file_name));
 
 	//
 	// Get the base address
 	//
-	if (EnumProcessModules(hProcess, hModules, sizeof(hModules), &cbNeeded))
+	if (EnumProcessModules(process_handle, module_handle, sizeof(module_handle), &needed))
 	{
-		for (unsigned int i = 0; i < (cbNeeded / sizeof(HMODULE)); i++)
+		for (unsigned int i = 0; i < (needed / sizeof(HMODULE)); i++)
 		{
-			std::string FileName(szFileName);
+			std::string std_file_name(file_name);
 
-			if (GetModuleBaseName(hProcess, hModules[i], szModuleName, sizeof(szModuleName))) {
-				if (FileName.compare(szModuleName) == 0) {
-					BaseAddress = reinterpret_cast<DWORD_PTR>(hModules[i]);
+			if (GetModuleBaseName(process_handle, module_handle[i], module_name, sizeof(module_name))) {
+				if (std_file_name == module_name) {
+					base_address = reinterpret_cast<DWORD_PTR>(module_handle[i]);
 					break;
 				}
 			}
@@ -94,7 +96,7 @@ DWORD_PTR UsermodeMemory::GetBaseAddress()
 		}
 	}
 
-	delete[] hModules;
+	delete[] module_handle;
 
-	return BaseAddress;
+	return base_address;
 }

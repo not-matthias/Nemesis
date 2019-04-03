@@ -1,9 +1,6 @@
 #pragma once
 
 #include "IMemorySource.hpp"
-
-#include <string>
-#include <iostream>
 #include <Windows.h>
 
 //
@@ -24,13 +21,13 @@ typedef struct _READ_REQUEST
 	//
 	// In
 	//
-	ULONG Pid;
-	DWORD_PTR TargetAddress;
+	ULONG process_id;
+	DWORD_PTR target_address;
 
 	//
 	// Both
 	//
-	SIZE_T BufferSize;
+	SIZE_T buffer_size;
 
 	// 
 	// Out
@@ -52,17 +49,15 @@ typedef struct _BASE_ADDRESS_REQUEST
 } BASE_ADDRESS_REQUEST, *PBASE_ADDRESS_REQUEST;
 
 
-class KernelMemory : IMemorySource
+class KernelMemory final : IMemorySource
 {
-private:
-	LPCWSTR RegistryPath = L"\\\\.\\KernelMemory";
-	HANDLE hDriver = NULL;
+	LPCWSTR registry_path = L"\\\\.\\KernelMemory";
+	HANDLE driver_handle = nullptr;
 
 public:
-	KernelMemory(DWORD Pid);
+	explicit KernelMemory(DWORD process_id);
 	~KernelMemory();
 
-	PVOID ReadMemory(DWORD_PTR StartAddress, SIZE_T Size);
-	DWORD_PTR GetBaseAddress();
+	auto ReadMemory(DWORD_PTR start_address, SIZE_T size) -> PVOID override;
+	auto GetBaseAddress() -> DWORD_PTR override;
 };
-

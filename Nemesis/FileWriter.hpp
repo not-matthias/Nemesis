@@ -1,23 +1,21 @@
 #pragma once
 
-#include "PEFile.hpp"
-#include "PEMemory.hpp"
-
-#include <vector>
+#include "Module.hpp"
+#include "Memory.hpp"
+#include <string>
 
 class FileWriter
 {
-private:
-	std::string FileName;
-	HANDLE hFile;
+	std::string file_name;
+	HANDLE file_handle = INVALID_HANDLE_VALUE;
 
 public:
-	FileWriter(std::string FileName);
+	explicit FileWriter(std::string file_name);
 	~FileWriter();
 
-	BOOL WriteToFile(PEFile *pPEFile);
-	BOOL WriteToFile(PEMemory *pPEMemory);
-	BOOL WriteMemoryToFile(LONG Offset, DWORD Size, LPCVOID Buffer);
-	BOOL WriteZeroMemoryToFile(LONG Offset, DWORD Size);
-};
+	auto WriteToFile(Module* module) -> BOOL;
+	auto WriteToFile(Memory* memory) -> BOOL;
 
+	auto WriteMemoryToFile(LONG offset, DWORD size, LPCVOID buffer) const -> BOOL;
+	auto WriteZeroMemoryToFile(LONG offset, DWORD size) const -> BOOL;
+};

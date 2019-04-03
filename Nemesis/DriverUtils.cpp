@@ -1,47 +1,46 @@
 #include "DriverUtils.hpp"
+#include "Logger.hpp"
 
-std::vector<DRIVER *> GetDriverList()
+std::vector<DRIVER*> GetDriverList()
 {
-	std::vector<DRIVER *> List;
-	NTSTATUS Status;
-	ULONG i;
-
-	PRTL_PROCESS_MODULES ModuleInfo;
+	std::vector<DRIVER*> driver_list;
+	NTSTATUS status;
 
 	//
-	// Allocate memory for the module list
+	// Allocate Memory for the Module list
 	//
-	ModuleInfo = (PRTL_PROCESS_MODULES)VirtualAlloc(NULL, 1024 * 1024, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
-	if (!ModuleInfo)
+	auto module_info = static_cast<PRTL_PROCESS_MODULES>(VirtualAlloc(
+		nullptr, 1024 * 1024, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE));
+	if (!module_info)
 	{
-		Logger::Log("Unable to allocate memory for module list (%d)\n", GetLastError());
-		return List;
+		logger::Log("Unable to allocate Memory for Module list (%d)\n", GetLastError());
+		return driver_list;
 	}
 
 
 	//
-	// Get the module list (SystemModuleInformation)
+	// Get the Module list (SystemModuleInformation)
 	//
-	if (!NT_SUCCESS(Status = NtQuerySystemInformation((SYSTEM_INFORMATION_CLASS)11, ModuleInfo, 1024 * 1024, NULL)))
+	if (!NT_SUCCESS(status = NtQuerySystemInformation((SYSTEM_INFORMATION_CLASS)11, module_info, 1024 * 1024, NULL)))
 	{
-		Logger::Log("Unable to query module list (%#x)\n", Status);
-		VirtualFree(ModuleInfo, 0, MEM_RELEASE);
-		return List;
+		logger::Log("Unable to query Module list (%#x)\n", status);
+		VirtualFree(module_info, 0, MEM_RELEASE);
+		return driver_list;
 	}
 
 
 	//
 	// Loop though the modules
 	//
-	for (i = 0; i < ModuleInfo->NumberOfModules; i++)
+	for (ULONG i = 0; i < module_info->number_of_modules; i++)
 	{
-		DRIVER *pDriver = new DRIVER;
-		pDriver->DriverName = std::string(reinterpret_cast<char *>(ModuleInfo->Modules[i].FullPathName + ModuleInfo->Modules[i].OffsetToFileName));
+		auto* driver = new DRIVER;
+		driver->driver_name = std::string(reinterpret_cast<char*>(module_info->Modules[i].full_path_name + module_info->Modules[i].offset_to_file_name));
 
-		List.push_back(pDriver);
+		driver_list.push_back(driver);
 	}
 
-	VirtualFree(ModuleInfo, 0, MEM_RELEASE);
+	VirtualFree(module_info, 0, MEM_RELEASE);
 
-	return List;
+	return driver_list;
 }

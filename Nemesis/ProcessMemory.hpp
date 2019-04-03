@@ -1,39 +1,34 @@
 #pragma once
 
 #include "IMemorySource.hpp"
-#include "UsermodeMemory.hpp"
-
-#include <iostream>
-#include <vector>
 #include <Windows.h>
 
 class ProcessMemory
 {
-private:
-	DWORD Pid;
-	IMemorySource *pMemorySource = nullptr;
+	DWORD process_id;
+	IMemorySource *memory_source = nullptr;
 
-	// TODO: Add list of memory sources here
+	// TODO: Add list of Memory sources here
 
 public:
-	ProcessMemory(DWORD Pid);
+	explicit ProcessMemory(DWORD process_id);
 	~ProcessMemory();
 
 	//
 	// Functions
 	//
-	template <typename T> 
-	T ReadMemory(DWORD_PTR StartAddress);
+	template <typename T>
+	auto ReadMemory(DWORD_PTR start_address) -> T;
 
-	PVOID ReadMemory(DWORD_PTR StartAddress, SIZE_T Size);
+	PVOID ReadMemory(DWORD_PTR start_address, SIZE_T size) const;
 
 	//
 	// Getters
 	//
-	DWORD_PTR GetBaseAddress();
+	auto GetBaseAddress() const -> DWORD_PTR;
 
 	//
 	// Checks
 	//
-	BOOL IsValid();
+	auto IsValid() const -> BOOL;
 };

@@ -2,15 +2,15 @@
 
 #include <Windows.h>
 
-class PESection
+class Section
 {
 public:
-	IMAGE_SECTION_HEADER SectionHeader;
-	PVOID Content;
-	DWORD DataSize;
-	DWORD InitialSize;
+	IMAGE_SECTION_HEADER section_header_;
+	BYTE *content_;
+	DWORD data_size_;
+	DWORD initial_size_;
 
-	PESection();
-	~PESection();
+	Section();
+	~Section();
 };
 

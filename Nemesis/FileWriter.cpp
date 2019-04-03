@@ -1,28 +1,19 @@
 #include "FileWriter.hpp"
+#include <utility>
+
+FileWriter::FileWriter(std::string file_name) : file_name(std::move(file_name)) {}
+
+FileWriter::~FileWriter() = default;
 
 //
-// Standard constructor
+// Write the Module to the file
 //
-FileWriter::FileWriter(std::string FileName)
+auto FileWriter::WriteToFile(Module* module) -> BOOL
 {
-	this->FileName = FileName;
-}
-
-FileWriter::~FileWriter()
-{
-}
-
-//
-// Write the PEFile to the file
-//
-BOOL FileWriter::WriteToFile(PEFile *pPEFile)
-{
-	DWORD dwFileOffset = 0, dwWriteSize = 0;
-
 	//
 	// Some checks
 	//
-	if (pPEFile->GetSectionCount() != pPEFile->Sections.size())
+	if (module->GetSectionCount() != module->sections.size())
 	{
 		return FALSE;
 	}
@@ -31,143 +22,143 @@ BOOL FileWriter::WriteToFile(PEFile *pPEFile)
 	//
 	// Create the file
 	//
-	hFile = CreateFile(FileName.c_str(), GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-	if (hFile == INVALID_HANDLE_VALUE)
+	file_handle = CreateFile(file_name.c_str(), GENERIC_WRITE, FILE_SHARE_WRITE, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+	if (file_handle == INVALID_HANDLE_VALUE)
 	{
 		return FALSE;
 	}
-	
+
 
 	//
 	// DOS Header
 	//
-	dwWriteSize = sizeof(IMAGE_DOS_HEADER);
-	if (!WriteMemoryToFile(dwFileOffset, dwWriteSize, pPEFile->pDosHeader))
+	DWORD file_offset = 0, write_size = sizeof(IMAGE_DOS_HEADER);
+	if (!WriteMemoryToFile(file_offset, write_size, module->dos_header))
 	{
 		return FALSE;
 	}
-	dwFileOffset += dwWriteSize;
+	file_offset += write_size;
 
 
 	//
 	// Stubs
 	//
-	if (pPEFile->DosStubSize && pPEFile->pDosStub)
+	if (module->dos_stub_size && module->dos_stub)
 	{
-		dwWriteSize = pPEFile->DosStubSize;
-		if (!WriteMemoryToFile(dwFileOffset, dwWriteSize, pPEFile->pDosStub))
+		write_size = module->dos_stub_size;
+		if (!WriteMemoryToFile(file_offset, write_size, module->dos_stub))
 		{
 			return FALSE;
 		}
-		dwFileOffset += dwWriteSize;
+		file_offset += write_size;
 	}
 
 
 	//
 	// PE Header
 	//
-	if (pPEFile->IsPE32())
+	if (module->Is32Bit())
 	{
-		dwWriteSize = sizeof(IMAGE_NT_HEADERS32);
+		write_size = sizeof(IMAGE_NT_HEADERS32);
 
-		if (!WriteMemoryToFile(dwFileOffset, dwWriteSize, pPEFile->pNTHeader32))
+		if (!WriteMemoryToFile(file_offset, write_size, module->nt_header32))
 		{
 			return FALSE;
 		}
 
-		dwFileOffset += dwWriteSize;
+		file_offset += write_size;
 	}
 	else
 	{
-		dwWriteSize = sizeof(IMAGE_NT_HEADERS64); 
-		
-		if (!WriteMemoryToFile(dwFileOffset, dwWriteSize, pPEFile->pNTHeader64))
+		write_size = sizeof(IMAGE_NT_HEADERS64);
+
+		if (!WriteMemoryToFile(file_offset, write_size, module->nt_header64))
 		{
 			return FALSE;
 		}
 
-		dwFileOffset += dwWriteSize;
+		file_offset += write_size;
 	}
 
 	// 
 	// Section Header
 	// 
-	dwWriteSize = sizeof(IMAGE_SECTION_HEADER);
-	for (WORD i = 0; i < pPEFile->GetSectionCount(); i++)
+	write_size = sizeof(IMAGE_SECTION_HEADER);
+	for (WORD i = 0; i < module->GetSectionCount(); i++)
 	{
-		if (!WriteMemoryToFile(dwFileOffset, dwWriteSize, &pPEFile->Sections[i].SectionHeader))
+		if (!WriteMemoryToFile(file_offset, write_size, &module->sections[i].section_header))
 		{
 			return FALSE;
 		}
 
-		dwFileOffset += dwWriteSize;
+		file_offset += write_size;
 	}
 
 
 	//
 	// Sections
 	//
-	for (WORD i = 0; i < pPEFile->GetSectionCount(); i++)
+	for (WORD i = 0; i < module->GetSectionCount(); i++)
 	{
 		// 
 		// Raw data not found
 		//
-		if (pPEFile->Sections[i].SectionHeader.PointerToRawData == NULL)
+		if (module->sections[i].section_header.PointerToRawData == NULL)
 			continue;
 
 		//
 		// PointerToRawData > dwFileOffset => Padding needed
 		//
-		if (pPEFile->Sections[i].SectionHeader.PointerToRawData > dwFileOffset)
+		if (module->sections[i].section_header.PointerToRawData > file_offset)
 		{
 			//
 			// Calculate the padding
 			//
-			dwWriteSize = pPEFile->Sections[i].SectionHeader.PointerToRawData - dwFileOffset;
+			write_size = module->sections[i].section_header.PointerToRawData - file_offset;
 
 			//
 			// Write the padding
 			//
-			if (!WriteZeroMemoryToFile(dwFileOffset, dwWriteSize))
+			if (!WriteZeroMemoryToFile(file_offset, write_size))
 			{
 				return FALSE;
 			}
 
-			dwFileOffset += dwWriteSize;
+			file_offset += write_size;
 		}
 
 		//
 		// Write the section data
 		//
-		dwWriteSize = pPEFile->Sections[i].DataSize;
+		write_size = module->sections[i].data_size;
 
-		if (!WriteMemoryToFile(pPEFile->Sections[i].SectionHeader.PointerToRawData, dwWriteSize, pPEFile->Sections[i].Content))
+		if (!WriteMemoryToFile(module->sections[i].section_header.PointerToRawData, write_size, module->sections[i].content))
 		{
 			return FALSE;
 		}
 
-		dwFileOffset += dwWriteSize;
+		file_offset += write_size;
 
 
 		//
 		// DataSize < SizeOfRawData => Padding needed
 		//
-		if (pPEFile->Sections[i].DataSize < pPEFile->Sections[i].SectionHeader.SizeOfRawData)
+		if (module->sections[i].data_size < module->sections[i].section_header.SizeOfRawData)
 		{
 			//
 			// Calculate the padding
 			//
-			dwWriteSize = pPEFile->Sections[i].SectionHeader.SizeOfRawData - pPEFile->Sections[i].DataSize;
+			write_size = module->sections[i].section_header.SizeOfRawData - module->sections[i].data_size;
 
 			//
 			// Write the padding
 			//
-			if (!WriteZeroMemoryToFile(dwFileOffset, dwWriteSize))
+			if (!WriteZeroMemoryToFile(file_offset, write_size))
 			{
 				return FALSE;
 			}
 
-			dwFileOffset += dwWriteSize;
+			file_offset += write_size;
 		}
 	}
 
@@ -189,38 +180,38 @@ BOOL FileWriter::WriteToFile(PEFile *pPEFile)
 	//
 	// Set EOL
 	//
-	SetEndOfFile(hFile);
+	SetEndOfFile(file_handle);
 
 
 	//
 	// Close the handle
 	//
-	if (hFile != INVALID_HANDLE_VALUE)
+	if (file_handle != INVALID_HANDLE_VALUE)
 	{
-		CloseHandle(hFile);
+		CloseHandle(file_handle);
 	}
 
 	return TRUE;
 }
 
 //
-// Writes the buffer to a new file
+// Writes the memory_buffer to a new file
 //
-BOOL FileWriter::WriteToFile(PEMemory *pPEMemory)
+auto FileWriter::WriteToFile(Memory* memory) -> BOOL
 {
 	//
 	// Create the file
 	//
-	hFile = CreateFile(FileName.c_str(), GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-	if (hFile == INVALID_HANDLE_VALUE)
+	file_handle = CreateFile(file_name.c_str(), GENERIC_WRITE, FILE_SHARE_WRITE, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+	if (file_handle == INVALID_HANDLE_VALUE)
 	{
 		return FALSE;
 	}
 
 	//
-	// Write the buffer to the file
+	// Write the memory_buffer to the file
 	//
-	if (WriteMemoryToFile(0, pPEMemory->Size, pPEMemory->Buffer))
+	if (WriteMemoryToFile(0, memory->memory_size, memory->memory_buffer))
 	{
 		return FALSE;
 	}
@@ -228,31 +219,31 @@ BOOL FileWriter::WriteToFile(PEMemory *pPEMemory)
 	//
 	// Set EOL
 	//
-	SetEndOfFile(hFile);
+	SetEndOfFile(file_handle);
 
 
 	//
 	// Close the handle
 	//
-	if (hFile != INVALID_HANDLE_VALUE)
+	if (file_handle != INVALID_HANDLE_VALUE)
 	{
-		CloseHandle(hFile);
+		CloseHandle(file_handle);
 	}
 
 	return TRUE;
 }
 
 //
-// Write a buffer to a specific location
+// Write a memory_buffer to a specific location
 //
-BOOL FileWriter::WriteMemoryToFile(LONG Offset, DWORD Size, LPCVOID Buffer)
+auto FileWriter::WriteMemoryToFile(const LONG offset, const DWORD size, const LPCVOID buffer) const -> BOOL
 {
 	DWORD lpNumberOfBytesWritten = 0;
 
 	//
 	// Some checks
 	//
-	if (hFile == INVALID_HANDLE_VALUE || Buffer == nullptr)
+	if (file_handle == INVALID_HANDLE_VALUE || buffer == nullptr)
 	{
 		return FALSE;
 	}
@@ -260,7 +251,7 @@ BOOL FileWriter::WriteMemoryToFile(LONG Offset, DWORD Size, LPCVOID Buffer)
 	//
 	// Set the file pointer
 	//
-	if (SetFilePointer(hFile, Offset, NULL, FILE_BEGIN) == INVALID_SET_FILE_POINTER && GetLastError() != NO_ERROR)
+	if (SetFilePointer(file_handle, offset, nullptr, FILE_BEGIN) == INVALID_SET_FILE_POINTER && GetLastError() != NO_ERROR)
 	{
 		return FALSE;
 	}
@@ -268,7 +259,7 @@ BOOL FileWriter::WriteMemoryToFile(LONG Offset, DWORD Size, LPCVOID Buffer)
 	//
 	// Write to the file
 	//
-	if (!WriteFile(hFile, Buffer, Size, &lpNumberOfBytesWritten, NULL))
+	if (!WriteFile(file_handle, buffer, size, &lpNumberOfBytesWritten, nullptr))
 	{
 		return FALSE;
 	}
@@ -277,16 +268,16 @@ BOOL FileWriter::WriteMemoryToFile(LONG Offset, DWORD Size, LPCVOID Buffer)
 }
 
 //
-// Write zero memory
+// Write zero Memory
 //
-BOOL FileWriter::WriteZeroMemoryToFile(LONG Offset, DWORD Size)
+auto FileWriter::WriteZeroMemoryToFile(const LONG offset, const DWORD size) const -> BOOL
 {
-	PVOID Buffer = calloc(Size, 1);
+	const auto buffer = calloc(size, 1);
 
 	//
-	// Check the buffer
+	// Check the memory_buffer
 	//
-	if (!Buffer)
+	if (!buffer)
 	{
 		return FALSE;
 	}
@@ -294,15 +285,15 @@ BOOL FileWriter::WriteZeroMemoryToFile(LONG Offset, DWORD Size)
 	//
 	// Write to file
 	//
-	if (!WriteMemoryToFile(Offset, Size, Buffer))
+	if (!WriteMemoryToFile(offset, size, buffer))
 	{
 		return FALSE;
 	}
 
 	//
-	// Free memory
+	// Free Memory
 	//
-	free(Buffer);
+	free(buffer);
 
 	return TRUE;
 }

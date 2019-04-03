@@ -1,16 +1,20 @@
 #include "DumpUtils.hpp"
 
-BOOL StandardDump(DWORD Pid, LPCSTR FileName)
+#include "Module.hpp"
+#include "FileWriter.hpp"
+#include "Dump.hpp"
+
+auto DumpMainModule(const DWORD process_id, const LPCSTR file_name) -> BOOL
 {
 	//
 	// Create the classes
 	//
-	Dump Dump(Pid, FileName);
+	Dump dump(process_id, file_name);
 
 	//
 	// Dump it
 	//
-	if (Dump.DumpProcess())
+	if (dump.DumpProcess())
 	{
 		return TRUE;
 	}
@@ -20,13 +24,13 @@ BOOL StandardDump(DWORD Pid, LPCSTR FileName)
 	}
 }
 
-BOOL DumpModule(DWORD Pid, DWORD_PTR BaseAddress, LPCSTR FileName)
+auto DumpModule(const DWORD process_id, const DWORD_PTR base_address, const LPCSTR file_name) -> BOOL
 {
 	//
-	// Create the memory wrapper
+	// Create the Memory wrapper
 	//
-	ProcessMemory ProcessMemory(Pid);
-	if (!ProcessMemory.IsValid())
+	ProcessMemory process_memory(process_id);
+	if (!process_memory.IsValid())
 	{
 		return FALSE;
 	}
@@ -34,22 +38,22 @@ BOOL DumpModule(DWORD Pid, DWORD_PTR BaseAddress, LPCSTR FileName)
 	//
 	// Create and initialize the pe file
 	//
-	PEFile PEFile(&ProcessMemory, BaseAddress);
-	if (!PEFile.Initialize())
+	Module module(&process_memory, base_address);
+	if (!module.Initialize())
 	{
 		return FALSE;
 	}
 
-	PEFile.SetFileAlignment();
-	PEFile.AlignSectionHeaders();
-	PEFile.FixPEHeader();
-	PEFile.RemoveIAT();
+	module.SetFileAlignment();
+	module.AlignSectionHeaders();
+	module.FixHeader();
+	module.RemoveIat();
 
 	//
 	// Write to file
 	//
-	FileWriter FileWriter(FileName);
-	if (FileWriter.WriteToFile(&PEFile))
+	FileWriter file_writer(file_name);
+	if (file_writer.WriteToFile(&module))
 	{
 		return TRUE;
 	}
@@ -59,22 +63,22 @@ BOOL DumpModule(DWORD Pid, DWORD_PTR BaseAddress, LPCSTR FileName)
 	}
 }
 
-BOOL DumpMemory(DWORD Pid, DWORD_PTR StartAddress, DWORD Size, LPCSTR FileName)
+auto DumpMemory(const DWORD process_id, const DWORD_PTR start_address, const DWORD size, const LPCSTR file_name) -> BOOL
 {
 	//
-	// Create the memory wrapper
+	// Create the Memory wrapper
 	//
-	ProcessMemory ProcessMemory(Pid);
-	if (!ProcessMemory.IsValid())
+	ProcessMemory process_memory(process_id);
+	if (!process_memory.IsValid())
 	{
 		return FALSE;
 	}
 
 	//
-	// Create and initialize the memory
+	// Create and initialize the Memory
 	//
-	PEMemory PEMemory(&ProcessMemory, StartAddress, Size);
-	if (!PEMemory.Initialize())
+	Memory memory(&process_memory, start_address, size);
+	if (!memory.Initialize())
 	{
 		return FALSE;
 	}
@@ -82,8 +86,8 @@ BOOL DumpMemory(DWORD Pid, DWORD_PTR StartAddress, DWORD Size, LPCSTR FileName)
 	//
 	// Write to file
 	//
-	FileWriter FileWriter(FileName);
-	if (FileWriter.WriteToFile(&PEMemory))
+	FileWriter file_writer(file_name);
+	if (file_writer.WriteToFile(&memory))
 	{
 		return TRUE;
 	}

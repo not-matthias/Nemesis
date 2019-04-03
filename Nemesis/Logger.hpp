@@ -1,11 +1,10 @@
 #pragma once
 
-#include <stdio.h>
 #include <Windows.h>
 
-namespace Logger
+namespace logger
 {
-	void Log(const WCHAR * format, ...);
-	void Log(const CHAR * format, ...);
+	auto Log(const WCHAR* format, ...) -> void;
+	auto Log(const CHAR* format, ...) -> void;
 };
 

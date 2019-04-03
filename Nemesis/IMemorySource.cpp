@@ -1,6 +1,6 @@
 #include "IMemorySource.hpp"
 
-IMemorySource::IMemorySource(DWORD Pid)
+IMemorySource::IMemorySource(const DWORD process_id)
 {
-	this->Pid = Pid;
+	this->process_id = process_id;
 }

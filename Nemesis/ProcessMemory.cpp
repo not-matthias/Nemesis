@@ -1,41 +1,40 @@
 #include "ProcessMemory.hpp"
+#include "UsermodeMemory.hpp"
 
-ProcessMemory::ProcessMemory(DWORD Pid)
+ProcessMemory::ProcessMemory(const DWORD process_id)
 {
-	this->Pid = Pid;
-	this->pMemorySource = new UsermodeMemory(Pid);
+	this->process_id = process_id;
+	this->memory_source = new UsermodeMemory(process_id);
 }
 
-ProcessMemory::~ProcessMemory()
-{
-}
+ProcessMemory::~ProcessMemory() = default;
 
 //
 // Functions
 //
 template<typename T>
-T ProcessMemory::ReadMemory(DWORD_PTR StartAddress)
+T ProcessMemory::ReadMemory(DWORD_PTR start_address)
 {
-	return reinterpret_cast<T>(this->pMemorySource->ReadMemory(StartAddress, sizeof(T)));
+	return reinterpret_cast<T>(this->memory_source->ReadMemory(start_address, sizeof(T)));
 }
 
-PVOID ProcessMemory::ReadMemory(DWORD_PTR StartAddress, SIZE_T Size)
+PVOID ProcessMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size) const
 {
-	return this->pMemorySource->ReadMemory(StartAddress, Size);
+	return this->memory_source->ReadMemory(start_address, size);
 }
 
 //
 // Getters
 //
-DWORD_PTR ProcessMemory::GetBaseAddress()
+DWORD_PTR ProcessMemory::GetBaseAddress() const
 {
-	return pMemorySource->GetBaseAddress();
+	return memory_source->GetBaseAddress();
 }
 
 //
 // Checks
 //
-BOOL ProcessMemory::IsValid()
+BOOL ProcessMemory::IsValid() const
 {
-	return pMemorySource != nullptr;
+	return memory_source != nullptr;
 }

@@ -26,11 +26,11 @@
     <ClInclude Include="IMemorySource.hpp" />
     <ClInclude Include="KernelMemory.hpp" />
     <ClInclude Include="Logger.hpp" />
-    <ClInclude Include="PEMemory.hpp" />
-    <ClInclude Include="PESection.hpp" />
+    <ClInclude Include="Memory.hpp" />
+    <ClInclude Include="Section.hpp" />
     <ClInclude Include="ProcessMemory.hpp" />
     <ClInclude Include="UsermodeMemory.hpp" />
-    <ClInclude Include="PEFile.hpp" />
+    <ClInclude Include="Module.hpp" />
     <ClInclude Include="ProcessUtils.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -43,11 +43,11 @@
     <ClCompile Include="KernelMemory.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="PEMemory.cpp" />
-    <ClCompile Include="PESection.cpp" />
+    <ClCompile Include="Memory.cpp" />
+    <ClCompile Include="Section.cpp" />
     <ClCompile Include="ProcessMemory.cpp" />
     <ClCompile Include="UsermodeMemory.cpp" />
-    <ClCompile Include="PEFile.cpp" />
+    <ClCompile Include="Module.cpp" />
     <ClCompile Include="ProcessUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -58,32 +58,32 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{3F24DF07-AFDE-40B1-8897-A63B0C4110A9}</ProjectGuid>
     <RootNamespace>Nemesis</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>

@@ -2,20 +2,16 @@
 
 #include <Windows.h>
 
-// 1. Implement the interface
-// 2. Implement the methods
-// 3. Add and switch to the MemorySource to the list in the Memory class
-
-
-class IMemorySource 
+class IMemorySource
 {
 protected:
-	DWORD Pid;
+	DWORD process_id;
 
 public:
-	IMemorySource(DWORD Pid);
+	virtual ~IMemorySource() = default;
+	explicit IMemorySource(DWORD process_id);
 
-	virtual PVOID ReadMemory(DWORD_PTR StartAddress, SIZE_T Size) = 0;
+	virtual PVOID ReadMemory(DWORD_PTR start_address, SIZE_T size) = 0;
 
 	virtual DWORD_PTR GetBaseAddress() = 0;
 };
