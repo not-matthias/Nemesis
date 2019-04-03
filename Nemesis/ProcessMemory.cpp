@@ -7,7 +7,7 @@ ProcessMemory::ProcessMemory(const DWORD process_id)
 	this->memory_source = new UsermodeMemory(process_id);
 }
 
-template<typename T>
+template <typename T>
 T ProcessMemory::ReadMemory(const DWORD_PTR start_address)
 {
 	return reinterpret_cast<T>(this->memory_source->ReadMemory(start_address, sizeof(T)));

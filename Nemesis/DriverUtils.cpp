@@ -21,7 +21,7 @@ std::vector<DRIVER*> GetDriverList()
 	//
 	// Get the Module list (SystemModuleInformation)
 	//
-	if (!NT_SUCCESS(status = NtQuerySystemInformation((SYSTEM_INFORMATION_CLASS)11, module_info, 1024 * 1024, NULL)))
+	if (!NT_SUCCESS(status = NtQuerySystemInformation(static_cast<SYSTEM_INFORMATION_CLASS>(11), module_info, 1024 * 1024, NULL)))
 	{
 		logger::Log("Unable to query Module list (%#x)\n", status);
 		VirtualFree(module_info, 0, MEM_RELEASE);
@@ -34,8 +34,9 @@ std::vector<DRIVER*> GetDriverList()
 	//
 	for (ULONG i = 0; i < module_info->number_of_modules; i++)
 	{
-		auto* driver = new DRIVER;
-		driver->driver_name = std::string(reinterpret_cast<char*>(module_info->Modules[i].full_path_name + module_info->Modules[i].offset_to_file_name));
+		auto * driver = new DRIVER;
+		driver->driver_name = std::string(
+			reinterpret_cast<char*>(module_info->modules[i].full_path_name + module_info->modules[i].offset_to_file_name));
 
 		driver_list.push_back(driver);
 	}

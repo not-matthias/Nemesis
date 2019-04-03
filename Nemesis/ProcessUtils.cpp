@@ -5,7 +5,6 @@ auto GetProcessList() -> std::vector<PROCESS*>
 {
 	std::vector<PROCESS*> process_list;
 	NTSTATUS status;
-	PSYSTEM_PROCESS_INFO system_process_info = { nullptr };
 
 	//
 	// Allocate Memory for the list
@@ -14,10 +13,14 @@ auto GetProcessList() -> std::vector<PROCESS*>
 	if (!buffer)
 	{
 		logger::Log("Failed to allocate memory_buffer.\n");
-		goto EXIT;
+
+		// Free the memory_buffer
+		VirtualFree(buffer, 0, MEM_RELEASE);
+
+		return process_list;
 	}
 
-	system_process_info = static_cast<PSYSTEM_PROCESS_INFO>(buffer);
+	auto system_process_info = static_cast<PSYSTEM_PROCESS_INFO>(buffer);
 
 	//
 	// Get the process list
@@ -25,7 +28,11 @@ auto GetProcessList() -> std::vector<PROCESS*>
 	if (!NT_SUCCESS(status = NtQuerySystemInformation(SystemProcessInformation, system_process_info, 1024 * 1024, NULL)))
 	{
 		logger::Log("Unable to query process list (%#x)\n", status);
-		goto EXIT;
+
+		// Free the memory_buffer
+		VirtualFree(buffer, 0, MEM_RELEASE);
+
+		return process_list;
 	}
 
 	//
@@ -41,10 +48,10 @@ auto GetProcessList() -> std::vector<PROCESS*>
 		process_list.push_back(process);
 
 		// Calculate the address of the next entry
-		system_process_info = reinterpret_cast<PSYSTEM_PROCESS_INFO>(reinterpret_cast<LPBYTE>(system_process_info) + system_process_info->next_entry_offset);
+		system_process_info = reinterpret_cast<PSYSTEM_PROCESS_INFO>(reinterpret_cast<LPBYTE>(system_process_info) + system_process_info->
+			next_entry_offset);
 	}
 
-EXIT:
 	// Free the memory_buffer
 	VirtualFree(buffer, 0, MEM_RELEASE);
 

@@ -16,6 +16,7 @@ class Memory
 	ProcessMemory *process_memory;
 
 public:
+
 	/**
 	 * \brief The memory start address.
 	 */

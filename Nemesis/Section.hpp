@@ -2,6 +2,7 @@
 
 #include <Windows.h>
 
+// TODO: Use struct instead
 class Section
 {
 public:
@@ -19,27 +20,15 @@ public:
 	/**
 	 * \brief The memory of the section.
 	 */
-	BYTE *content;
+	BYTE *content = nullptr;
 
 	/**
 	 * \brief The size of the section.
 	 */
-	DWORD data_size;
+	DWORD data_size = NULL;
 
 	/**
 	 * \brief The initial size of the section.
 	 */
-	DWORD initial_size;
-
-
-	//
-	//
-	// Constructors/Destructors
-	//
-	//
-
-	/**
-	 * \brief Initializes the variables.
-	 */
-	Section();
+	DWORD initial_size = NULL;
 };

@@ -3,10 +3,10 @@
 #include "Logger.hpp"
 #include <Psapi.h>
 
-UsermodeMemory::UsermodeMemory(DWORD process_id) : IMemorySource(process_id)
+UsermodeMemory::UsermodeMemory(const DWORD process_id) : IMemorySource(process_id)
 {
-	this->process_handle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, process_id);
-	if (this->process_handle == INVALID_HANDLE_VALUE)
+	process_handle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, process_id);
+	if (process_handle == INVALID_HANDLE_VALUE)
 	{
 		logger::Log("Failed to open process.");
 	}
@@ -14,13 +14,15 @@ UsermodeMemory::UsermodeMemory(DWORD process_id) : IMemorySource(process_id)
 
 UsermodeMemory::~UsermodeMemory()
 {
-	if (this->process_handle != INVALID_HANDLE_VALUE)
-		CloseHandle(this->process_handle);
+	if (process_handle != INVALID_HANDLE_VALUE)
+	{
+		CloseHandle(process_handle);
+	}
 }
 
 auto UsermodeMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size) -> PVOID
 {
-	if (this->process_handle == INVALID_HANDLE_VALUE)
+	if (process_handle == INVALID_HANDLE_VALUE)
 		return nullptr;
 
 	const auto buffer = new BYTE[size];
@@ -61,7 +63,7 @@ auto UsermodeMemory::GetBaseAddress() -> DWORD_PTR
 {
 	TCHAR file_name[MAX_PATH] = {};
 	TCHAR module_name[MAX_PATH];
-	HMODULE *module_handle = nullptr;
+	HMODULE * module_handle = nullptr;
 	DWORD needed;
 	DWORD modules;
 	DWORD_PTR base_address = NULL;
@@ -86,13 +88,14 @@ auto UsermodeMemory::GetBaseAddress() -> DWORD_PTR
 		{
 			std::string std_file_name(file_name);
 
-			if (GetModuleBaseName(process_handle, module_handle[i], module_name, sizeof(module_name))) {
-				if (std_file_name == module_name) {
+			if (GetModuleBaseName(process_handle, module_handle[i], module_name, sizeof(module_name)))
+			{
+				if (std_file_name == module_name)
+				{
 					base_address = reinterpret_cast<DWORD_PTR>(module_handle[i]);
 					break;
 				}
 			}
-
 		}
 	}
 

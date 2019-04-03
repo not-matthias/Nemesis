@@ -2,7 +2,7 @@
 
 #include <cstdio>
 
-auto logger::Log(const WCHAR* format, ...) -> void
+auto logger::Log(const WCHAR * format, ...) -> void
 {
 	static WCHAR buffer[300];
 
@@ -13,10 +13,9 @@ auto logger::Log(const WCHAR* format, ...) -> void
 	va_start(va_alist, format);
 	_vsnwprintf_s(buffer, _countof(buffer) - 1, format, va_alist);
 	va_end(va_alist);
-
 }
 
-auto logger::Log(const CHAR* format, ...) -> void
+auto logger::Log(const CHAR * format, ...) -> void
 {
 	static char buffer[300];
 
@@ -27,5 +26,4 @@ auto logger::Log(const CHAR* format, ...) -> void
 	va_start(va_alist, format);
 	_vsnprintf_s(buffer, _countof(buffer) - 1, format, va_alist);
 	va_end(va_alist);
-
 }

@@ -1,14 +1,13 @@
 #include "FileWriter.hpp"
 #include <utility>
 
-FileWriter::FileWriter(std::string file_name) : file_name(std::move(file_name)) {}
+FileWriter::FileWriter(std::string file_name) : file_name(std::move(file_name))
+{
+}
 
 FileWriter::~FileWriter() = default;
 
-//
-// Write the Module to the file
-//
-auto FileWriter::WriteToFile(Module* module) -> BOOL
+auto FileWriter::WriteToFile(Module * module) -> BOOL
 {
 	//
 	// Some checks
@@ -194,10 +193,7 @@ auto FileWriter::WriteToFile(Module* module) -> BOOL
 	return TRUE;
 }
 
-//
-// Writes the memory_buffer to a new file
-//
-auto FileWriter::WriteToFile(Memory* memory) -> BOOL
+auto FileWriter::WriteToFile(Memory * memory) -> BOOL
 {
 	//
 	// Create the file
@@ -233,9 +229,6 @@ auto FileWriter::WriteToFile(Memory* memory) -> BOOL
 	return TRUE;
 }
 
-//
-// Write a memory_buffer to a specific location
-//
 auto FileWriter::WriteMemoryToFile(const LONG offset, const DWORD size, const LPCVOID buffer) const -> BOOL
 {
 	DWORD lpNumberOfBytesWritten = 0;
@@ -267,9 +260,6 @@ auto FileWriter::WriteMemoryToFile(const LONG offset, const DWORD size, const LP
 	return TRUE;
 }
 
-//
-// Write zero Memory
-//
 auto FileWriter::WriteZeroMemoryToFile(const LONG offset, const DWORD size) const -> BOOL
 {
 	const auto buffer = calloc(size, 1);

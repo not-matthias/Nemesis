@@ -1,6 +1,5 @@
 #include "Dump.hpp"
 
-#include <iostream>
 #include "Module.hpp"
 #include "FileWriter.hpp"
 

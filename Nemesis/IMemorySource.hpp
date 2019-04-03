@@ -17,6 +17,7 @@ protected:
 	DWORD process_id;
 
 public:
+
 	//
 	//
 	// Constructors/Destructors
@@ -24,15 +25,15 @@ public:
 	//
 
 	/**
-	 * \brief Frees the resources.
-	 */
-	virtual ~IMemorySource() = default;
-
-	/**
 	 * \brief Stores the parameters.
 	 * \param process_id the id of the process
 	 */
 	explicit IMemorySource(DWORD process_id);
+
+	/**
+	 * \brief Frees the resources.
+	 */
+	virtual ~IMemorySource() = default;
 
 
 	//

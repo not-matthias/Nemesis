@@ -25,6 +25,7 @@ class ProcessMemory
 
 
 public:
+
 	//
 	//
 	// Constructors/Destructors

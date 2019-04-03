@@ -2,7 +2,7 @@
 #include <iostream>
 #include <algorithm>
 
-Module::Module(ProcessMemory* process_memory)
+Module::Module(ProcessMemory * process_memory)
 {
 	this->process_memory = process_memory;
 	this->base_address = process_memory->GetBaseAddress();
@@ -13,7 +13,7 @@ Module::Module(ProcessMemory* process_memory)
 	this->nt_header64 = nullptr;
 }
 
-Module::Module(ProcessMemory* process_memory, const DWORD_PTR base_address)
+Module::Module(ProcessMemory * process_memory, const DWORD_PTR base_address)
 {
 	this->process_memory = process_memory;
 	this->base_address = base_address;
@@ -26,7 +26,7 @@ Module::Module(ProcessMemory* process_memory, const DWORD_PTR base_address)
 
 Module::~Module()
 {
-	for (auto& section : sections)
+	for (auto & section : sections)
 	{
 		delete[] section.content;
 	}
@@ -60,7 +60,7 @@ auto Module::ReadHeader() -> BOOL
 	//
 	// Get the pe header
 	//
-	const auto header_memory = static_cast<BYTE *>(process_memory->ReadMemory(base_address, header_size));
+	const auto header_memory = static_cast<BYTE*>(process_memory->ReadMemory(base_address, header_size));
 
 	//
 	// Check if valid
@@ -78,9 +78,9 @@ auto Module::ReadHeader() -> BOOL
 	return TRUE;
 }
 
-auto Module::SetHeader(BYTE *header_memory, const DWORD header_size) -> VOID
+auto Module::SetHeader(BYTE * header_memory, const DWORD header_size) -> VOID
 {
-	dos_header = static_cast<PIMAGE_DOS_HEADER>(header_memory);
+	dos_header = reinterpret_cast<PIMAGE_DOS_HEADER>(header_memory);
 
 	//
 	// Malformed PE
@@ -92,12 +92,12 @@ auto Module::SetHeader(BYTE *header_memory, const DWORD header_size) -> VOID
 		nt_header64 = reinterpret_cast<PIMAGE_NT_HEADERS64>(reinterpret_cast<DWORD_PTR>(dos_header) + dos_header->
 			e_lfanew);
 
-		if (dos_header->e_lfanew > sizeof(IMAGE_DOS_HEADER))
+		if (dos_header->e_lfanew <= static_cast<LONG>(sizeof(IMAGE_DOS_HEADER)))
 		{
 			dos_stub_size = dos_header->e_lfanew - sizeof(IMAGE_DOS_HEADER);
 			dos_stub = reinterpret_cast<BYTE*>(reinterpret_cast<DWORD_PTR>(dos_header) + sizeof(IMAGE_DOS_HEADER));
 		}
-		else if (dos_header->e_lfanew < sizeof(IMAGE_DOS_HEADER))
+		else if (dos_header->e_lfanew >= static_cast<LONG>(sizeof(IMAGE_DOS_HEADER)))
 		{
 			dos_header->e_lfanew = sizeof(IMAGE_DOS_HEADER);
 		}
@@ -268,7 +268,7 @@ auto Module::SetEntryPoint(const DWORD_PTR entry_point) const -> VOID
 
 auto Module::AlignSectionHeaders() -> VOID
 {
-	DWORD section_alignment = 0, file_alignment = 0, new_file_size = 0;
+	DWORD section_alignment, file_alignment;
 
 	//
 	// Initialize the variables
@@ -287,15 +287,15 @@ auto Module::AlignSectionHeaders() -> VOID
 	//
 	// Sort by PointerToRawData (ascending)
 	//
-	std::sort(sections.begin(), sections.end(), [](const Section & a, const Section & b) -> bool
-	{
+	std::sort(sections.begin(), sections.end(), [](const Section & a, const Section & b) -> bool{
 		return a.section_header.PointerToRawData < b.section_header.PointerToRawData;
 	});
 
 	//
 	// Calculate the new file memory_size
 	//
-	new_file_size = dos_header->e_lfanew + sizeof(DWORD) + sizeof(IMAGE_FILE_HEADER) + nt_header32->FileHeader.SizeOfOptionalHeader + (GetSectionCount() * sizeof(IMAGE_SECTION_HEADER));
+	DWORD new_file_size = dos_header->e_lfanew + sizeof(DWORD) + sizeof(IMAGE_FILE_HEADER) + nt_header32->FileHeader.SizeOfOptionalHeader +
+		(GetSectionCount() * sizeof(IMAGE_SECTION_HEADER));
 
 	//
 	// Align the section values
@@ -317,8 +317,7 @@ auto Module::AlignSectionHeaders() -> VOID
 	//
 	// Sort by VirtualAddress (ascending)
 	//
-	std::sort(sections.begin(), sections.end(), [](const Section & a, const Section & b) -> bool
-	{
+	std::sort(sections.begin(), sections.end(), [](const Section & a, const Section & b) -> bool{
 		return a.section_header.VirtualAddress < b.section_header.VirtualAddress;
 	});
 }
@@ -381,7 +380,7 @@ auto Module::FixHeader() -> VOID
 
 auto Module::RemoveIat() -> VOID
 {
-	DWORD iat_search_address = 0;
+	DWORD iat_search_address;
 
 	if (Is32Bit())
 	{

@@ -6,6 +6,9 @@
 
 #pragma comment(lib,"ntdll.lib")
 
+/**
+ * \brief The structure for the process enumeration.
+ */
 typedef struct _SYSTEM_PROCESS_INFO
 {
 	ULONG                   next_entry_offset;
@@ -20,10 +23,17 @@ typedef struct _SYSTEM_PROCESS_INFO
 	HANDLE                  inherited_from_process_id;
 }SYSTEM_PROCESS_INFO, *PSYSTEM_PROCESS_INFO;
 
+/**
+ * \brief The structure for the process list.
+ */
 struct PROCESS
 {
 	HANDLE					process_id;
 	UNICODE_STRING			image_name;
 };
 
+/**
+ * \brief Returns a list of drivers.
+ * \return the process list
+ */
 auto GetProcessList() -> std::vector<PROCESS *>;
