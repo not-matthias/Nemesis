@@ -56,7 +56,10 @@ public:
 	 * \return the memory buffer
 	 */
 	template <typename T>
-	auto ReadMemory(DWORD_PTR start_address) -> T;
+	auto ReadMemory(const DWORD_PTR start_address) -> T
+	{
+		return reinterpret_cast<T>(this->memory_source->ReadMemory(start_address, sizeof(T)));
+	}
 
 	/**
 	 * \brief Reads memory from the process. (e.g. float[])
@@ -66,7 +69,10 @@ public:
 	 * \return the memory buffer
 	 */
 	template <typename T>
-	auto ReadMemory(DWORD_PTR start_address, SIZE_T size) -> T;
+	auto ReadMemory(const DWORD_PTR start_address, const SIZE_T size) -> T
+	{
+		return reinterpret_cast<T>(this->memory_source->ReadMemory(start_address, size));
+	}
 
 	/**
 	 * \brief Reads memory from the process. (e.g. float or float[])

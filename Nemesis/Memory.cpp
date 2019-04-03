@@ -18,7 +18,7 @@ auto Memory::Initialize() -> BOOL
 	//
 	// Get the Memory
 	//
-	memory_buffer = static_cast<BYTE *>(process_memory->ReadMemory(start_address, memory_size));
+	memory_buffer = process_memory->ReadMemory<BYTE*>(start_address, memory_size);
 
 	//
 	// Check if valid
