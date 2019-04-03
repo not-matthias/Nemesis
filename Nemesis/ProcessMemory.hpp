@@ -50,7 +50,7 @@ public:
 	//
 
 	/**
-	  * \brief Reads memory from the process.
+	  * \brief Reads memory from the process. (e.g. float)
 	 * \tparam T the read value data type
 	 * \param start_address the memory start address
 	 * \return the memory buffer
@@ -59,7 +59,7 @@ public:
 	auto ReadMemory(DWORD_PTR start_address) -> T;
 
 	/**
-	 * \brief Reads memory from the process.
+	 * \brief Reads memory from the process. (e.g. float[])
 	 * \tparam T the read value data type
 	 * \param start_address the memory start address
 	 * \param size the size of the memory buffer
@@ -69,7 +69,7 @@ public:
 	auto ReadMemory(DWORD_PTR start_address, SIZE_T size) -> T;
 
 	/**
-	 * \brief Reads memory from the process.
+	 * \brief Reads memory from the process. (e.g. float or float[])
 	 * \param start_address the memory start address
 	 * \param size the buffer size
 	 * \return the memory buffer

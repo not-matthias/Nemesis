@@ -67,7 +67,7 @@ auto Module::ReadHeader() -> BOOL
 	//
 	// Get the pe header
 	//
-	const auto header_memory = static_cast<BYTE*>(process_memory->ReadMemory(base_address, header_size));
+	const auto header_memory = process_memory->ReadMemory<BYTE *>(base_address, header_size);
 
 	//
 	// Check if valid
@@ -175,7 +175,7 @@ auto Module::SetSectionSize(Section & section, const DWORD_PTR section_pointer) 
 	auto current_offset = section_pointer + read_size - current_read_size;
 	while (current_offset >= section_pointer)
 	{
-		const auto buffer = reinterpret_cast<BYTE*>(process_memory->ReadMemory(current_offset, current_read_size));
+		const auto buffer = process_memory->ReadMemory<BYTE *>(current_offset, current_read_size);
 		const auto code_byte_count = GetInstructionByteCount(buffer, current_read_size);
 
 		if (code_byte_count != 0)
@@ -220,7 +220,7 @@ auto Module::ReadSection(Section & section, const DWORD_PTR section_pointer) con
 	if (read_size <= max_read_size)
 	{
 		section.buffer_size = read_size;
-		section.buffer = static_cast<BYTE*>(process_memory->ReadMemory(static_cast<DWORD_PTR>(section_pointer), read_size));
+		section.buffer = process_memory->ReadMemory<BYTE*>(static_cast<DWORD_PTR>(section_pointer), read_size);
 		return TRUE;
 	}
 	//
@@ -233,7 +233,7 @@ auto Module::ReadSection(Section & section, const DWORD_PTR section_pointer) con
 	//
 	if (section.buffer_size != 0)
 	{
-		section.buffer = static_cast<BYTE*>(process_memory->ReadMemory(static_cast<DWORD_PTR>(section_pointer), section.buffer_size));
+		section.buffer = process_memory->ReadMemory<BYTE*>(static_cast<DWORD_PTR>(section_pointer), section.buffer_size);
 		return TRUE;
 	}
 
