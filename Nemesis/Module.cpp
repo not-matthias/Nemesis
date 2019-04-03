@@ -26,9 +26,16 @@ Module::Module(ProcessMemory * process_memory, const DWORD_PTR base_address)
 
 Module::~Module()
 {
+	delete dos_stub;
+	delete dos_header; // Note: nt headers get set from the dos header (so you delete them too, once you delete the dos header)
+
+
+	//
+	// Delete the section data
+	//
 	for (auto & section : sections)
 	{
-		delete[] section.content;
+		delete[] section.buffer;
 	}
 
 	sections.clear();
@@ -177,12 +184,12 @@ auto Module::SetSectionSize(Section & section, const DWORD_PTR section_pointer) 
 
 			if (section_pointer < current_offset)
 			{
-				section.data_size = static_cast<DWORD>(current_offset - section_pointer);
-				section.data_size += 4;
+				section.buffer_size = static_cast<DWORD>(current_offset - section_pointer);
+				section.buffer_size += 4;
 
-				if (section.initial_size < section.data_size)
+				if (section.initial_size < section.buffer_size)
 				{
-					section.data_size = section.initial_size;
+					section.buffer_size = section.initial_size;
 				}
 			}
 
@@ -212,8 +219,8 @@ auto Module::ReadSection(Section & section, const DWORD_PTR section_pointer) con
 	//
 	if (read_size <= max_read_size)
 	{
-		section.data_size = read_size;
-		section.content = static_cast<BYTE*>(process_memory->ReadMemory(static_cast<DWORD_PTR>(section_pointer), read_size));
+		section.buffer_size = read_size;
+		section.buffer = static_cast<BYTE*>(process_memory->ReadMemory(static_cast<DWORD_PTR>(section_pointer), read_size));
 		return TRUE;
 	}
 	//
@@ -224,9 +231,9 @@ auto Module::ReadSection(Section & section, const DWORD_PTR section_pointer) con
 	//
 	//
 	//
-	if (section.data_size != 0)
+	if (section.buffer_size != 0)
 	{
-		section.content = static_cast<BYTE*>(process_memory->ReadMemory(static_cast<DWORD_PTR>(section_pointer), section.data_size));
+		section.buffer = static_cast<BYTE*>(process_memory->ReadMemory(static_cast<DWORD_PTR>(section_pointer), section.buffer_size));
 		return TRUE;
 	}
 
@@ -308,7 +315,7 @@ auto Module::AlignSectionHeaders() -> VOID
 
 		// PointerToRawData and SizeOfRawData
 		sections[i].section_header.PointerToRawData = AlignValue(new_file_size, file_alignment);
-		sections[i].section_header.SizeOfRawData = AlignValue(sections[i].data_size, file_alignment);
+		sections[i].section_header.SizeOfRawData = AlignValue(sections[i].buffer_size, file_alignment);
 
 		// NewFileSize
 		new_file_size = sections[i].section_header.PointerToRawData + sections[i].section_header.SizeOfRawData;

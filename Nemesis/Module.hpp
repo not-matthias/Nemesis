@@ -11,7 +11,7 @@ class Module
 	/**
 	 * \brief The process memory wrapper.
 	 */
-	ProcessMemory *process_memory;
+	ProcessMemory * process_memory;
 
 	/**
 	 * \brief The base address of the module.
@@ -27,7 +27,7 @@ public:
 	/**
 	 * \brief The dos stub memory.
 	 */
-	BYTE *dos_stub;
+	BYTE * dos_stub;
 
 	/**
 	 * \brief The dos stub size.
@@ -74,7 +74,7 @@ private:
 	 * \param header_memory the header memory
 	 * \param header_size the header memory size
 	 */
-	auto SetHeader(BYTE* header_memory, DWORD header_size) -> VOID;
+	auto SetHeader(BYTE * header_memory, DWORD header_size) -> VOID;
 
 	/**
 	 * \brief Sets the sections.
@@ -86,7 +86,7 @@ private:
 	 * \param section the specified section
 	 * \param section_pointer the section pointer
 	 */
-	auto SetSectionSize(Section& section, DWORD_PTR section_pointer) const -> VOID;
+	auto SetSectionSize(Section & section, DWORD_PTR section_pointer) const -> VOID;
 
 	/**
 	 * \brief Reads the section from memory.
@@ -94,7 +94,7 @@ private:
 	 * \param section_pointer the section pointer
 	 * \return true if successful
 	 */
-	auto ReadSection(Section& section, DWORD_PTR section_pointer) const -> BOOL;
+	auto ReadSection(Section & section, DWORD_PTR section_pointer) const -> BOOL;
 
 public:
 
@@ -108,14 +108,14 @@ public:
 	 * \brief Stores the parameters.
 	 * \param process_memory used for reading the memory
 	 */
-	explicit Module(ProcessMemory* process_memory);
+	explicit Module(ProcessMemory * process_memory);
 
 	/**
 	 * \brief Stores the parameters.
 	 * \param process_memory the memory wrapper of the module
 	 * \param base_address the base address of the module
 	 */
-	Module(ProcessMemory *process_memory, DWORD_PTR base_address);
+	Module(ProcessMemory * process_memory, DWORD_PTR base_address);
 
 	/**
 	 * \brief Deletes the section buffers.
@@ -174,7 +174,7 @@ public:
 	 * \param size the size of the buffer
 	 * \return the instruction count
 	 */
-	static auto GetInstructionByteCount(const BYTE* data, DWORD size) -> DWORD;
+	static auto GetInstructionByteCount(const BYTE * data, DWORD size) -> DWORD;
 
 	/**
 	 * \brief Aligns the value.
@@ -232,6 +232,5 @@ public:
 	 * \brief Returns the header size.
 	 * \return the header size
 	 */
-	static auto GetHeaderSize()->DWORD;
+	static auto GetHeaderSize() -> DWORD;
 };
-

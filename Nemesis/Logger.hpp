@@ -16,6 +16,5 @@ namespace logger
 	 * \param format the format string
 	 * \param ... the additional parameters
 	 */
-	auto Log(const CHAR* format, ...) -> void;
+	auto Log(const CHAR * format, ...) -> void;
 };
-

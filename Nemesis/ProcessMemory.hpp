@@ -19,7 +19,7 @@ class ProcessMemory
 	/**
 	 * \brief The process memory wrapper.
 	 */
-	IMemorySource* memory_source = nullptr;
+	IMemorySource * memory_source = nullptr;
 
 	// TODO: Add list of Memory sources here
 
@@ -38,6 +38,10 @@ public:
 	 */
 	explicit ProcessMemory(DWORD process_id);
 
+	/**
+	 * \brief Deletes the memory source.
+	 */
+	~ProcessMemory();
 
 	//
 	//
@@ -52,7 +56,7 @@ public:
 	 * \return the memory buffer
 	 */
 	template <typename T>
-	auto ReadMemory(DWORD_PTR start_address)->T;
+	auto ReadMemory(DWORD_PTR start_address) -> T;
 
 	/**
 	 * \brief Reads memory from the process.
@@ -62,7 +66,7 @@ public:
 	 * \return the memory buffer
 	 */
 	template <typename T>
-	auto ReadMemory(DWORD_PTR start_address, SIZE_T size)->T;
+	auto ReadMemory(DWORD_PTR start_address, SIZE_T size) -> T;
 
 	/**
 	 * \brief Reads memory from the process.
@@ -70,7 +74,7 @@ public:
 	 * \param size the buffer size
 	 * \return the memory buffer
 	 */
-	PVOID ReadMemory(DWORD_PTR start_address, SIZE_T size) const;
+	auto ReadMemory(DWORD_PTR start_address, SIZE_T size) const -> PVOID;
 
 
 	//
@@ -83,7 +87,7 @@ public:
 	 * \brief Checks whether the memory is valid.
 	 * \return true if successful
 	 */
-	auto IsValid() const->BOOL;
+	auto IsValid() const -> BOOL;
 
 
 	//
@@ -96,5 +100,5 @@ public:
 	 * \brief Returns the base address.
 	 * \return the base address of the process
 	 */
-	auto GetBaseAddress() const->DWORD_PTR;
+	auto GetBaseAddress() const -> DWORD_PTR;
 };

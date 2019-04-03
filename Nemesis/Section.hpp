@@ -20,12 +20,12 @@ public:
 	/**
 	 * \brief The memory of the section.
 	 */
-	BYTE *content = nullptr;
+	BYTE * buffer = nullptr;
 
 	/**
 	 * \brief The size of the section.
 	 */
-	DWORD data_size = NULL;
+	DWORD buffer_size = NULL;
 
 	/**
 	 * \brief The initial size of the section.

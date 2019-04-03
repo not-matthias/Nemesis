@@ -41,7 +41,7 @@ public:
 	// Important functions
 	//
 	//
-	
+
 	/**
 	 * \brief Reads the memory from the process.
 	 * \param start_address the memory start address

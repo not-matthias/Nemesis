@@ -7,8 +7,13 @@ ProcessMemory::ProcessMemory(const DWORD process_id)
 	this->memory_source = new UsermodeMemory(process_id);
 }
 
+ProcessMemory::~ProcessMemory()
+{
+	delete memory_source;
+}
+
 template <typename T>
-T ProcessMemory::ReadMemory(const DWORD_PTR start_address)
+auto ProcessMemory::ReadMemory(const DWORD_PTR start_address) -> T
 {
 	return reinterpret_cast<T>(this->memory_source->ReadMemory(start_address, sizeof(T)));
 }
@@ -19,17 +24,17 @@ auto ProcessMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size)
 	return reinterpret_cast<T>(this->memory_source->ReadMemory(start_address, size));
 }
 
-PVOID ProcessMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size) const
+auto ProcessMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size) const -> PVOID
 {
 	return this->memory_source->ReadMemory(start_address, size);
 }
 
-BOOL ProcessMemory::IsValid() const
+auto ProcessMemory::IsValid() const -> BOOL
 {
 	return memory_source != nullptr;
 }
 
-DWORD_PTR ProcessMemory::GetBaseAddress() const
+auto ProcessMemory::GetBaseAddress() const -> DWORD_PTR
 {
 	return memory_source->GetBaseAddress();
 }

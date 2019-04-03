@@ -129,9 +129,9 @@ auto FileWriter::WriteToFile(Module * module) -> BOOL
 		//
 		// Write the section data
 		//
-		write_size = module->sections[i].data_size;
+		write_size = module->sections[i].buffer_size;
 
-		if (!WriteMemoryToFile(module->sections[i].section_header.PointerToRawData, write_size, module->sections[i].content))
+		if (!WriteMemoryToFile(module->sections[i].section_header.PointerToRawData, write_size, module->sections[i].buffer))
 		{
 			return FALSE;
 		}
@@ -142,12 +142,12 @@ auto FileWriter::WriteToFile(Module * module) -> BOOL
 		//
 		// DataSize < SizeOfRawData => Padding needed
 		//
-		if (module->sections[i].data_size < module->sections[i].section_header.SizeOfRawData)
+		if (module->sections[i].buffer_size < module->sections[i].section_header.SizeOfRawData)
 		{
 			//
 			// Calculate the padding
 			//
-			write_size = module->sections[i].section_header.SizeOfRawData - module->sections[i].data_size;
+			write_size = module->sections[i].section_header.SizeOfRawData - module->sections[i].buffer_size;
 
 			//
 			// Write the padding
@@ -231,7 +231,7 @@ auto FileWriter::WriteToFile(Memory * memory) -> BOOL
 
 auto FileWriter::WriteMemoryToFile(const LONG offset, const DWORD size, const LPCVOID buffer) const -> BOOL
 {
-	DWORD lpNumberOfBytesWritten = 0;
+	DWORD number_of_bytes_written = 0;
 
 	//
 	// Some checks
@@ -252,7 +252,7 @@ auto FileWriter::WriteMemoryToFile(const LONG offset, const DWORD size, const LP
 	//
 	// Write to the file
 	//
-	if (!WriteFile(file_handle, buffer, size, &lpNumberOfBytesWritten, nullptr))
+	if (!WriteFile(file_handle, buffer, size, &number_of_bytes_written, nullptr))
 	{
 		return FALSE;
 	}

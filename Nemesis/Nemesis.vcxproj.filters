@@ -60,9 +60,6 @@
     <ClInclude Include="IMemorySource.hpp">
       <Filter>Header Files\Memory</Filter>
     </ClInclude>
-    <ClInclude Include="Dump.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ProcessMemory.hpp">
       <Filter>Header Files\Memory</Filter>
     </ClInclude>
@@ -97,9 +94,6 @@
     </ClCompile>
     <ClCompile Include="DumpUtils.cpp">
       <Filter>Source Files\Exports</Filter>
-    </ClCompile>
-    <ClCompile Include="Dump.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="IMemorySource.cpp">
       <Filter>Source Files\Memory</Filter>

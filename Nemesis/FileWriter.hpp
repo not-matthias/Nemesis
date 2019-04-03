@@ -53,14 +53,14 @@ public:
 	 * \param module the module to dumped
 	 * \return true if successful
 	 */
-	auto WriteToFile(Module* module) -> BOOL;
+	auto WriteToFile(Module * module) -> BOOL;
 
 	/**
 	 * \brief Writes the memory to the file.
 	 * \param memory the memory to dump
 	 * \return true if successful
 	 */
-	auto WriteToFile(Memory* memory) -> BOOL;
+	auto WriteToFile(Memory * memory) -> BOOL;
 
 
 	//

@@ -1,7 +1,9 @@
 #include "UsermodeMemory.hpp"
+
 #include <iostream>
-#include "Logger.hpp"
 #include <Psapi.h>
+
+#include "Logger.hpp"
 
 UsermodeMemory::UsermodeMemory(const DWORD process_id) : IMemorySource(process_id)
 {

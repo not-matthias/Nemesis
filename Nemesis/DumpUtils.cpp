@@ -2,19 +2,37 @@
 
 #include "Module.hpp"
 #include "FileWriter.hpp"
-#include "Dump.hpp"
 
-auto DumpMainModule(const DWORD process_id, const LPCSTR file_name) -> BOOL
+auto DumpProcess(const DWORD process_id, const LPCSTR file_name) -> BOOL
 {
 	//
-	// Create the classes
+	// Create the memory wrapper
 	//
-	Dump dump(process_id, file_name);
+	ProcessMemory process_memory(process_id);
+	if (!process_memory.IsValid())
+	{
+		return FALSE;
+	}
 
 	//
-	// Dump it
+	// Create and initialize the module
 	//
-	if (dump.DumpProcess())
+	Module module(&process_memory);
+	if (!module.Initialize())
+	{
+		return FALSE;
+	}
+
+	module.SetFileAlignment();
+	module.AlignSectionHeaders();
+	module.FixHeader();
+	module.RemoveIat();
+
+	//
+	// Write to file
+	//
+	FileWriter file_writer(file_name);
+	if (file_writer.WriteToFile(&module))
 	{
 		return TRUE;
 	}

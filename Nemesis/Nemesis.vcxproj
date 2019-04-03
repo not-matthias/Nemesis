@@ -20,7 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DriverUtils.hpp" />
-    <ClInclude Include="Dump.hpp" />
     <ClInclude Include="DumpUtils.hpp" />
     <ClInclude Include="FileWriter.hpp" />
     <ClInclude Include="IMemorySource.hpp" />
@@ -36,7 +35,6 @@
   <ItemGroup>
     <ClCompile Include="DriverUtils.cpp" />
     <ClCompile Include="DllMain.cpp" />
-    <ClCompile Include="Dump.cpp" />
     <ClCompile Include="DumpUtils.cpp" />
     <ClCompile Include="FileWriter.cpp" />
     <ClCompile Include="IMemorySource.cpp" />
