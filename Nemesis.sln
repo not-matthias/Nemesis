@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.421
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28729.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Driver", "Driver\Driver.vcxproj", "{3C9EA4A6-9E08-49A7-9E0D-C59321B4D529}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Nemesis", "Nemesis\Nemesis.vcxproj", "{3F24DF07-AFDE-40B1-8897-A63B0C4110A9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nemesis.GUI", "Nemesis.GUI\Nemesis.GUI.csproj", "{20312010-AB4F-4DC7-93DA-C82EBED127A5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NemesisUtils", "NemesisUtils\NemesisUtils.vcxproj", "{B74374B7-C48D-479E-9872-3ADFBD051DBF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +85,20 @@ Global
 		{20312010-AB4F-4DC7-93DA-C82EBED127A5}.Release|x64.Build.0 = Release|Any CPU
 		{20312010-AB4F-4DC7-93DA-C82EBED127A5}.Release|x86.ActiveCfg = Release|Any CPU
 		{20312010-AB4F-4DC7-93DA-C82EBED127A5}.Release|x86.Build.0 = Release|Any CPU
+		{B74374B7-C48D-479E-9872-3ADFBD051DBF}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{B74374B7-C48D-479E-9872-3ADFBD051DBF}.Debug|ARM.ActiveCfg = Debug|Win32
+		{B74374B7-C48D-479E-9872-3ADFBD051DBF}.Debug|ARM64.ActiveCfg = Debug|Win32
+		{B74374B7-C48D-479E-9872-3ADFBD051DBF}.Debug|x64.ActiveCfg = Debug|x64
+		{B74374B7-C48D-479E-9872-3ADFBD051DBF}.Debug|x64.Build.0 = Debug|x64
+		{B74374B7-C48D-479E-9872-3ADFBD051DBF}.Debug|x86.ActiveCfg = Debug|Win32
+		{B74374B7-C48D-479E-9872-3ADFBD051DBF}.Debug|x86.Build.0 = Debug|Win32
+		{B74374B7-C48D-479E-9872-3ADFBD051DBF}.Release|Any CPU.ActiveCfg = Release|Win32
+		{B74374B7-C48D-479E-9872-3ADFBD051DBF}.Release|ARM.ActiveCfg = Release|Win32
+		{B74374B7-C48D-479E-9872-3ADFBD051DBF}.Release|ARM64.ActiveCfg = Release|Win32
+		{B74374B7-C48D-479E-9872-3ADFBD051DBF}.Release|x64.ActiveCfg = Release|x64
+		{B74374B7-C48D-479E-9872-3ADFBD051DBF}.Release|x64.Build.0 = Release|x64
+		{B74374B7-C48D-479E-9872-3ADFBD051DBF}.Release|x86.ActiveCfg = Release|Win32
+		{B74374B7-C48D-479E-9872-3ADFBD051DBF}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
