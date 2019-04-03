@@ -7,5 +7,3 @@ Section::Section()
 	this->data_size = 0;
 	this->initial_size = 0;
 }
-
-Section::~Section() = default;

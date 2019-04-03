@@ -5,13 +5,60 @@
 class IMemorySource
 {
 protected:
+	//
+	//
+	// Variables
+	//
+	//
+
+	/**
+	 * \brief The process id.
+	 */
 	DWORD process_id;
 
 public:
+	//
+	//
+	// Constructors/Destructors
+	//
+	//
+
+	/**
+	 * \brief Frees the resources.
+	 */
 	virtual ~IMemorySource() = default;
+
+	/**
+	 * \brief Stores the parameters.
+	 * \param process_id the id of the process
+	 */
 	explicit IMemorySource(DWORD process_id);
 
-	virtual PVOID ReadMemory(DWORD_PTR start_address, SIZE_T size) = 0;
 
-	virtual DWORD_PTR GetBaseAddress() = 0;
+	//
+	//
+	// Important functions
+	//
+	//
+	
+	/**
+	 * \brief Reads the memory from the process.
+	 * \param start_address the memory start address
+	 * \param size the buffer size
+	 * \return the memory buffer
+	 */
+	virtual auto ReadMemory(DWORD_PTR start_address, SIZE_T size) -> PVOID = 0;
+
+
+	//
+	//
+	// Getters
+	//
+	//
+
+	/**
+	 * \brief Returns the base address.
+	 * \return the base address of the process
+	 */
+	virtual auto GetBaseAddress() -> DWORD_PTR = 0;
 };

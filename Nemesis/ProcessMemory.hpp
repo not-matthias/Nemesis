@@ -5,30 +5,95 @@
 
 class ProcessMemory
 {
+	//
+	//
+	// Variables
+	//
+	//
+
+	/**
+	 * \brief The id of the process.
+	 */
 	DWORD process_id;
-	IMemorySource *memory_source = nullptr;
+
+	/**
+	 * \brief The process memory wrapper.
+	 */
+	IMemorySource* memory_source = nullptr;
 
 	// TODO: Add list of Memory sources here
 
+
 public:
+	//
+	//
+	// Constructors/Destructors
+	//
+	//
+
+	/**
+	 * \brief Stores the parameters.
+	 * \param process_id the id of the process
+	 */
 	explicit ProcessMemory(DWORD process_id);
-	~ProcessMemory();
+
 
 	//
-	// Functions
 	//
+	// Important functions
+	//
+	//
+
+	/**
+	  * \brief Reads memory from the process.
+	 * \tparam T the read value data type
+	 * \param start_address the memory start address
+	 * \return the memory buffer
+	 */
 	template <typename T>
-	auto ReadMemory(DWORD_PTR start_address) -> T;
+	auto ReadMemory(DWORD_PTR start_address)->T;
 
+	/**
+	 * \brief Reads memory from the process.
+	 * \tparam T the read value data type
+	 * \param start_address the memory start address
+	 * \param size the size of the memory buffer
+	 * \return the memory buffer
+	 */
+	template <typename T>
+	auto ReadMemory(DWORD_PTR start_address, SIZE_T size)->T;
+
+	/**
+	 * \brief Reads memory from the process.
+	 * \param start_address the memory start address
+	 * \param size the buffer size
+	 * \return the memory buffer
+	 */
 	PVOID ReadMemory(DWORD_PTR start_address, SIZE_T size) const;
 
-	//
-	// Getters
-	//
-	auto GetBaseAddress() const -> DWORD_PTR;
 
+	//
 	//
 	// Checks
 	//
-	auto IsValid() const -> BOOL;
+	//
+
+	/**
+	 * \brief Checks whether the memory is valid.
+	 * \return true if successful
+	 */
+	auto IsValid() const->BOOL;
+
+
+	//
+	//
+	// Getters
+	//
+	//
+
+	/**
+	 * \brief Returns the base address.
+	 * \return the base address of the process
+	 */
+	auto GetBaseAddress() const->DWORD_PTR;
 };

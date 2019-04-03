@@ -4,26 +4,33 @@
 
 class Memory
 {
+	//
+	//
+	// Variables
+	//
+	//
+
 	/**
-	 * \brief The process memory wrapper
+	 * \brief The process memory wrapper.
 	 */
 	ProcessMemory *process_memory;
 
 public:
 	/**
-	 * \brief The memory start address
+	 * \brief The memory start address.
 	 */
 	DWORD_PTR start_address;
 
 	/**
-	 * \brief The memory size
+	 * \brief The memory size.
 	 */
 	DWORD memory_size;
 
 	/**
-	 * \brief The memory buffer
+	 * \brief The memory buffer.
 	 */
 	BYTE *memory_buffer;
+
 
 	//
 	//
@@ -40,7 +47,7 @@ public:
 	Memory(ProcessMemory *process_memory, DWORD_PTR start_address, DWORD size);
 
 	/**
-	 * \brief Deletes the memory buffer
+	 * \brief Deletes the memory buffer.
 	 */
 	~Memory();
 
@@ -52,7 +59,7 @@ public:
 	//
 
 	/**
-	 * \brief Reads the memory and stores it in the memory_buffer
+	 * \brief Reads the memory and stores it in the memory_buffer.
 	 * \return true if successful
 	 */
 	auto Initialize() -> BOOL;
