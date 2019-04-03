@@ -8,7 +8,6 @@
 
 class Module
 {
-
 	/**
 	 * \brief The process memory wrapper
 	 */
@@ -126,7 +125,7 @@ public:
 
 	//
 	//
-	// Other functions
+	// Important functions
 	//
 	//
 
