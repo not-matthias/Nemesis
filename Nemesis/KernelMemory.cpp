@@ -39,7 +39,7 @@ auto KernelMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size) 
 	//
 	if (DeviceIoControl(driver_handle, IOCTL_READ_REQUEST, &read_request, sizeof(read_request), &read_request, sizeof(read_request), 0, 0))
 	{
-		return read_request.BufferAddress;
+		return read_request.buffer_address;
 	}
 	else
 	{

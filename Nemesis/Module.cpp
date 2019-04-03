@@ -2,9 +2,6 @@
 #include <iostream>
 #include <algorithm>
 
-//
-// Parse the main Module
-//
 Module::Module(ProcessMemory* process_memory)
 {
 	this->process_memory = process_memory;
@@ -16,9 +13,6 @@ Module::Module(ProcessMemory* process_memory)
 	this->nt_header64 = nullptr;
 }
 
-//
-// Parse a custom Module
-//
 Module::Module(ProcessMemory* process_memory, const DWORD_PTR base_address)
 {
 	this->process_memory = process_memory;
@@ -40,9 +34,7 @@ Module::~Module()
 	sections.clear();
 }
 
-//
-// Init Functions
-//
+
 auto Module::Initialize() -> BOOL
 {
 	//
@@ -68,7 +60,7 @@ auto Module::ReadHeader() -> BOOL
 	//
 	// Get the pe header
 	//
-	const auto header_memory = process_memory->ReadMemory(base_address, header_size);
+	const auto header_memory = static_cast<BYTE *>(process_memory->ReadMemory(base_address, header_size));
 
 	//
 	// Check if valid
@@ -86,7 +78,7 @@ auto Module::ReadHeader() -> BOOL
 	return TRUE;
 }
 
-auto Module::SetHeader(PVOID const header_memory, const DWORD header_size) -> VOID
+auto Module::SetHeader(BYTE *header_memory, const DWORD header_size) -> VOID
 {
 	dos_header = static_cast<PIMAGE_DOS_HEADER>(header_memory);
 
@@ -114,7 +106,7 @@ auto Module::SetHeader(PVOID const header_memory, const DWORD header_size) -> VO
 
 auto Module::SetSections() -> VOID
 {
-	PIMAGE_SECTION_HEADER section_header = IMAGE_FIRST_SECTION(nt_header32);
+	auto section_header = IMAGE_FIRST_SECTION(nt_header32);
 	Section section;
 
 	sections.clear();
@@ -125,8 +117,7 @@ auto Module::SetSections() -> VOID
 		//
 		// Read section
 		//
-		if (memcpy_s(&section.section_header, sizeof(IMAGE_SECTION_HEADER), section_header,
-			sizeof(IMAGE_SECTION_HEADER)) != 0)
+		if (memcpy_s(&section.section_header, sizeof(IMAGE_SECTION_HEADER), section_header, sizeof(IMAGE_SECTION_HEADER)) != 0)
 		{
 			std::cout << "Failed to read section." << std::endl;
 		}
@@ -243,18 +234,15 @@ auto Module::ReadSection(Section & section, const DWORD_PTR section_pointer) con
 }
 
 
-//
-// Functions
-//
 auto Module::SetFileAlignment() const -> VOID
 {
 	if (Is32Bit())
 	{
-		nt_header32->OptionalHeader.FileAlignment = kFileAlignmentConstant;
+		nt_header32->OptionalHeader.FileAlignment = file_alignment_constant;
 	}
 	else
 	{
-		nt_header64->OptionalHeader.FileAlignment = kFileAlignmentConstant;
+		nt_header64->OptionalHeader.FileAlignment = file_alignment_constant;
 	}
 }
 
@@ -337,7 +325,7 @@ auto Module::AlignSectionHeaders() -> VOID
 
 auto Module::FixHeader() -> VOID
 {
-	DWORD size = dos_header->e_lfanew + sizeof(DWORD) + sizeof(IMAGE_FILE_HEADER);
+	const DWORD size = dos_header->e_lfanew + sizeof(DWORD) + sizeof(IMAGE_FILE_HEADER);
 
 	if (Is32Bit())
 	{
@@ -347,7 +335,7 @@ auto Module::FixHeader() -> VOID
 		nt_header32->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT].VirtualAddress = 0;
 		nt_header32->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT].Size = 0;
 
-		for (DWORD i = nt_header32->OptionalHeader.NumberOfRvaAndSizes; i < IMAGE_NUMBEROF_DIRECTORY_ENTRIES; i++)
+		for (auto i = nt_header32->OptionalHeader.NumberOfRvaAndSizes; i < IMAGE_NUMBEROF_DIRECTORY_ENTRIES; i++)
 		{
 			nt_header32->OptionalHeader.DataDirectory[i].Size = 0;
 			nt_header32->OptionalHeader.DataDirectory[i].VirtualAddress = 0;
@@ -459,10 +447,7 @@ auto Module::AlignValue(const DWORD bad_value, const DWORD align_to) -> DWORD
 }
 
 
-//
-// Checks
-//
-auto Module::IsValidPeFile() const -> BOOL
+auto Module::IsValidModule() const -> BOOL
 {
 	if (dos_header)
 	{
@@ -483,7 +468,7 @@ auto Module::IsValidPeFile() const -> BOOL
 
 auto Module::Is64Bit() const -> BOOL
 {
-	if (IsValidPeFile())
+	if (IsValidModule())
 	{
 		return (nt_header32->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR64_MAGIC);
 	}
@@ -493,7 +478,7 @@ auto Module::Is64Bit() const -> BOOL
 
 auto Module::Is32Bit() const -> BOOL
 {
-	if (IsValidPeFile())
+	if (IsValidModule())
 	{
 		return (nt_header32->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR32_MAGIC);
 	}
@@ -502,9 +487,6 @@ auto Module::Is32Bit() const -> BOOL
 }
 
 
-//
-// Getters
-//
 auto Module::GetImageSize() -> DWORD
 {
 	DWORD last_virtual_offset = 0, last_virtual_size = 0;
