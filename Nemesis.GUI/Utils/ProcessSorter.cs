@@ -1,18 +1,18 @@
-﻿using Nemesis.Utils;
+﻿using System;
 using System.Collections;
 using System.Windows.Forms;
 
-namespace Nemesis
+namespace Nemesis.Utils
 {
     public class ProcessSorter : IComparer
     {
-        private readonly int columnIndex;
-        private readonly SortOrder sortOrder;
+        private readonly int _columnIndex;
+        private readonly SortOrder _sortOrder;
 
         public ProcessSorter(int columnIndex, SortOrder sortOrder)
         {
-            this.columnIndex = columnIndex;
-            this.sortOrder = sortOrder;
+            _columnIndex = columnIndex;
+            _sortOrder = sortOrder;
         }
 
         //
@@ -20,54 +20,50 @@ namespace Nemesis
         //
         public int Compare(object x, object y)
         {
-            if ((x is ListViewItem) && (y is ListViewItem))
+            //
+            // Check if the object is a ListViewItem
+            //
+            if ((!(x is ListViewItem item1)) || (!(y is ListViewItem item2))) return 0;
+
+            //
+            // Check if the tag is a ProcesslistItem
+            //
+            if (!(item1.Tag is ProcessListItem p1) || !(item2.Tag is ProcessListItem p2)) return 0;
+
+            var result = 0;
+
+            //
+            // Chose the sort by the column
+            //
+            switch (_columnIndex)
             {
-                ProcessListItem p1 = ((ListViewItem)x).Tag as ProcessListItem;
-                ProcessListItem p2 = ((ListViewItem)y).Tag as ProcessListItem;
-
-                if (!(p1 == null || p2 == null))
+                case 0:
                 {
-                    int result = 0;
+                    var pid1 = int.Parse(p1.Id);
+                    var pid2 = int.Parse(p2.Id);
 
-                    switch (columnIndex)
-                    {
-                        //
-                        // ProcessId
-                        //
-                        case 0:
-                            int pid1 = int.Parse(p1.Id);
-                            int pid2 = int.Parse(p2.Id);
+                    if (pid1 > pid2)
+                        result = 1;
 
-                            if (pid1 > pid2)
-                                result = 1;
-
-                            if (pid1 < pid2)
-                                result = - 1;
-
-                            break;
-
-                        //
-                        // ProcessName
-                        //
-                        case 1:
-                            result = p1.ProcessName.CompareTo(p2.ProcessName);
-                            break;
-                    }
-
-                    //
-                    // Revert the sort if it's descending
-                    //
-                    if (sortOrder == SortOrder.Descending)
-                    {
-                        result = -result;
-                    }
-
-                    return result;
+                    if (pid1 < pid2)
+                        result = -1;
+                    break;
                 }
+
+                case 1:
+                    result = string.Compare(p1.ProcessName, p2.ProcessName, StringComparison.Ordinal);
+                    break;
             }
 
-            return 0;
+            //
+            // Revert the sort if it's descending
+            //
+            if (_sortOrder == SortOrder.Descending)
+            {
+                result = -result;
+            }
+
+            return result;
         }
     }
 }
-

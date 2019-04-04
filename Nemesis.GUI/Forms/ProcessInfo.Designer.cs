@@ -1,6 +1,6 @@
 ﻿namespace Nemesis.Forms
 {
-    partial class ProcessInfo
+    sealed partial class ProcessInfo
     {
         /// <summary>
         /// Required designer variable.

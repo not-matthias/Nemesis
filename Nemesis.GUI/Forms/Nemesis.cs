@@ -49,7 +49,7 @@ namespace Nemesis.Forms
                     //
                     // Open the dialog
                     //
-                    SaveFileDialog saveFile = new SaveFileDialog
+                    var saveFile = new SaveFileDialog
                     {
                         // 
                         // Set the default name
@@ -59,7 +59,7 @@ namespace Nemesis.Forms
                         // 
                         // Set the filters
                         // 
-                        Filter = "Executable File (.exe)|*.exe"
+                        Filter = @"Executable File (.exe)|*.exe"
                     };
 
                     //
@@ -80,14 +80,14 @@ namespace Nemesis.Forms
                 //
                 if ((Config.GetValue("custom_dump_location")) == "On")
                 {
-                    string dump_location = Config.GetValue("dump_location");
+                    string dumpLocation = Config.GetValue("dump_location");
 
                     //
                     // Absolute path
                     //
                     if (Path.IsPathRooted(path))
                     {
-                        path = dump_location;
+                        path = dumpLocation;
                     }
 
                     //
@@ -95,7 +95,7 @@ namespace Nemesis.Forms
                     //
                     if (!Path.IsPathRooted(path))
                     {
-                        path = $@"{Path.GetDirectoryName(Application.ExecutablePath)}/{dump_location}";
+                        path = $@"{Path.GetDirectoryName(Application.ExecutablePath)}/{dumpLocation}";
                     }
 
                     //
@@ -111,7 +111,7 @@ namespace Nemesis.Forms
                     //
                     if (Config.GetValue("create_timestamp_folder") == "On")
                     {
-                        path += $@"{DateTime.Now.ToString("dd-MM-yyyy HH-mm-ss")}/";
+                        path += $@"{DateTime.Now:dd-MM-yyyy HH-mm-ss}/";
                     }
 
                     //
@@ -124,10 +124,9 @@ namespace Nemesis.Forms
                     }
                     catch (Exception)
                     {
-                        MessageBox.Show("Custom path is invalid. Make sure the path is correct.", "Warning");
+                        MessageBox.Show(@"Custom path is invalid. Make sure the path is correct.", @"Warning");
                         return;
                     }
-
                 }
 
                 //
@@ -138,19 +137,17 @@ namespace Nemesis.Forms
                     bool status = NemesisApi.DumpProcess(processId, path);
                     if (status)
                     {
-                        MessageBox.Show("Successfully dumped the process.", "Success");
+                        MessageBox.Show(@"Successfully dumped the process.", @"Success");
                     }
                     else
                     {
-                        MessageBox.Show("Failed to dump the process.", "Warning");
+                        MessageBox.Show(@"Failed to dump the process.", @"Warning");
                     }
                 }
-                catch(Exception)
+                catch (Exception)
                 {
-                    MessageBox.Show("Nemesis threw an exception.", "Warning");
+                    MessageBox.Show(@"Nemesis threw an exception.", @"Warning");
                 }
-
-               
             }
         }
 
@@ -159,7 +156,7 @@ namespace Nemesis.Forms
         //
         private void AboutButton_Click(object sender, EventArgs e)
         {
-            About about = new About();
+            var about = new About();
             about.ShowDialog();
             about.Dispose();
         }
@@ -169,7 +166,7 @@ namespace Nemesis.Forms
         //
         private void SettingsButton_Click(object sender, EventArgs e)
         {
-            Settings settings = new Settings();
+            var settings = new Settings();
             settings.ShowDialog();
             settings.Dispose();
         }
@@ -181,11 +178,9 @@ namespace Nemesis.Forms
         {
             if (processListView.SelectedItems.Count > 0)
             {
-                ListViewItem listViewItem = (ListViewItem)sender;
-                
+                var listViewItem = (ListViewItem) sender;
 
-
-                ProcessInfo processInfo = new ProcessInfo();
+                var processInfo = new ProcessInfo();
                 processInfo.ShowDialog();
                 processInfo.Dispose();
             }
@@ -196,30 +191,27 @@ namespace Nemesis.Forms
         //
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            //
-            // Ctrl+D = Dump
-            //
-            if (keyData == (Keys.Control | Keys.D))
+            switch (keyData)
             {
-                DumpButton_Click(null, null);
+                //
+                // Ctrl+D = Dump
+                //
+                case Keys.Control | Keys.D:
+                    DumpButton_Click(null, null);
 
-                return true;
-            }
-
-            //
-            // Ctrl+R = Refresh
-            //
-            if (keyData == (Keys.Control | Keys.R))
-            {
-                RefreshButton_Click(null, null);
-            }
-
-            //
-            // Ctrl+Alt+S
-            //
-            if (keyData == (Keys.Control | Keys.Alt | Keys.S))
-            {
-                SettingsButton_Click(null, null);
+                    return true;
+                //
+                // Ctrl+R = Refresh
+                //
+                case Keys.Control | Keys.R:
+                    RefreshButton_Click(null, null);
+                    break;
+                //
+                // Ctrl+Alt+S
+                //
+                case Keys.Control | Keys.Alt | Keys.S:
+                    SettingsButton_Click(null, null);
+                    break;
             }
 
             return base.ProcessCmdKey(ref msg, keyData);

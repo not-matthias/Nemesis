@@ -1,6 +1,6 @@
 ﻿using System.Configuration;
 
-namespace Nemesis
+namespace Nemesis.Utils
 {
     internal class Config
     {

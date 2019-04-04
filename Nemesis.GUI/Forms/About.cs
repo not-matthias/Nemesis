@@ -6,8 +6,7 @@ namespace Nemesis.Forms
     {
         public About()
         {
-            InitializeComponent(); 
-
+            InitializeComponent();
         }
     }
 }

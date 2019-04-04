@@ -22,6 +22,5 @@ namespace Nemesis.Utils
 
         [DllImport("D:\\Nemesis\\Nemesis\\x64\\Release\\Nemesis.dll")]
         public static extern void SetMemorySource(string memorySource);
-
     }
 }

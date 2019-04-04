@@ -1,13 +1,11 @@
-﻿using MetroFramework.Controls;
-using Nemesis.Utils;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Windows.Forms;
 
-namespace Nemesis
+namespace Nemesis.Utils
 {
-    internal class ProcessListView : ListView
+    internal sealed class ProcessListView : ListView
     {
-        private int sortColumnIndex = 0;
+        private int _sortColumnIndex = 0;
 
         //
         // Sets some properties
@@ -29,7 +27,7 @@ namespace Nemesis
             //
             // Get the process list
             //
-            Process[] processlist = Process.GetProcesses();
+            var processlist = Process.GetProcesses();
 
             //
             // Remove all previous processes
@@ -39,12 +37,12 @@ namespace Nemesis
             //
             // Loop through all processes
             //
-            foreach (Process process in processlist)
+            foreach (var process in processlist)
             {
                 //
                 // Create a new ProcessListItem
                 //
-                ProcessListItem processListItem = new ProcessListItem(process.Id.ToString(), process.ProcessName);
+                var processListItem = new ProcessListItem(process.Id.ToString(), process.ProcessName);
 
                 //
                 // Add it to the ListView
@@ -60,7 +58,7 @@ namespace Nemesis
             //
             // Sort the list
             //
-            ListViewItemSorter = new ProcessSorter(sortColumnIndex, Sorting);
+            ListViewItemSorter = new ProcessSorter(_sortColumnIndex, Sorting);
         }
 
         //
@@ -71,9 +69,9 @@ namespace Nemesis
             //
             // Check if another column clicked
             //
-            if (e.Column != sortColumnIndex)
+            if (e.Column != _sortColumnIndex)
             {
-                sortColumnIndex = e.Column;
+                _sortColumnIndex = e.Column;
                 Sorting = SortOrder.Ascending;
             }
             else
@@ -81,14 +79,7 @@ namespace Nemesis
                 //
                 // Change the SortOrder to the opposite
                 //
-                if (Sorting == SortOrder.Ascending)
-                {
-                    Sorting = SortOrder.Descending;
-                }
-                else
-                {
-                    Sorting = SortOrder.Ascending;
-                }
+                Sorting = Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
             }
 
             //

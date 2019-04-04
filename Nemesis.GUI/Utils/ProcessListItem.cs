@@ -4,8 +4,8 @@ namespace Nemesis.Utils
 {
     internal class ProcessListItem
     {
-        public string Id { get; private set; }
-        public string ProcessName { get; private set; }
+        public string Id { get; }
+        public string ProcessName { get; }
 
         public ProcessListItem(string id, string processName)
         {
@@ -18,7 +18,7 @@ namespace Nemesis.Utils
         //
         public ListViewItem GetListViewItem()
         {
-            ListViewItem listViewItem = new ListViewItem(Id);
+            var listViewItem = new ListViewItem(Id);
             listViewItem.SubItems.Add(ProcessName);
             listViewItem.Tag = this;
 

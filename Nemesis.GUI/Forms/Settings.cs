@@ -1,7 +1,7 @@
 ﻿using MetroFramework.Controls;
 using MetroFramework.Forms;
 using System;
-using System.Windows.Forms;
+using Nemesis.Utils;
 
 namespace Nemesis.Forms
 {
@@ -17,7 +17,7 @@ namespace Nemesis.Forms
             //
             // Set default values the first time
             //
-            if(Config.GetValue("first_time_started") == null)
+            if (Config.GetValue("first_time_started") == null)
             {
                 Config.SetValue("file_name", "_dump.exe");
                 Config.SetValue("ask_for_location", "On");
@@ -35,10 +35,10 @@ namespace Nemesis.Forms
             // Toggles
             //
             // TODO: Find a better way
-            customDumpLocationToggle.Checked = Config.GetValue("custom_dump_location") == "On" ? true : false;
-            createFolderToggle.Checked = Config.GetValue("create_process_folder") == "On" ? true : false;
-            createTimestampFolderToggle.Checked = Config.GetValue("create_timestamp_folder") == "On" ? true : false;
-            askForLocationToggle.Checked = Config.GetValue("ask_for_location") == "On" ? true : false;
+            customDumpLocationToggle.Checked = Config.GetValue("custom_dump_location") == "On";
+            createFolderToggle.Checked = Config.GetValue("create_process_folder") == "On";
+            createTimestampFolderToggle.Checked = Config.GetValue("create_timestamp_folder") == "On";
+            askForLocationToggle.Checked = Config.GetValue("ask_for_location") == "On";
         }
 
         //
@@ -62,7 +62,7 @@ namespace Nemesis.Forms
         //
         private void CustomDumpLocationToggle_CheckedChanged(object sender, EventArgs e)
         {
-            MetroToggle toggle = (MetroToggle)sender;
+            var toggle = (MetroToggle) sender;
 
             //
             // Disable "ask for location" if enabled
@@ -84,7 +84,7 @@ namespace Nemesis.Forms
         //
         private void CreateFolderToggle_CheckedChanged(object sender, EventArgs e)
         {
-            MetroToggle toggle = (MetroToggle)sender;
+            var toggle = (MetroToggle) sender;
 
             //
             // Disable "ask for location" if enabled
@@ -100,7 +100,7 @@ namespace Nemesis.Forms
         //
         private void CreateTimestampFolderToggle_CheckedChanged(object sender, EventArgs e)
         {
-            MetroToggle toggle = (MetroToggle)sender;
+            var toggle = (MetroToggle) sender;
 
             //
             // Disable "ask for location" if enabled
@@ -116,7 +116,7 @@ namespace Nemesis.Forms
         // 
         private void AskForLocationToggle_CheckedChanged(object sender, EventArgs e)
         {
-            MetroToggle toggle = (MetroToggle)sender;
+            var toggle = (MetroToggle) sender;
 
             //
             // Disable "custom dump location" if enabled
@@ -133,6 +133,5 @@ namespace Nemesis.Forms
                 createTimestampFolderToggle.Checked = false;
             }
         }
-
     }
 }
