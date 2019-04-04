@@ -7,7 +7,7 @@
  * \brief Returns a list of memory sources.
  * \return the list
  */
-auto GetMemorySources() -> std::vector<const char*>;
+auto GetMemorySources() -> const char **;
 
 /**
  * \brief Sets the new memory source.
