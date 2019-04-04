@@ -61,6 +61,19 @@ auto UsermodeMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size
 	return buffer;
 }
 
+auto UsermodeMemory::IsValid() -> BOOL
+{
+	//
+	// Check if handle is valid
+	//
+	if (process_handle == INVALID_HANDLE_VALUE)
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
 auto UsermodeMemory::GetBaseAddress() -> DWORD_PTR
 {
 	TCHAR file_name[MAX_PATH] = {};

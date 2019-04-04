@@ -25,6 +25,7 @@
     <ClInclude Include="KernelMemory.hpp" />
     <ClInclude Include="Logger.hpp" />
     <ClInclude Include="Memory.hpp" />
+    <ClInclude Include="MemorySourceExport.h" />
     <ClInclude Include="Section.hpp" />
     <ClInclude Include="ProcessMemory.hpp" />
     <ClInclude Include="UsermodeMemory.hpp" />
@@ -39,6 +40,7 @@
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Memory.cpp" />
+    <ClCompile Include="MemorySourceExport.cpp" />
     <ClCompile Include="Section.cpp" />
     <ClCompile Include="ProcessMemory.cpp" />
     <ClCompile Include="UsermodeMemory.cpp" />

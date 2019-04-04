@@ -54,6 +54,19 @@ public:
 
 	//
 	//
+	// Checks
+	//
+	//
+
+	/**
+	 * \brief Checks whether the memory source is valid.
+	 * \return true if valid
+	 */
+	auto IsValid() -> BOOL override;
+
+
+	//
+	//
 	// Getters
 	//
 	//

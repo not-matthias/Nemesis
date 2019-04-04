@@ -53,6 +53,19 @@ public:
 
 	//
 	//
+	// Checks
+	//
+	//
+
+	/**
+	 * \brief Checks whether the memory source is valid.
+	 * \return true if valid
+	 */
+	virtual auto IsValid()->BOOL = 0;
+
+
+	//
+	//
 	// Getters
 	//
 	//

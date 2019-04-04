@@ -65,7 +65,7 @@ typedef struct _BASE_ADDRESS_REQUEST
 } BASE_ADDRESS_REQUEST, *PBASE_ADDRESS_REQUEST;
 
 
-class KernelMemory final : IMemorySource
+class KernelMemory final : public IMemorySource
 {
 	//
 	//
@@ -116,6 +116,19 @@ public:
 	 * \return the memory buffer
 	 */
 	auto ReadMemory(DWORD_PTR start_address, SIZE_T size) -> PVOID override;
+
+
+	//
+	//
+	// Checks
+	//
+	//
+
+	/**
+	 * \brief Checks whether the memory source is valid.
+	 * \return true if valid
+	 */
+	auto IsValid() -> BOOL override;
 
 
 	//

@@ -75,6 +75,9 @@
     <ClInclude Include="DumpExport.hpp">
       <Filter>Header Files\Exports</Filter>
     </ClInclude>
+    <ClInclude Include="MemorySourceExport.h">
+      <Filter>Header Files\Exports</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DllMain.cpp">
@@ -111,6 +114,9 @@
       <Filter>Source Files\PortableExecutable</Filter>
     </ClCompile>
     <ClCompile Include="DumpExport.cpp">
+      <Filter>Source Files\Exports</Filter>
+    </ClCompile>
+    <ClCompile Include="MemorySourceExport.cpp">
       <Filter>Source Files\Exports</Filter>
     </ClCompile>
   </ItemGroup>

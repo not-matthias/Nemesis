@@ -49,6 +49,19 @@ auto KernelMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size) 
 	}
 }
 
+auto KernelMemory::IsValid() -> BOOL
+{
+	//
+	// Check if handle is valid
+	//
+	if (driver_handle == INVALID_HANDLE_VALUE)
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
 auto KernelMemory::GetBaseAddress() -> DWORD_PTR
 {
 	//

@@ -1,7 +1,9 @@
 #pragma once
 
-#include "IMemorySource.hpp"
 #include <Windows.h>
+#include <unordered_map>
+
+#include "IMemorySource.hpp"
 
 class ProcessMemory
 {
@@ -17,14 +19,21 @@ class ProcessMemory
 	DWORD process_id;
 
 	/**
-	 * \brief The process memory wrapper.
+	 * \brief The current memory source.
 	 */
 	IMemorySource * memory_source = nullptr;
 
-	// TODO: Add list of Memory sources here
-
+	/**
+	 * \brief The list of memory sources.
+	 */
+	std::unordered_map<const char *, IMemorySource *> memory_sources;
 
 public:
+
+	/**
+	 * \brief The current memory source name.
+	 */
+	static char * current_memory_source;
 
 	//
 	//
@@ -42,6 +51,7 @@ public:
 	 * \brief Deletes the memory source.
 	 */
 	~ProcessMemory();
+
 
 	//
 	//
@@ -107,4 +117,24 @@ public:
 	 * \return the base address of the process
 	 */
 	auto GetBaseAddress() const -> DWORD_PTR;
+
+	/**
+	 * \brief 
+	 * \return 
+	 */
+	static auto GetMemorySources() -> std::vector<const char*>;
+
+
+	//
+	//
+	// Setters
+	//
+	//
+
+	/**
+	 * \brief Sets the new memory source name. 
+	 * \param memory_source_name the name of the memory source
+	 * \return true if successful
+	 */
+	static auto SetMemorySource(char * memory_source_name) -> VOID;
 };
