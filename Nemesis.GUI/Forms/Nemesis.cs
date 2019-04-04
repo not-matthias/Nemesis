@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Windows.Forms;
+using Nemesis.Utils;
 
 namespace Nemesis.Forms
 {
@@ -134,7 +135,7 @@ namespace Nemesis.Forms
                 //
                 try
                 {
-                    bool status = NemesisApi.StandardDump(processId, path);
+                    bool status = NemesisApi.DumpProcess(processId, path);
                     if (status)
                     {
                         MessageBox.Show("Successfully dumped the process.", "Success");
