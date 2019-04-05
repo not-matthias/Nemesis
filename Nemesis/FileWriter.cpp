@@ -1,5 +1,6 @@
 #include "FileWriter.hpp"
 #include <utility>
+#include "Logger.hpp"
 
 FileWriter::FileWriter(std::string file_name) : file_name(std::move(file_name))
 {
@@ -9,6 +10,8 @@ FileWriter::~FileWriter() = default;
 
 auto FileWriter::WriteToFile(Module * module) -> BOOL
 {
+	Logger::Log("Writing to the file %s.", file_name.data());
+
 	//
 	// Some checks
 	//

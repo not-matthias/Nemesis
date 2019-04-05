@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <algorithm>
+#include "Logger.hpp"
 
 Module::Module(ProcessMemory * process_memory)
 {
@@ -45,6 +46,8 @@ Module::~Module()
 
 auto Module::Initialize() -> BOOL
 {
+	Logger::Log("Initializing the module.");
+
 	//
 	// Read the header from the Memory
 	//
@@ -63,6 +66,8 @@ auto Module::Initialize() -> BOOL
 
 auto Module::ReadHeader() -> BOOL
 {
+	Logger::Log("Reading the headers.");
+
 	const auto header_size = GetHeaderSize();
 
 	//
@@ -88,6 +93,8 @@ auto Module::ReadHeader() -> BOOL
 
 auto Module::SetHeader(BYTE * header_memory, const DWORD header_size) -> VOID
 {
+	Logger::Log("Setting the headers.");
+
 	dos_header = reinterpret_cast<PIMAGE_DOS_HEADER>(header_memory);
 
 	//
@@ -114,6 +121,8 @@ auto Module::SetHeader(BYTE * header_memory, const DWORD header_size) -> VOID
 
 auto Module::SetSections() -> VOID
 {
+	Logger::Log("Setting the sections.");
+
 	auto section_header = IMAGE_FIRST_SECTION(nt_header32);
 	Section section;
 
@@ -158,6 +167,8 @@ auto Module::SetSections() -> VOID
 
 auto Module::SetSectionSize(Section & section, const DWORD_PTR section_pointer) const -> VOID
 {
+	Logger::Log("Setting the section size.");
+
 	const DWORD max_read_size = 100;
 	const auto read_size = section.initial_size;
 	auto current_read_size = read_size % max_read_size;

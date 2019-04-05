@@ -5,7 +5,7 @@
 std::string Logger::prefix = "[Nemesis] ";
 
 
-auto Logger::Log(std::wstring& format, ...) -> void
+auto Logger::Log(std::wstring format, ...) -> VOID
 {
 	if (format.empty())
 		return;
@@ -31,8 +31,9 @@ auto Logger::Log(std::wstring& format, ...) -> void
 	va_end(va_alist);
 }
 
-auto Logger::Log(std::string &format, ...) -> void
+auto Logger::Log(std::string format, ...) -> VOID
 {
+
 	if (format.empty())
 		return;
 
@@ -50,7 +51,7 @@ auto Logger::Log(std::string &format, ...) -> void
 	// Print it
 	//
 	va_list va_alist;
-	va_start(va_alist, format.data());
+	va_start(va_alist, format);
 	vprintf(format.data(), va_alist);
 	va_end(va_alist);
 }

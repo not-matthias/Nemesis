@@ -10,7 +10,7 @@ UsermodeMemory::UsermodeMemory(const DWORD process_id) : IMemorySource(process_i
 	process_handle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, process_id);
 	if (process_handle == INVALID_HANDLE_VALUE)
 	{
-		logger::Log("Failed to open process.");
+		Logger::Log("Failed to open process.");
 	}
 }
 

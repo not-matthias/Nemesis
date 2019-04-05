@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Windows.h>
 #include <string>
+#include <Windows.h>
 
 class Logger
 {
@@ -29,13 +29,12 @@ public:
 	 * \param format the format string
 	 * \param ... the additional parameters
 	 */
-	static auto Log(std::wstring& format, ...) -> void;
+	static auto Log(std::wstring format, ...) -> VOID;
 
 	/**
 	 * \brief Prints the specified string.
 	 * \param format the format string
 	 * \param ... the additional parameters
 	 */
-	static auto Log(std::string& format, ...) -> void;
-
+	static auto Log(std::string format, ...) -> VOID;
 };

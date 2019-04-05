@@ -1,4 +1,5 @@
 #include "Memory.hpp"
+#include "Logger.hpp"
 
 Memory::Memory(ProcessMemory * process_memory, const DWORD_PTR start_address, const DWORD size)
 {
@@ -15,6 +16,8 @@ Memory::~Memory()
 
 auto Memory::Initialize() -> BOOL
 {
+	Logger::Log("Initializing the memory.");
+
 	//
 	// Get the Memory
 	//
