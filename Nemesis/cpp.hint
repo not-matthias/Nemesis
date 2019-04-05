@@ -3,3 +3,5 @@
 // For more information see https://go.microsoft.com/fwlink/?linkid=865984
 #define NULL
 #define NULL ((void *)0)
+#define va_start
+#define va_start

@@ -1,20 +1,51 @@
 #pragma once
 
 #include <Windows.h>
+#include <string>
 
-namespace logger
+class Logger
 {
+	//
+	//
+	// Variables
+	//
+	//
+
+	/**
+	 * \brief Will be added in the beginning of the log.
+	 */
+	static std::string prefix;
+
+public:
+	//
+	//
+	// Constructors/Destructors
+	//
+	//
+
+	Logger();
+
+	~Logger();
+
+
+	//
+	//
+	// Important functions
+	//
+	//
+
 	/**
 	 * \brief Prints the specified wide string.
 	 * \param format the format string
 	 * \param ... the additional parameters
 	 */
-	auto Log(const WCHAR * format, ...) -> void;
+	static auto Log(std::wstring& format, ...) -> void;
 
 	/**
 	 * \brief Prints the specified string.
 	 * \param format the format string
 	 * \param ... the additional parameters
 	 */
-	auto Log(const CHAR * format, ...) -> void;
+	static auto Log(std::string& format, ...) -> void;
+
 };

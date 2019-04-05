@@ -2,28 +2,55 @@
 
 #include <cstdio>
 
-auto logger::Log(const WCHAR * format, ...) -> void
-{
-	static WCHAR buffer[300];
+std::string Logger::prefix = "[Nemesis] ";
 
-	if (!format)
+
+auto Logger::Log(std::wstring& format, ...) -> void
+{
+	if (format.empty())
 		return;
 
+	//
+	// Insert the prefix
+	//
+	std::wstring wprefix;
+	wprefix.assign(prefix.begin(), prefix.end());
+	format.insert(0, wprefix);
+
+	//
+	// Insert new line
+	//
+	format.append(L"\n");
+
+	//
+	// Print it
+	//
 	va_list va_alist;
 	va_start(va_alist, format);
-	_vsnwprintf_s(buffer, _countof(buffer) - 1, format, va_alist);
+	vwprintf(format.data(), va_alist);
 	va_end(va_alist);
 }
 
-auto logger::Log(const CHAR * format, ...) -> void
+auto Logger::Log(std::string &format, ...) -> void
 {
-	static char buffer[300];
-
-	if (!format)
+	if (format.empty())
 		return;
 
+	//
+	// Insert the prefix
+	//
+	format.insert(0, prefix);
+
+	//
+	// Insert new line
+	//
+	format.append("\n");
+
+	//
+	// Print it
+	//
 	va_list va_alist;
-	va_start(va_alist, format);
-	_vsnprintf_s(buffer, _countof(buffer) - 1, format, va_alist);
+	va_start(va_alist, format.data());
+	vprintf(format.data(), va_alist);
 	va_end(va_alist);
 }
