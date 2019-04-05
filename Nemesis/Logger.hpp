@@ -17,16 +17,6 @@ class Logger
 	static std::string prefix;
 
 public:
-	//
-	//
-	// Constructors/Destructors
-	//
-	//
-
-	Logger();
-
-	~Logger();
-
 
 	//
 	//
