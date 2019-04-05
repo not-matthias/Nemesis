@@ -14,6 +14,7 @@ namespace Nemesis
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Forms.Nemesis());
+
         }
     }
 }

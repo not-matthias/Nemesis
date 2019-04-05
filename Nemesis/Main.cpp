@@ -10,9 +10,8 @@ int main()
 
 	auto memory_sources = GetMemorySources();
 
-	std::cout << DumpProcess(92200, "D:/dump_1.exe") << std::endl;
-	SetMemorySource("kernel_mode");
-	std::cout << DumpProcess(92200, "D:/dump_2.exe") << std::endl;
+	std::cout << DumpProcess(1440, "D:\\dump_1.exe") << std::endl;
+	std::cout << DumpProcess(1440, "D:\\dump_2.exe") << std::endl;
 
 
 	std::cin.get();

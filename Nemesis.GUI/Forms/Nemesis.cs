@@ -33,12 +33,10 @@ namespace Nemesis.Forms
         {
             if (processListView.SelectedItems.Count > 0)
             {
-                ListViewItem selectedItem = processListView.SelectedItems[0];
-
-                int processId = int.Parse(selectedItem.SubItems[0].Text);
-                string processName = selectedItem.SubItems[1].Text;
-
-                string path = "";
+                var selectedItem = processListView.SelectedItems[0];
+                var processId = int.Parse(selectedItem.SubItems[0].Text);
+                var processName = selectedItem.SubItems[1].Text;
+                var path = "";
 
 
                 //
@@ -80,7 +78,7 @@ namespace Nemesis.Forms
                 //
                 if ((Config.GetValue("custom_dump_location")) == "On")
                 {
-                    string dumpLocation = Config.GetValue("dump_location");
+                    var dumpLocation = Path.GetFullPath(Config.GetValue("dump_location"));
 
                     //
                     // Absolute path
@@ -95,7 +93,7 @@ namespace Nemesis.Forms
                     //
                     if (!Path.IsPathRooted(path))
                     {
-                        path = $@"{Path.GetDirectoryName(Application.ExecutablePath)}/{dumpLocation}";
+                        path = $@"{Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), dumpLocation)}";
                     }
 
                     //
@@ -103,7 +101,7 @@ namespace Nemesis.Forms
                     //
                     if (Config.GetValue("create_process_folder") == "On")
                     {
-                        path += $@"{processName}/";
+                        path = Path.Combine(path, processName);
                     }
 
                     //
@@ -111,7 +109,7 @@ namespace Nemesis.Forms
                     //
                     if (Config.GetValue("create_timestamp_folder") == "On")
                     {
-                        path += $@"{DateTime.Now:dd-MM-yyyy HH-mm-ss}/";
+                        path = Path.Combine(path, $@"{DateTime.Now:dd-MM-yyyy HH-mm-ss}");
                     }
 
                     //
@@ -120,11 +118,12 @@ namespace Nemesis.Forms
                     try
                     {
                         Directory.CreateDirectory(path);
-                        path += $@"/{processName}{Config.GetValue("file_name")}";
+
+                        path = Path.Combine(path, $@"{processName}{Config.GetValue("file_name")}");
                     }
-                    catch (Exception)
+                    catch (Exception exception)
                     {
-                        MessageBox.Show(@"Custom path is invalid. Make sure the path is correct.", @"Warning");
+                        MessageBox.Show($@"{exception.Message}", @"Warning");
                         return;
                     }
                 }
@@ -134,7 +133,7 @@ namespace Nemesis.Forms
                 //
                 try
                 {
-                    bool status = NemesisApi.DumpProcess(processId, path);
+                    var status = NemesisApi.DumpProcess(processId, path);
                     if (status)
                     {
                         MessageBox.Show(@"Successfully dumped the process.", @"Success");
