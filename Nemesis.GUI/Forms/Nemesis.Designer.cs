@@ -1,4 +1,6 @@
-﻿namespace Nemesis.Forms
+﻿using Nemesis.Utils;
+
+namespace Nemesis.Forms
 {
     partial class Nemesis
     {

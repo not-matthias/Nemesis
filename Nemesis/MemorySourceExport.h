@@ -2,15 +2,16 @@
 
 #include <vector>
 #include <Windows.h>
+#include <string>
 
 /**
  * \brief Returns a list of memory sources.
  * \return the list
  */
-auto GetMemorySources() -> const char **;
+auto GetMemorySources() ->std::vector<std::string>;
 
 /**
  * \brief Sets the new memory source.
  * \param memory_source_name the specified memory source
  */
-auto SetMemorySource(char * memory_source_name) -> VOID;
+auto SetMemorySource(const char * memory_source_name) -> VOID;

@@ -1,9 +1,8 @@
 #pragma once
 
 #include <Windows.h>
-#include <unordered_map>
 
-#include "IMemorySource.hpp"
+#include "MemorySource.h"
 
 class ProcessMemory
 {
@@ -18,22 +17,7 @@ class ProcessMemory
 	 */
 	DWORD process_id;
 
-	/**
-	 * \brief The current memory source.
-	 */
-	IMemorySource * memory_source = nullptr;
-
-	/**
-	 * \brief The list of memory sources.
-	 */
-	std::unordered_map<const char *, IMemorySource *> memory_sources;
-
 public:
-
-	/**
-	 * \brief The current memory source name.
-	 */
-	static char * current_memory_source;
 
 	//
 	//
@@ -45,7 +29,7 @@ public:
 	 * \brief Stores the parameters.
 	 * \param process_id the id of the process
 	 */
-	explicit ProcessMemory(DWORD process_id);
+	ProcessMemory(DWORD process_id);
 
 	/**
 	 * \brief Deletes the memory source.
@@ -68,7 +52,7 @@ public:
 	template <typename T>
 	auto ReadMemory(const DWORD_PTR start_address) -> T
 	{
-		return reinterpret_cast<T>(this->memory_source->ReadMemory(start_address, sizeof(T)));
+		return reinterpret_cast<T>(MemorySource::GetMemorySource(process_id)->ReadMemory(start_address, sizeof(T)));
 	}
 
 	/**
@@ -81,7 +65,7 @@ public:
 	template <typename T>
 	auto ReadMemory(const DWORD_PTR start_address, const SIZE_T size) -> T
 	{
-		return reinterpret_cast<T>(this->memory_source->ReadMemory(start_address, size));
+		return reinterpret_cast<T>(MemorySource::GetMemorySource(process_id)->ReadMemory(start_address, size));
 	}
 
 	/**
@@ -117,24 +101,4 @@ public:
 	 * \return the base address of the process
 	 */
 	auto GetBaseAddress() const -> DWORD_PTR;
-
-	/**
-	 * \brief 
-	 * \return 
-	 */
-	static auto GetMemorySources() -> std::vector<const char*>;
-
-
-	//
-	//
-	// Setters
-	//
-	//
-
-	/**
-	 * \brief Sets the new memory source name. 
-	 * \param memory_source_name the name of the memory source
-	 * \return true if successful
-	 */
-	static auto SetMemorySource(char * memory_source_name) -> VOID;
 };

@@ -13,7 +13,7 @@ class Memory
 	/**
 	 * \brief The process memory wrapper.
 	 */
-	ProcessMemory *process_memory;
+	ProcessMemory * process_memory;
 
 public:
 
@@ -30,7 +30,7 @@ public:
 	/**
 	 * \brief The memory buffer.
 	 */
-	BYTE *memory_buffer;
+	BYTE * memory_buffer;
 
 
 	//
@@ -45,7 +45,7 @@ public:
 	 * \param start_address the memory start address
 	 * \param size the memory size
 	 */
-	Memory(ProcessMemory *process_memory, DWORD_PTR start_address, DWORD size);
+	Memory(ProcessMemory * process_memory, DWORD_PTR start_address, DWORD size);
 
 	/**
 	 * \brief Deletes the memory buffer.
@@ -65,4 +65,3 @@ public:
 	 */
 	auto Initialize() -> BOOL;
 };
-

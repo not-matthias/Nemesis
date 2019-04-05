@@ -78,6 +78,9 @@
     <ClInclude Include="MemorySourceExport.h">
       <Filter>Header Files\Exports</Filter>
     </ClInclude>
+    <ClInclude Include="MemorySource.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DllMain.cpp">
@@ -118,6 +121,9 @@
     </ClCompile>
     <ClCompile Include="MemorySourceExport.cpp">
       <Filter>Source Files\Exports</Filter>
+    </ClCompile>
+    <ClCompile Include="MemorySource.cpp">
+      <Filter>Source Files\Memory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

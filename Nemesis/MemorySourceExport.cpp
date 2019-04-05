@@ -1,12 +1,13 @@
 #include "MemorySourceExport.h"
 #include "ProcessMemory.hpp"
 
-auto GetMemorySources() -> const char **
+auto GetMemorySources() -> std::vector<std::string>
 {
-	return ProcessMemory::GetMemorySources().data();
+	// TODO: Convert to PCHAR[]
+	return MemorySource::GetMemorySources();
 }
 
-auto SetMemorySource(char * memory_source_name) -> VOID
+auto SetMemorySource(const char * memory_source_name) -> VOID
 {
-	ProcessMemory::SetMemorySource(memory_source_name);
+	MemorySource::SetMemorySource(memory_source_name);
 }
