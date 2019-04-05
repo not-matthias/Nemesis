@@ -12,7 +12,7 @@ class Logger
 	//
 
 	/**
-	 * \brief Will be added in the beginning of the log.
+	 * \brief Will be inserted at the beginning of the log.
 	 */
 	static std::string prefix;
 
