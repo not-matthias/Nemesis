@@ -4,7 +4,7 @@
 
 #include "ProcessMemory.hpp"
 
-auto GetMemorySourcesExport(PVOID const buffer) -> VOID
+auto GetMemorySourcesExport(PVOID buffer) -> VOID
 {
 	//
 	// Cast the buffer
@@ -15,9 +15,27 @@ auto GetMemorySourcesExport(PVOID const buffer) -> VOID
 	// Copy the memory sources to the buffer
 	//
 	auto i = 0;
-	for (const auto & memory_source : MemorySource::GetMemorySources())
+	for (auto & memory_source : MemorySource::GetMemorySources())
 	{
-		strcpy_s(memory_sources->memory_sources[i++], sizeof(memory_source.data()), memory_source.data());
+		//
+		// Add the null terminator
+		//
+		memory_source.append("\0");
+
+		//
+		// Create the char array
+		//
+		memory_sources->memory_sources[i] = new char[memory_source.length()];
+
+		//
+		// Clear the memory
+		//
+		RtlSecureZeroMemory(memory_sources->memory_sources[i], memory_source.length());
+
+		//
+		// Copy the string
+		//
+		std::copy(memory_source.begin(), memory_source.end(), memory_sources->memory_sources[i++]);
 	}
 }
 
