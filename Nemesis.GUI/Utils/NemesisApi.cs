@@ -29,10 +29,8 @@ namespace Nemesis.Utils
         [DllImport("D:\\Nemesis\\Nemesis\\x64\\Release\\Nemesis.dll")]
         private static extern void GetMemorySourcesExport(ref MemorySourcesStruct structure);
 
-
         [DllImport("D:\\Nemesis\\Nemesis\\x64\\Release\\Nemesis.dll")]
-        public static extern bool SetMemorySourceExport(string memorySource);
-
+        private static extern bool SetMemorySourceExport(string memorySource);
 
         public static List<string> GetMemorySources()
         {
@@ -63,6 +61,11 @@ namespace Nemesis.Utils
             // Return the list
             //
             return list;
+        }
+
+        public static bool SetMemorySource(string memorySource)
+        {
+            return SetMemorySourceExport(memorySource);
         }
     }
 }
