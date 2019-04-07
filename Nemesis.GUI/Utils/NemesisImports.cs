@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace Nemesis.Utils
 {
-    internal class NemesisApi
+    internal class NemesisImports
     {
         //TODO: Replace paths
 
@@ -18,9 +18,10 @@ namespace Nemesis.Utils
 
 
         [DllImport("D:\\Nemesis\\Nemesis\\x64\\Release\\Nemesis.dll")]
-        public static extern IntPtr GetMemorySources();
+        public static extern string GetMemorySrc();
+
 
         [DllImport("D:\\Nemesis\\Nemesis\\x64\\Release\\Nemesis.dll")]
-        public static extern void SetMemorySource(string memorySource);
+        public static extern void SetMemorySrc(string memorySource);
     }
 }

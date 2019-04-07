@@ -4,16 +4,7 @@
 #include "KernelMemory.hpp"
 
 std::string MemorySource::current_memory_source;
-std::vector<std::string> MemorySource::memory_sources;;
-
-
-MemorySource::MemorySource()
-{
-	memory_sources.emplace_back("user_mode");
-	memory_sources.emplace_back("kernel_mode");
-}
-
-MemorySource::~MemorySource() = default;
+std::vector<std::string> MemorySource::memory_sources = {"kernel_mode", "user_mode"};
 
 auto MemorySource::SetMemorySource(const std::string & memory_source_name) -> VOID
 {

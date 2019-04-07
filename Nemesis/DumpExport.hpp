@@ -8,7 +8,7 @@
  * \param file_name the dump file name
  * \return true if successful
  */
-BOOL DumpProcess(DWORD process_id, LPCSTR file_name);
+auto DumpProcess(DWORD process_id, LPCSTR file_name) -> BOOL;
 
 /**
  * \brief Dumps a specific Module (e.g. kernel32.dll).

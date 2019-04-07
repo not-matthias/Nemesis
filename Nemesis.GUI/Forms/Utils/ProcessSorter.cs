@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Windows.Forms;
 
-namespace Nemesis.Utils
+namespace Nemesis.Forms.Utils
 {
     public class ProcessSorter : IComparer
     {

@@ -133,7 +133,7 @@ namespace Nemesis.Forms
                 //
                 try
                 {
-                    var status = NemesisApi.DumpProcess(processId, path);
+                    var status = NemesisImports.DumpProcess(processId, path);
                     if (status)
                     {
                         MessageBox.Show(@"Successfully dumped the process.", @"Success");

@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace Nemesis.Utils
+namespace Nemesis.Forms.Utils
 {
     internal class ProcessListItem
     {

@@ -1,4 +1,4 @@
-﻿using Nemesis.Utils;
+﻿using Nemesis.Forms.Utils;
 
 namespace Nemesis.Forms
 {

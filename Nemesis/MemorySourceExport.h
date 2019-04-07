@@ -1,17 +1,27 @@
 #pragma once
 
+#include <string>
 #include <vector>
 #include <Windows.h>
-#include <string>
+
+/**
+ * \brief Contains the memory sources.
+ */
+struct MemorySources
+{
+	char * memory_sources[12];
+};
+
 
 /**
  * \brief Returns a list of memory sources.
- * \return the list
+ * \return the list of memory sources
  */
-auto GetMemorySources() ->std::vector<std::string>;
+auto GetMemorySourcesExport(OUT PVOID buffer) -> VOID;
 
 /**
  * \brief Sets the new memory source.
  * \param memory_source_name the specified memory source
+ * \return true if successful
  */
-auto SetMemorySource(const char * memory_source_name) -> VOID;
+auto SetMemorySourceExport(IN const char * memory_source_name) -> BOOL;

@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Windows.Forms;
 
-namespace Nemesis.Utils
+namespace Nemesis.Forms.Utils
 {
     internal sealed class ProcessListView : ListView
     {

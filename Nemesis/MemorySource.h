@@ -28,23 +28,6 @@ public:
 
 	//
 	//
-	// Constructors/Destructors
-	//
-	//
-
-	/**
-	 * \brief Adds the memory sources to the list.
-	 */
-	MemorySource();
-
-	/**
-	 * \brief Default destructor.
-	 */
-	~MemorySource();
-
-
-	//
-	//
 	// Important functions
 	//
 	//
