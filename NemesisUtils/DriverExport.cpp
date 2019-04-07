@@ -1,12 +1,1 @@
-#include "DriverExport.h"
-
-
-
-DriverExport::DriverExport()
-{
-}
-
-
-DriverExport::~DriverExport()
-{
-}
+#include "DriverExport.hpp"

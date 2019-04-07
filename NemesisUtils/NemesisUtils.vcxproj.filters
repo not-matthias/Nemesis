@@ -30,16 +30,16 @@
     <None Include="exports.def" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DriverUtils.h">
+    <ClInclude Include="DriverUtils.hpp">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="ProcessUtils.h">
+    <ClInclude Include="ProcessUtils.hpp">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="DriverExport.h">
+    <ClInclude Include="DriverExport.hpp">
       <Filter>Header Files\Exports</Filter>
     </ClInclude>
-    <ClInclude Include="ProcessExport.h">
+    <ClInclude Include="ProcessExport.hpp">
       <Filter>Header Files\Exports</Filter>
     </ClInclude>
   </ItemGroup>

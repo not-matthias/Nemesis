@@ -1,11 +1,4 @@
 #pragma once
-class DriverExport
-{
-public:
-	DriverExport();
-	~DriverExport();
-};
-
 
 
 // TODO: Return driver list

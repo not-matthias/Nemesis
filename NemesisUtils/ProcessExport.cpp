@@ -1,12 +1,2 @@
-#include "ProcessExport.h"
+#include "ProcessExport.hpp"
 
-
-
-ProcessExport::ProcessExport()
-{
-}
-
-
-ProcessExport::~ProcessExport()
-{
-}

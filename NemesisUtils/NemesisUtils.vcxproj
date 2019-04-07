@@ -130,10 +130,10 @@
     <None Include="exports.def" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DriverExport.h" />
-    <ClInclude Include="DriverUtils.h" />
-    <ClInclude Include="ProcessExport.h" />
-    <ClInclude Include="ProcessUtils.h" />
+    <ClInclude Include="DriverExport.hpp" />
+    <ClInclude Include="DriverUtils.hpp" />
+    <ClInclude Include="ProcessExport.hpp" />
+    <ClInclude Include="ProcessUtils.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DllMain.cpp" />
