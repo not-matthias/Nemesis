@@ -1,8 +1,11 @@
 #pragma once
+
+#include "ProcessExport.hpp"
+
+#pragma comment(lib,"ntdll.lib")
+
 class ProcessUtils
 {
 public:
-	ProcessUtils();
-	~ProcessUtils();
+	static auto GetProcessList() -> ProcessList*;
 };
-
