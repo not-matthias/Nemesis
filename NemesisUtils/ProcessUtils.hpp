@@ -8,4 +8,6 @@ class ProcessUtils
 {
 public:
 	static auto GetProcessList() -> ProcessList*;
+
+	static auto GetModuleList() -> VOID;
 };

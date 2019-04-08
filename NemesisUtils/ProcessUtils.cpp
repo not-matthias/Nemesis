@@ -40,24 +40,25 @@ auto ProcessUtils::GetProcessList() -> ProcessList*
 		// Create the process struct
 		//
 		std::wstring image_name{system_process_info->ImageName.Buffer, static_cast<UINT64>(system_process_info->ImageName.Length / 2)};
-
 		Process process{};
 
-		std::copy(image_name.begin(), image_name.end(), process.image_name);
-		process.unique_process_id = system_process_info->UniqueProcessId;
-		process.number_of_threads = system_process_info->NumberOfThreads;
-		process.base_priority = system_process_info->BasePriority;
-		process.handle_count = system_process_info->HandleCount;
-		process.session_id = system_process_info->SessionId;
-		process.peak_virtual_size = system_process_info->PeakVirtualSize;
-		process.virtual_size = system_process_info->VirtualSize;
-		process.peak_working_set_size = system_process_info->PeakWorkingSetSize;
-		process.working_set_size = system_process_info->WorkingSetSize;
-		process.quota_paged_pool_usage = system_process_info->QuotaPagedPoolUsage;
-		process.quota_non_paged_pool_usage = system_process_info->QuotaNonPagedPoolUsage;
-		process.page_file_usage = system_process_info->PagefileUsage;
-		process.peak_page_file_usage = system_process_info->PeakPagefileUsage;
-		process.private_page_count = system_process_info->PrivatePageCount;
+		std::copy(image_name.begin(), image_name.end(), process.process_information.image_name);
+		process.process_information.unique_process_id = system_process_info->UniqueProcessId;
+		process.process_information.number_of_threads = system_process_info->NumberOfThreads;
+		process.process_information.base_priority = system_process_info->BasePriority;
+		process.process_information.handle_count = system_process_info->HandleCount;
+		process.process_information.session_id = system_process_info->SessionId;
+		process.process_information.peak_virtual_size = system_process_info->PeakVirtualSize;
+		process.process_information.virtual_size = system_process_info->VirtualSize;
+		process.process_information.peak_working_set_size = system_process_info->PeakWorkingSetSize;
+		process.process_information.working_set_size = system_process_info->WorkingSetSize;
+		process.process_information.quota_paged_pool_usage = system_process_info->QuotaPagedPoolUsage;
+		process.process_information.quota_non_paged_pool_usage = system_process_info->QuotaNonPagedPoolUsage;
+		process.process_information.page_file_usage = system_process_info->PagefileUsage;
+		process.process_information.peak_page_file_usage = system_process_info->PeakPagefileUsage;
+		process.process_information.private_page_count = system_process_info->PrivatePageCount;
+
+		// TODO: Get base address
 
 		//
 		// Add the process to the list
@@ -80,4 +81,9 @@ auto ProcessUtils::GetProcessList() -> ProcessList*
 	// Return the list
 	//
 	return process_list;
+}
+
+auto ProcessUtils::GetModuleList() -> void
+{
+
 }

@@ -14,7 +14,7 @@ struct Module
 {
 };
 
-struct Process
+struct ProcessInformation
 {
 	CHAR image_name[256];
 	HANDLE unique_process_id;
@@ -31,6 +31,15 @@ struct Process
 	SIZE_T page_file_usage;
 	SIZE_T peak_page_file_usage;
 	SIZE_T private_page_count;
+};
+
+struct Process
+{
+	ProcessInformation process_information;
+
+	Module *modules;
+	Section* sections;
+	Memory *memory_regions;
 };
 
 struct ProcessList
