@@ -4,13 +4,8 @@
 
 #include "ProcessMemory.hpp"
 
-auto GetMemorySourcesExport(PVOID buffer) -> VOID
+auto GetMemorySourcesExport(OUT MemorySources * memory_sources) -> VOID
 {
-	//
-	// Cast the buffer
-	//
-	auto memory_sources = static_cast<MemorySources *>(buffer);
-
 	//
 	// Copy the memory sources to the buffer
 	//
@@ -39,7 +34,7 @@ auto GetMemorySourcesExport(PVOID buffer) -> VOID
 	}
 }
 
-auto SetMemorySourceExport(const char * memory_source_name) -> BOOL
+auto SetMemorySourceExport(IN const char * memory_source_name) -> BOOL
 {
 	auto memory_sources = MemorySource::GetMemorySources();
 

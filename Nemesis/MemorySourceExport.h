@@ -17,7 +17,7 @@ struct MemorySources
  * \brief Returns a list of memory sources.
  * \return the list of memory sources
  */
-auto GetMemorySourcesExport(OUT PVOID buffer) -> VOID;
+auto GetMemorySourcesExport(OUT MemorySources * memory_sources) -> VOID;
 
 /**
  * \brief Sets the new memory source.
