@@ -1,6 +1,8 @@
 #include "ProcessUtils.hpp"
+
 #include <iostream>
 #include <winternl.h>
+#include <Psapi.h>
 
 auto ProcessUtils::GetProcessList() -> ProcessList*
 {
@@ -83,7 +85,47 @@ auto ProcessUtils::GetProcessList() -> ProcessList*
 	return process_list;
 }
 
-auto ProcessUtils::GetModuleList() -> void
+auto ProcessUtils::GetModuleList(const DWORD process_id) -> Module*
 {
+	auto module = new Module;
 
+	HMODULE module_handles[1024];
+	DWORD cb_needed;
+
+	//
+	// Open the process
+	//
+	const auto process_handle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, process_id);
+	if (process_handle == INVALID_HANDLE_VALUE)
+	{
+		return nullptr;
+	}
+
+	//
+	// Loop through the modules
+	//
+	if (EnumProcessModules(process_handle, module_handles, sizeof(module_handles), &cb_needed))
+	{
+		for (unsigned long i = 0; i < (cb_needed / sizeof(HMODULE)); i++)
+		{
+			CHAR module_name[MAX_PATH];
+
+			//
+			// Get the full path
+			//
+			if (GetModuleFileNameEx(process_handle, module_handles[i], module_name, sizeof(module_name) / sizeof(CHAR)))
+			{
+				std::string module_name_string(module_name);
+				std::copy(module_name_string.begin(), module_name_string.end(), module->module_name[i]);
+				module->base_address = reinterpret_cast<INT64>(module_handles[i]);
+			}
+		}
+	}
+
+	//
+	// Close the handle
+	//
+	CloseHandle(process_handle);
+
+	return module;
 }

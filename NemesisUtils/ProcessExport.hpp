@@ -12,6 +12,8 @@ struct Memory
 
 struct Module
 {
+	CHAR module_name[MAX_PATH];
+	INT64 base_address;
 };
 
 struct ProcessInformation
@@ -37,9 +39,9 @@ struct Process
 {
 	ProcessInformation process_information;
 
-	Module *modules;
-	Section* sections;
-	Memory *memory_regions;
+	Module modules[32];
+	Section sections[32];
+	Memory * memory_regions;
 };
 
 struct ProcessList
@@ -48,3 +50,6 @@ struct ProcessList
 };
 
 auto GetProcessListExport(ProcessList * process_list) -> VOID;
+
+// NtQueryVirtualMemory
+// https://stackoverflow.com/questions/46978645/how-list-all-modules-of-system-not-modules-of-my-own-process

@@ -9,5 +9,5 @@ class ProcessUtils
 public:
 	static auto GetProcessList() -> ProcessList*;
 
-	static auto GetModuleList() -> VOID;
+	static auto GetModuleList(DWORD process_id) -> Module *;
 };
