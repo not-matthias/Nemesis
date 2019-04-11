@@ -14,7 +14,6 @@ auto ProcessUtils::GetProcessList() -> ProcessList*
 	LPVOID buffer = nullptr;
 	if (!(buffer = VirtualAlloc(nullptr, 1024 * 1024, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE)))
 	{
-		VirtualFree(buffer, 0, MEM_RELEASE);
 		return process_list;
 	}
 
@@ -42,9 +41,10 @@ auto ProcessUtils::GetProcessList() -> ProcessList*
 		// Create the process struct
 		//
 		std::wstring image_name{system_process_info->ImageName.Buffer, static_cast<UINT64>(system_process_info->ImageName.Length / 2)};
+		std::string string(image_name.begin(), image_name.end());
 		Process process{};
 
-		std::copy(image_name.begin(), image_name.end(), process.process_information.image_name);
+		std::copy(string.begin(), string.end(), reinterpret_cast<char*>(process.process_information.image_name));
 		process.process_information.unique_process_id = system_process_info->UniqueProcessId;
 		process.process_information.number_of_threads = system_process_info->NumberOfThreads;
 		process.process_information.base_priority = system_process_info->BasePriority;
@@ -116,7 +116,7 @@ auto ProcessUtils::GetModuleList(const DWORD process_id) -> Module*
 			if (GetModuleFileNameEx(process_handle, module_handles[i], module_name, sizeof(module_name) / sizeof(CHAR)))
 			{
 				std::string module_name_string(module_name);
-				std::copy(module_name_string.begin(), module_name_string.end(), module->module_name[i]);
+				std::copy(module_name_string.begin(), module_name_string.end(), reinterpret_cast<char *>(module->module_name[i]));
 				module->base_address = reinterpret_cast<INT64>(module_handles[i]);
 			}
 		}
@@ -128,4 +128,33 @@ auto ProcessUtils::GetModuleList(const DWORD process_id) -> Module*
 	CloseHandle(process_handle);
 
 	return module;
+}
+
+auto ProcessUtils::GetMemoryRegions(const DWORD process_id) -> Memory*
+{
+	//
+	// Open the process
+	//
+	const auto process_handle = OpenProcess(PROCESS_ALL_ACCESS, false, process_id);
+	if (process_handle == INVALID_HANDLE_VALUE)
+	{
+		return nullptr;
+	}
+
+	MEMORY_BASIC_INFORMATION memory_basic_information;
+
+	// 
+	// Loop through the memory regions
+	// 
+	for (BYTE * memory_region_start = nullptr;
+	     VirtualQueryEx(process_handle, memory_region_start, &memory_basic_information, sizeof(MEMORY_BASIC_INFORMATION));
+	     memory_region_start += memory_basic_information.RegionSize)
+	{
+		//
+		// 
+		//
+		printf("%#10.10x (%6uK)\t", memory_basic_information.BaseAddress, memory_basic_information.RegionSize / 1024);
+	}
+
+	return nullptr;
 }
