@@ -8,6 +8,10 @@ struct Section
 
 struct Memory
 {
+	PVOID base_address;
+	SIZE_T region_size;
+	DWORD state;
+	DWORD type;
 };
 
 struct Module
@@ -41,7 +45,7 @@ struct Process
 
 	Module modules[32];
 	Section sections[32];
-	Memory * memory_regions;
+	Memory memory_regions[64];
 };
 
 struct ProcessList

@@ -10,8 +10,8 @@ int main()
 	//auto process_list = ProcessUtils::GetProcessList();
 	//std::cout << process_list->processes[10].process_information.image_name << std::endl;
 
-	ProcessUtils::GetMemoryRegions(3136);
+	//const auto memory_region_list = ProcessUtils::GetMemoryRegions(22236);
+
 
 	std::cout << "Finished." << std::endl;
-	std::cin.get();
 }

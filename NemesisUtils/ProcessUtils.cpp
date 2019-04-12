@@ -132,6 +132,8 @@ auto ProcessUtils::GetModuleList(const DWORD process_id) -> Module*
 
 auto ProcessUtils::GetMemoryRegions(const DWORD process_id) -> Memory*
 {
+	const auto memory_list = new Memory[64];
+
 	//
 	// Open the process
 	//
@@ -146,15 +148,25 @@ auto ProcessUtils::GetMemoryRegions(const DWORD process_id) -> Memory*
 	// 
 	// Loop through the memory regions
 	// 
+	auto counter = 0;
 	for (BYTE * memory_region_start = nullptr;
 	     VirtualQueryEx(process_handle, memory_region_start, &memory_basic_information, sizeof(MEMORY_BASIC_INFORMATION));
 	     memory_region_start += memory_basic_information.RegionSize)
 	{
 		//
-		// 
+		// Creates a new memory source
 		//
-		printf("%#10.10x (%6uK)\t", memory_basic_information.BaseAddress, memory_basic_information.RegionSize / 1024);
+		Memory memory{};
+		memory.base_address = memory_basic_information.BaseAddress;
+		memory.region_size = memory_basic_information.RegionSize;
+		memory.state = memory_basic_information.State; // (MEM_COMMIT | MEM_FREE | MEM_RESERVE)
+		memory.type = memory_basic_information.Type; // (MEM_IMAGE | MEM_MAPPED | MEM_PRIVATE)
+
+		//
+		// Add it to the list
+		//
+		memory_list[counter++] = memory;
 	}
 
-	return nullptr;
+	return memory_list;
 }
