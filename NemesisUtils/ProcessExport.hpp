@@ -2,10 +2,17 @@
 
 #include <Windows.h>
 
+// TODO: Add sections (from the pe header)
+/**
+ * \brief 
+ */
 struct Section
 {
 };
 
+/**
+ * \brief 
+ */
 struct Memory
 {
 	PVOID base_address;
@@ -14,12 +21,18 @@ struct Memory
 	DWORD type;
 };
 
+/**
+ * \brief 
+ */
 struct Module
 {
 	CHAR module_name[MAX_PATH];
 	INT64 base_address;
 };
 
+/**
+ * \brief 
+ */
 struct ProcessInformation
 {
 	CHAR image_name[256];
@@ -39,21 +52,29 @@ struct ProcessInformation
 	SIZE_T private_page_count;
 };
 
+/**
+ * \brief 
+ */
 struct Process
 {
 	ProcessInformation process_information;
 
-	Module modules[32];
-	Section sections[32];
-	Memory memory_regions[64];
+	Module * modules;
+	Section * sections;
+	Memory * memory_regions;
 };
 
+/**
+ * \brief 
+ */
 struct ProcessList
 {
-	Process processes[256];
+	Process processes[512]; // TODO: Use pointer instead of fixed size
 };
 
-auto GetProcessListExport(ProcessList * process_list) -> VOID;
 
-// NtQueryVirtualMemory
-// https://stackoverflow.com/questions/46978645/how-list-all-modules-of-system-not-modules-of-my-own-process
+/**
+ * \brief Creates a new process list.
+ * \param process_list the output buffer
+ */
+auto GetProcessListExport(ProcessList * process_list) -> VOID;

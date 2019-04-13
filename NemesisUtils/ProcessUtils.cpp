@@ -3,10 +3,11 @@
 #include <iostream>
 #include <winternl.h>
 #include <Psapi.h>
+#include <vector>
 
 auto ProcessUtils::GetProcessList() -> ProcessList*
 {
-	auto process_list = new ProcessList[256];
+	auto process_list = new ProcessList;
 
 	//
 	// Allocate memory for the buffer
@@ -63,6 +64,16 @@ auto ProcessUtils::GetProcessList() -> ProcessList*
 		// TODO: Get base address
 
 		//
+		// Set the modules
+		//
+		process.modules = GetModuleList(reinterpret_cast<DWORD>(system_process_info->UniqueProcessId));
+
+		//
+		// Set the memory regions 
+		//
+		//process.memory_regions = GetMemoryRegions(reinterpret_cast<DWORD>(system_process_info->UniqueProcessId));
+
+		//
 		// Add the process to the list
 		//
 		process_list->processes[index++] = process;
@@ -87,7 +98,7 @@ auto ProcessUtils::GetProcessList() -> ProcessList*
 
 auto ProcessUtils::GetModuleList(const DWORD process_id) -> Module*
 {
-	auto module = new Module;
+	std::vector<Module> modules;
 
 	HMODULE module_handles[1024];
 	DWORD cb_needed;
@@ -115,9 +126,19 @@ auto ProcessUtils::GetModuleList(const DWORD process_id) -> Module*
 			//
 			if (GetModuleFileNameEx(process_handle, module_handles[i], module_name, sizeof(module_name) / sizeof(CHAR)))
 			{
+				//
+				// Create a new module
+				//
+				Module module{};
+
 				std::string module_name_string(module_name);
-				std::copy(module_name_string.begin(), module_name_string.end(), reinterpret_cast<char *>(module->module_name[i]));
-				module->base_address = reinterpret_cast<INT64>(module_handles[i]);
+				std::copy(module_name_string.begin(), module_name_string.end(), reinterpret_cast<char *>(module.module_name));
+				module.base_address = reinterpret_cast<INT64>(module_handles[i]);
+
+				//
+				// Add it to the list
+				//
+				modules.push_back(module);
 			}
 		}
 	}
@@ -127,12 +148,12 @@ auto ProcessUtils::GetModuleList(const DWORD process_id) -> Module*
 	//
 	CloseHandle(process_handle);
 
-	return module;
+	return modules.data();
 }
 
 auto ProcessUtils::GetMemoryRegions(const DWORD process_id) -> Memory*
 {
-	const auto memory_list = new Memory[64];
+	std::vector<Memory> memory_list;
 
 	//
 	// Open the process
@@ -148,7 +169,6 @@ auto ProcessUtils::GetMemoryRegions(const DWORD process_id) -> Memory*
 	// 
 	// Loop through the memory regions
 	// 
-	auto counter = 0;
 	for (BYTE * memory_region_start = nullptr;
 	     VirtualQueryEx(process_handle, memory_region_start, &memory_basic_information, sizeof(MEMORY_BASIC_INFORMATION));
 	     memory_region_start += memory_basic_information.RegionSize)
@@ -165,8 +185,8 @@ auto ProcessUtils::GetMemoryRegions(const DWORD process_id) -> Memory*
 		//
 		// Add it to the list
 		//
-		memory_list[counter++] = memory;
+		memory_list.push_back(memory);
 	}
 
-	return memory_list;
+	return memory_list.data();
 }
