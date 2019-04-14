@@ -4,14 +4,14 @@
 
 // TODO: Add sections (from the pe header)
 /**
- * \brief 
+ * \brief A section of a process.
  */
 struct Section
 {
 };
 
 /**
- * \brief 
+ * \brief A memory region of a process.
  */
 struct Memory
 {
@@ -22,7 +22,7 @@ struct Memory
 };
 
 /**
- * \brief 
+ * \brief A module of a process. 
  */
 struct Module
 {
@@ -31,7 +31,7 @@ struct Module
 };
 
 /**
- * \brief 
+ * \brief The information about a process.
  */
 struct ProcessInformation
 {
@@ -53,7 +53,7 @@ struct ProcessInformation
 };
 
 /**
- * \brief 
+ * \brief Contains all the information about a process.
  */
 struct Process
 {
@@ -65,7 +65,7 @@ struct Process
 };
 
 /**
- * \brief 
+ * \brief Contains the list of processes.
  */
 struct ProcessList
 {

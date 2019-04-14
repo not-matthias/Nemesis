@@ -1,13 +1,14 @@
 #include "ProcessUtils.hpp"
 
 #include <iostream>
-#include <winternl.h>
 #include <Psapi.h>
 #include <vector>
+#include <winternl.h>
 
 auto ProcessUtils::GetProcessList() -> ProcessList*
 {
 	auto process_list = new ProcessList;
+	std::vector<Process> processes;
 
 	//
 	// Allocate memory for the buffer
@@ -71,7 +72,7 @@ auto ProcessUtils::GetProcessList() -> ProcessList*
 		//
 		// Set the memory regions 
 		//
-		//process.memory_regions = GetMemoryRegions(reinterpret_cast<DWORD>(system_process_info->UniqueProcessId));
+		process.memory_regions = GetMemoryRegions(reinterpret_cast<DWORD>(system_process_info->UniqueProcessId));
 
 		//
 		// Add the process to the list
@@ -126,6 +127,8 @@ auto ProcessUtils::GetModuleList(const DWORD process_id) -> Module*
 			//
 			if (GetModuleFileNameEx(process_handle, module_handles[i], module_name, sizeof(module_name) / sizeof(CHAR)))
 			{
+				std::cout << "[" << process_id << "]" << module_name << std::endl;
+
 				//
 				// Create a new module
 				//
@@ -148,6 +151,15 @@ auto ProcessUtils::GetModuleList(const DWORD process_id) -> Module*
 	//
 	CloseHandle(process_handle);
 
+	std::cout << modules.size() << std::endl;
+
+	//
+	// Create a copy of the list and return it
+	//
+	const auto module_list = new Module[modules.size()];
+	std::copy(modules.begin(), modules.end(), module_list);
+
+	//return module_list;
 	return modules.data();
 }
 
@@ -188,5 +200,16 @@ auto ProcessUtils::GetMemoryRegions(const DWORD process_id) -> Memory*
 		memory_list.push_back(memory);
 	}
 
-	return memory_list.data();
+	//
+	// Close the handle
+	//
+	CloseHandle(process_handle);
+
+	//
+	// Create a copy of the list and return it
+	//
+	const auto memory_regions = new Memory[memory_list.size()];
+	std::copy(memory_list.begin(), memory_list.end(), memory_regions);
+
+	return memory_regions;
 }
