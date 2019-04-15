@@ -81,6 +81,18 @@
     <ClInclude Include="MemorySource.h">
       <Filter>Header Files\Memory</Filter>
     </ClInclude>
+    <ClInclude Include="ProcessExport.hpp">
+      <Filter>Header Files\Exports</Filter>
+    </ClInclude>
+    <ClInclude Include="DriverUtils.hpp">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="DriverExport.hpp">
+      <Filter>Header Files\Exports</Filter>
+    </ClInclude>
+    <ClInclude Include="ProcessUtils.hpp">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DllMain.cpp">
@@ -124,6 +136,18 @@
     </ClCompile>
     <ClCompile Include="MemorySource.cpp">
       <Filter>Source Files\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="ProcessExport.cpp">
+      <Filter>Source Files\Exports</Filter>
+    </ClCompile>
+    <ClCompile Include="DriverExport.cpp">
+      <Filter>Source Files\Exports</Filter>
+    </ClCompile>
+    <ClCompile Include="ProcessUtils.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="DriverUtils.cpp">
+      <Filter>Source Files\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

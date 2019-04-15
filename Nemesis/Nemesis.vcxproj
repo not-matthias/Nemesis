@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DriverExport.hpp" />
+    <ClInclude Include="DriverUtils.hpp" />
     <ClInclude Include="DumpExport.hpp" />
     <ClInclude Include="FileWriter.hpp" />
     <ClInclude Include="IMemorySource.hpp" />
@@ -27,6 +29,8 @@
     <ClInclude Include="Memory.hpp" />
     <ClInclude Include="MemorySource.h" />
     <ClInclude Include="MemorySourceExport.h" />
+    <ClInclude Include="ProcessExport.hpp" />
+    <ClInclude Include="ProcessUtils.hpp" />
     <ClInclude Include="Section.hpp" />
     <ClInclude Include="ProcessMemory.hpp" />
     <ClInclude Include="UsermodeMemory.hpp" />
@@ -34,6 +38,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DllMain.cpp" />
+    <ClCompile Include="DriverExport.cpp" />
+    <ClCompile Include="DriverUtils.cpp" />
     <ClCompile Include="DumpExport.cpp" />
     <ClCompile Include="FileWriter.cpp" />
     <ClCompile Include="IMemorySource.cpp" />
@@ -43,6 +49,8 @@
     <ClCompile Include="Memory.cpp" />
     <ClCompile Include="MemorySource.cpp" />
     <ClCompile Include="MemorySourceExport.cpp" />
+    <ClCompile Include="ProcessExport.cpp" />
+    <ClCompile Include="ProcessUtils.cpp" />
     <ClCompile Include="Section.cpp" />
     <ClCompile Include="ProcessMemory.cpp" />
     <ClCompile Include="UsermodeMemory.cpp" />
