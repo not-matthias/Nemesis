@@ -160,7 +160,7 @@ auto ProcessUtils::GetMemoryRegions(const DWORD process_id) -> std::vector<Memor
 	// 
 	// Loop through the memory regions
 	// 
-	for (BYTE* memory_region_start = nullptr;
+	for (BYTE * memory_region_start = nullptr;
 	     VirtualQueryEx(process_handle, memory_region_start, &memory_basic_information,
 	                    sizeof(MEMORY_BASIC_INFORMATION));
 	     memory_region_start += memory_basic_information.RegionSize)
