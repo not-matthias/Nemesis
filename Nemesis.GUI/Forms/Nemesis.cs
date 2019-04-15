@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Windows.Forms;
+using Nemesis.Forms.Utils;
 using Nemesis.Utils;
 
 namespace Nemesis.Forms
@@ -177,9 +178,9 @@ namespace Nemesis.Forms
         {
             if (processListView.SelectedItems.Count > 0)
             {
-                var listViewItem = (ListViewItem) sender;
+                var listViewItem = (ProcessListView) sender;
 
-                var processInfo = new ProcessInfo();
+                var processInfo = new processInformation();
                 processInfo.ShowDialog();
                 processInfo.Dispose();
             }

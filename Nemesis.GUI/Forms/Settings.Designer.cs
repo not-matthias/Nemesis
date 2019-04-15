@@ -261,6 +261,7 @@
             this.Name = "Settings";
             this.Resizable = false;
             this.ShadowType = MetroFramework.Forms.MetroFormShadowType.AeroShadow;
+            this.ShowInTaskbar = false;
             this.Text = "Settings";
             this.ResumeLayout(false);
             this.PerformLayout();

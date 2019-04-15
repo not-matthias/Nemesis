@@ -2,14 +2,14 @@
 
 namespace Nemesis.Forms
 {
-    public sealed partial class ProcessInfo : MetroForm
+    public sealed partial class processInformation : MetroForm
     {
-        public ProcessInfo()
+        public processInformation()
         {
             InitializeComponent();
         }
 
-        public ProcessInfo(string processName)
+        public processInformation(string processName)
         {
             Text = processName;
 
