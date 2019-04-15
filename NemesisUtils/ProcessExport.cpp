@@ -3,5 +3,5 @@
 
 auto GetProcessListExport(ProcessList * process_list) -> VOID
 {
-	process_list = ProcessUtils::GetProcessList();
+	//process_list = ProcessUtils::GetProcessList();
 }

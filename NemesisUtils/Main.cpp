@@ -6,17 +6,26 @@ int main()
 {
 	std::cout << "Started." << std::endl;
 
-	
+	const auto index = 64;
+
 	//
 	// Process List
 	//
-	const auto process_list = ProcessUtils::GetProcessList();
-	//std::cout << process_list->processes[5].process_information.image_name << std::endl;
-	//std::cout << process_list->processes[5].modules[8].module_name<< std::endl;
-	//std::cout << process_list->processes[5].memory_regions[5].base_address<< std::endl;
+	const auto processes = ProcessUtils::GetProcessList();
+	std::cout << processes[index].process_information.image_name << std::endl;
+	std::cout << processes[index].process_information.unique_process_id << std::endl;
 
-	const auto module_list = ProcessUtils::GetModuleList(6196);
+	//
+	// Module List
+	//
+	auto module_list = ProcessUtils::GetModuleList(12224);
 
+	std::cout << "Size: " << module_list.size() << std::endl;
+
+	for (auto && module : module_list)
+	{
+		std::cout << module.base_address << std::endl;
+	}
 
 	//
 	// Driver List

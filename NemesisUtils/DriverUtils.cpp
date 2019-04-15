@@ -1,11 +1,9 @@
 #include "DriverUtils.hpp"
 
-#include <ostream>
-#include <vector>
+#include <string>
 
-auto DriverUtils::GetDriverList() -> DriverList*
+auto DriverUtils::GetDriverList() -> std::vector<Driver>
 {
-	const auto driver_list = new DriverList;
 	std::vector<Driver> drivers;
 
 	//
@@ -19,16 +17,17 @@ auto DriverUtils::GetDriverList() -> DriverList*
 	//
 	if (!module_info)
 	{
-		return nullptr;
+		return std::vector<Driver>();
 	}
 
 	//
 	// Query the system information (aka drivers)
 	//
-	if (!NT_SUCCESS(NtQuerySystemInformation(static_cast<SYSTEM_INFORMATION_CLASS>(11), module_info, 1024 * 1024, NULL)))
+	if (!NT_SUCCESS(NtQuerySystemInformation(static_cast<SYSTEM_INFORMATION_CLASS>(11), module_info, 1024 * 1024, NULL))
+	)
 	{
 		VirtualFree(module_info, 0, MEM_RELEASE);
-		return nullptr;
+		return std::vector<Driver>();
 	}
 
 	//
@@ -55,15 +54,9 @@ auto DriverUtils::GetDriverList() -> DriverList*
 	}
 
 	//
-	// Add the drivers to the actual list
-	//
-	driver_list->drivers = new Driver[drivers.size()];
-	std::copy(drivers.begin(), drivers.end(), driver_list->drivers);
-
-	//
 	// Free the buffer
 	//
 	VirtualFree(module_info, 0, MEM_RELEASE);
 
-	return driver_list;
+	return drivers;
 }

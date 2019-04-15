@@ -22,7 +22,7 @@ struct Memory
 };
 
 /**
- * \brief A module of a process. 
+ * \brief A module of a process.
  */
 struct Module
 {
@@ -58,10 +58,6 @@ struct ProcessInformation
 struct Process
 {
 	ProcessInformation process_information;
-
-	Module * modules;
-	Section * sections;
-	Memory * memory_regions;
 };
 
 /**
@@ -69,7 +65,7 @@ struct Process
  */
 struct ProcessList
 {
-	Process processes[512]; // TODO: Use pointer instead of fixed size
+	Process * processes;
 };
 
 

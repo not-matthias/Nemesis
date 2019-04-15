@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include <Windows.h>
 #include <winternl.h>
 
@@ -29,10 +30,9 @@ typedef struct _RTL_PROCESS_MODULES
 class DriverUtils
 {
 public:
-
 	/**
 	 * \brief Creates the driver list.
 	 * \return the driver list
 	 */
-	static auto GetDriverList() -> DriverList*;
+	static auto GetDriverList() -> std::vector<Driver>;
 };

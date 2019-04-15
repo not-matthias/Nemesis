@@ -3,7 +3,7 @@
 #include <Windows.h>
 
 /**
- * \brief 
+ * \brief Contains the driver data.
  */
 struct Driver
 {
@@ -14,7 +14,7 @@ struct Driver
 };
 
 /**
- * \brief 
+ * \brief Contains the list of drivers.
  */
 struct DriverList
 {
