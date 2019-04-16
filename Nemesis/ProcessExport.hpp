@@ -73,4 +73,4 @@ struct ProcessList
  * \brief Creates a new process list.
  * \param process_list the output buffer
  */
-auto GetProcessListExport(ProcessList * process_list) -> VOID;
+auto GetProcessListExport(OUT ProcessList * process_list) -> VOID;

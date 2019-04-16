@@ -3,7 +3,7 @@
 #include "Module.hpp"
 #include "FileWriter.hpp"
 
-auto DumpProcess(const DWORD process_id, const LPCSTR file_name) -> BOOL
+auto DumpProcessExport(const DWORD process_id, const LPCSTR file_name) -> BOOL
 {
 	//
 	// Create the memory wrapper
@@ -42,7 +42,7 @@ auto DumpProcess(const DWORD process_id, const LPCSTR file_name) -> BOOL
 	}
 }
 
-auto DumpModule(const DWORD process_id, const DWORD_PTR base_address, const LPCSTR file_name) -> BOOL
+auto DumpModuleExport(const DWORD process_id, const DWORD_PTR base_address, const LPCSTR file_name) -> BOOL
 {
 	//
 	// Create the Memory wrapper
@@ -81,7 +81,7 @@ auto DumpModule(const DWORD process_id, const DWORD_PTR base_address, const LPCS
 	}
 }
 
-auto DumpMemory(const DWORD process_id, const DWORD_PTR start_address, const DWORD size, const LPCSTR file_name) -> BOOL
+auto DumpMemoryExport(const DWORD process_id, const DWORD_PTR start_address, const DWORD size, const LPCSTR file_name) -> BOOL
 {
 	//
 	// Create the Memory wrapper

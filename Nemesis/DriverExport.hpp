@@ -26,4 +26,4 @@ struct DriverList
  * \brief Creates a new driver_list list.
  * \param driver_list the output buffer.
  */
-auto GetDriverList(DriverList * driver_list) -> VOID;
+auto GetDriverListExport(OUT DriverList * driver_list) -> VOID;
