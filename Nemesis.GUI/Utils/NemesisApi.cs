@@ -55,7 +55,7 @@ namespace Nemesis.Utils
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct Memory
+    public struct Memory
     {
         public long base_address;
         public int region_size;

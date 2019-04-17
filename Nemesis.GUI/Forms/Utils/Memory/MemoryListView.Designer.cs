@@ -1,6 +1,6 @@
 ﻿namespace Nemesis.Forms.Utils.Memory
 {
-    partial class MemoryListView
+    sealed partial class MemoryListView
     {
         /// <summary>
         /// Required designer variable.

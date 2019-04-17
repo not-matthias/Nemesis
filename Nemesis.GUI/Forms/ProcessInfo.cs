@@ -24,6 +24,7 @@ namespace Nemesis.Forms
             // Modules List View
             //
             moduleListView.LoadModules(_modules);
+            memoryListView.LoadMemory(_memory);
 
             //
             // Memory List View

@@ -58,13 +58,16 @@ namespace Nemesis.Forms
             // 
             // memoryListView
             // 
+            this.memoryListView.FullRowSelect = true;
             this.memoryListView.HideSelection = false;
-            this.memoryListView.Location = new System.Drawing.Point(3, 3);
+            this.memoryListView.Location = new System.Drawing.Point(3, 12);
             this.memoryListView.Name = "memoryListView";
-            this.memoryListView.Size = new System.Drawing.Size(470, 240);
+            this.memoryListView.Size = new System.Drawing.Size(470, 231);
+            this.memoryListView.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.memoryListView.TabIndex = 2;
             this.memoryListView.Text = "MemoryListView";
             this.memoryListView.UseCompatibleStateImageBehavior = false;
+            this.memoryListView.View = System.Windows.Forms.View.Details;
             // 
             // metroTabPage1
             // 
@@ -85,10 +88,10 @@ namespace Nemesis.Forms
             // 
             this.moduleListView.FullRowSelect = true;
             this.moduleListView.HideSelection = false;
-            this.moduleListView.Location = new System.Drawing.Point(3, 3);
+            this.moduleListView.Location = new System.Drawing.Point(3, 12);
             this.moduleListView.MultiSelect = false;
             this.moduleListView.Name = "moduleListView";
-            this.moduleListView.Size = new System.Drawing.Size(470, 240);
+            this.moduleListView.Size = new System.Drawing.Size(470, 232);
             this.moduleListView.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.moduleListView.TabIndex = 0;
             this.moduleListView.Text = "ModuleListView";
