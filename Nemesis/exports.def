@@ -6,5 +6,5 @@ EXPORTS
 	DumpModuleExport @4
 	DumpMemoryExport @5
 
-	GetDriverListExport @6
-	GetProcessListExport @7
+	GetDriverListElementExport @6
+	GetProcessListElementExport @7

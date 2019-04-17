@@ -2,7 +2,7 @@
 
 #include "DriverUtils.hpp"
 
-auto GetDriverListElementExport(const UINT index, Driver driver) -> BOOL
+auto GetDriverListElementExport(const UINT index, Driver *driver) -> BOOL
 {
 	const auto driver_list = DriverUtils::GetDriverList();
 
@@ -14,7 +14,15 @@ auto GetDriverListElementExport(const UINT index, Driver driver) -> BOOL
 		return FALSE;
 	}
 
-	driver = driver_list[index];
+	//
+	// Check if driver is valid
+	//
+	if(driver == nullptr)
+	{
+		return FALSE;
+	}
+
+	*driver = driver_list.at(index);
 
 	return TRUE;
 }

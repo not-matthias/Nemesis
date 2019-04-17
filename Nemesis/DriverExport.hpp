@@ -28,4 +28,4 @@ struct DriverList
  * \param driver the driver at the index
  * \return true if successful
  */
-auto GetDriverListElementExport(IN UINT index, OUT Driver driver) -> BOOL;
+auto GetDriverListElementExport(IN UINT index, OUT Driver *driver) -> BOOL;

@@ -12,23 +12,18 @@ namespace Nemesis.Utils
     {
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         public IntPtr[] MemorySources;
-    };
+    }
 
 
     [StructLayout(LayoutKind.Sequential)]
     internal struct Driver
     {
-        public IntPtr ImageBase;
+        public long ImageBase;
         public int ImageSize;
-        public int OffsetToFileName;
-        public char[] FullPathName;
-    }
+        public ushort OffsetToFileName;
 
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct DriverListStruct
-    {
-        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.Struct, SizeConst = 512)]
-        public IntPtr[] DriverList;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
+        public string FullPathName;
     }
 
 
@@ -36,13 +31,6 @@ namespace Nemesis.Utils
     internal struct Process
     {
 
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct ProcessListExport
-    {
-        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.Struct, SizeConst = 512)]
-        public Process[] ProcessList;
     }
 
     internal class NemesisImports
@@ -65,10 +53,10 @@ namespace Nemesis.Utils
 
         
         [DllImport("D:\\3_Programming\\1_Github\\Nemesis\\x64\\Debug\\Nemesis.dll")]
-        protected static extern void GetDriverListExport(ref DriverListStruct structure);
+        protected static extern bool GetDriverListElementExport(uint index, ref Driver structure);
 
         [DllImport("D:\\3_Programming\\1_Github\\Nemesis\\x64\\Debug\\Nemesis.dll")]
-        protected static extern void GetProcessListExport(ref ProcessListExport structure);
+        protected static extern bool GetProcessListElementExport(uint index, ref Process structure);
     }
 
     internal class NemesisApi : NemesisImports
@@ -117,52 +105,70 @@ namespace Nemesis.Utils
 
         public static List<Driver> GetDriverList()
         {
-            //
-            // Create a new struct
-            //
-            var structure = new DriverListStruct();
+            var list = new List<Driver>();
 
             //
             // Get the memory sources
             //
-            GetDriverListExport(ref structure);
-
-            //
-            // Convert the pointers to structures and return the list
-            //
-            List<Driver> list = new List<Driver>();
-            foreach (var pointer in structure.DriverList)
+            for (uint index = 0; index < 512; index++)
             {
-                if (pointer != IntPtr.Zero)
-                {
-                    list.Add(Marshal.PtrToStructure<Driver>(pointer));
-                }
-            }
+                //
+                // Create the driver object
+                //
+                var structure = new Driver();
 
+                //
+                // Get the driver at the specified index
+                //
+                if (!GetDriverListElementExport(index, ref structure))
+                {
+                    break;
+                }
+
+                //
+                // Add the item to the list
+                //
+                list.Add(structure);
+            }
 
             //
             // Return the list
             //
-            //return structure.DriverList.ToList();
             return list;
         }
 
         public static List<Process> GetProcessList()
         {
-            //
-            // Create a new struct
-            //
-            var structure = new ProcessListExport();
+            var list = new List<Process>();
 
             //
             // Get the memory sources
             //
-            GetProcessListExport(ref structure);
+            for (uint index = 0; index < 512; index++)
+            {
+                //
+                // Create the driver object
+                //
+                var structure = new Process();
+
+                //
+                // Get the driver at the specified index
+                //
+                if (!GetProcessListElementExport(index, ref structure))
+                {
+                    break;
+                }
+
+                //
+                // Add the item to the list
+                //
+                list.Add(structure);
+            }
 
             //
             // Return the list
             //
-            return structure.ProcessList.ToList();
+            return list;
         }
     }
 }

@@ -12,12 +12,10 @@ namespace Nemesis
         [STAThread]
         private static void Main()
         {
-            Console.WriteLine(NemesisApi.GetProcessList().Count);
-            Console.WriteLine(NemesisApi.GetDriverList().Count);
-
-            foreach (var driver in NemesisApi.GetDriverList())
+            var driverList = NemesisApi.GetDriverList();
+            foreach (var driver in driverList)
             {
-                Console.WriteLine(driver.ImageBase);
+                Console.WriteLine(driver.FullPathName);
             }
 
             Application.EnableVisualStyles();
