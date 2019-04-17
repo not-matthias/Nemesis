@@ -3,16 +3,17 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 using Nemesis.Forms.Utils;
+using Nemesis.Forms.Utils.Process;
 using Nemesis.Utils;
 
 namespace Nemesis.Forms
 {
-    public partial class Nemesis : MetroForm
+    public partial class NemesisForm : MetroForm
     {
         // 
         // Sets the process list
         // 
-        public Nemesis()
+        public NemesisForm()
         {
             InitializeComponent();
 
@@ -176,14 +177,22 @@ namespace Nemesis.Forms
         //
         private void ProcessListView_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (processListView.SelectedItems.Count > 0)
-            {
-                var listViewItem = (ProcessListView) sender;
+            //
+            // Check if element selected
+            //
+            if (processListView.SelectedItems.Count <= 0) return;
 
-                var processInfo = new processInformation();
-                processInfo.ShowDialog();
-                processInfo.Dispose();
-            }
+            //
+            // Check if tag is valid
+            //
+            if (!(processListView.SelectedItems[0].Tag is ProcessListItem item)) return;
+
+            //
+            // Open the process information window
+            //
+            var processInfo = new ProcessInformation(int.Parse(item.Id));
+            processInfo.ShowDialog();
+            processInfo.Dispose();
         }
 
         //

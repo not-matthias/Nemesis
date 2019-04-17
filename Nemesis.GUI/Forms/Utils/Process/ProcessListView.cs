@@ -1,7 +1,6 @@
-﻿using System.Diagnostics;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
-namespace Nemesis.Forms.Utils
+namespace Nemesis.Forms.Utils.Process
 {
     internal sealed class ProcessListView : ListView
     {
@@ -27,7 +26,7 @@ namespace Nemesis.Forms.Utils
             //
             // Get the process list
             //
-            var processlist = Process.GetProcesses();
+            var processlist = System.Diagnostics.Process.GetProcesses();
 
             //
             // Remove all previous processes

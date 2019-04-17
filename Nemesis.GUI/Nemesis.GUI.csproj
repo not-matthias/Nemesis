@@ -100,11 +100,11 @@
     <Compile Include="Forms\About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Nemesis.cs">
+    <Compile Include="Forms\NemesisForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Nemesis.Designer.cs">
-      <DependentUpon>Nemesis.cs</DependentUpon>
+    <Compile Include="Forms\NemesisForm.Designer.cs">
+      <DependentUpon>NemesisForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ProcessInfo.cs">
       <SubType>Form</SubType>
@@ -118,18 +118,32 @@
     <Compile Include="Forms\Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Utils\Memory\MemoryListItem.cs" />
+    <Compile Include="Forms\Utils\Memory\MemoryListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\Utils\Memory\MemoryListView.Designer.cs">
+      <DependentUpon>MemoryListView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Utils\Module\ModuleListItem.cs" />
+    <Compile Include="Forms\Utils\Module\ModuleListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\Utils\Module\ModuleListView.Designer.cs">
+      <DependentUpon>ModuleListView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utils\Config.cs" />
     <Compile Include="Utils\MarshalUtils.cs" />
     <Compile Include="Utils\NemesisApi.cs" />
-    <Compile Include="Forms\Utils\ProcessListItem.cs" />
-    <Compile Include="Forms\Utils\ProcessListView.cs">
+    <Compile Include="Forms\Utils\Process\ProcessListItem.cs" />
+    <Compile Include="Forms\Utils\Process\ProcessListView.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Forms\Utils\ProcessSorter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Forms\Nemesis.resx">
-      <DependentUpon>Nemesis.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\NemesisForm.resx">
+      <DependentUpon>NemesisForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ProcessInfo.resx">
       <DependentUpon>ProcessInfo.cs</DependentUpon>
@@ -173,5 +187,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,8 +1,9 @@
 ﻿using Nemesis.Forms.Utils;
+using Nemesis.Forms.Utils.Process;
 
 namespace Nemesis.Forms
 {
-    partial class Nemesis
+    partial class NemesisForm
     {
         /// <summary>
         /// Required designer variable.
@@ -34,7 +35,7 @@ namespace Nemesis.Forms
             this.refreshButton = new MetroFramework.Controls.MetroButton();
             this.settingsButton = new MetroFramework.Controls.MetroButton();
             this.aboutButton = new MetroFramework.Controls.MetroButton();
-            this.processListView = new ProcessListView();
+            this.processListView = new Nemesis.Forms.Utils.Process.ProcessListView();
             this.SuspendLayout();
             // 
             // dumpButton
@@ -81,6 +82,7 @@ namespace Nemesis.Forms
             // 
             this.processListView.Alignment = System.Windows.Forms.ListViewAlignment.Default;
             this.processListView.FullRowSelect = true;
+            this.processListView.HideSelection = false;
             this.processListView.Location = new System.Drawing.Point(23, 79);
             this.processListView.MultiSelect = false;
             this.processListView.Name = "processListView";
@@ -91,7 +93,7 @@ namespace Nemesis.Forms
             this.processListView.View = System.Windows.Forms.View.Details;
             this.processListView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ProcessListView_MouseDoubleClick);
             // 
-            // Nemesis
+            // NemesisForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -102,7 +104,7 @@ namespace Nemesis.Forms
             this.Controls.Add(this.refreshButton);
             this.Controls.Add(this.dumpButton);
             this.MaximizeBox = false;
-            this.Name = "Nemesis";
+            this.Name = "NemesisForm";
             this.Resizable = false;
             this.ShadowType = MetroFramework.Forms.MetroFormShadowType.AeroShadow;
             this.Text = "Nemesis";

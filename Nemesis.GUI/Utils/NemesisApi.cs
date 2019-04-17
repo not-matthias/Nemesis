@@ -46,7 +46,7 @@ namespace Nemesis.Utils
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct Module
+    public struct Module
     {
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
         public string module_name;

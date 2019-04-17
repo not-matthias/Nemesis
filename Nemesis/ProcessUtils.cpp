@@ -109,7 +109,6 @@ auto ProcessUtils::GetModuleList(const DWORD process_id) -> std::vector<Module>
 		for (unsigned long i = 0; i < (cb_needed / sizeof(HMODULE)); i++)
 		{
 			CHAR module_name[MAX_PATH];
-			std::cout << "[" << process_id << "]" << module_name << std::endl;
 
 			//
 			// Get the full path

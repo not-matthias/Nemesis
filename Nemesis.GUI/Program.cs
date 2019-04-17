@@ -13,7 +13,7 @@ namespace Nemesis
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Forms.Nemesis());
+            Application.Run(new Forms.NemesisForm());
         }
     }
 }

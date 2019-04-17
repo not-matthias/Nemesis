@@ -1,19 +1,33 @@
-﻿using MetroFramework.Forms;
+﻿using System.Collections.Generic;
+using MetroFramework.Forms;
+using Nemesis.Utils;
 
 namespace Nemesis.Forms
 {
-    public sealed partial class processInformation : MetroForm
+    public sealed partial class ProcessInformation : MetroForm
     {
-        public processInformation()
+        private int _processId;
+
+        private List<Module> _modules;
+        private List<Memory> _memory;
+
+        public ProcessInformation(int processId)
         {
             InitializeComponent();
-        }
 
-        public processInformation(string processName)
-        {
-            Text = processName;
+            _processId = processId;
 
-            InitializeComponent();
+            _modules = NemesisApi.GetModuleList(processId);
+            _memory = NemesisApi.GetMemoryList(processId);
+
+            //
+            // Modules List View
+            //
+            moduleListView.LoadModules(_modules);
+
+            //
+            // Memory List View
+            // 
         }
     }
 }
