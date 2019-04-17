@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace Nemesis.Utils
@@ -30,7 +28,23 @@ namespace Nemesis.Utils
     [StructLayout(LayoutKind.Sequential)]
     internal struct Process
     {
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
+        public string image_name;
 
+        public int unique_process_id;
+        public int number_of_threads;
+        public int base_priority;
+        public int handle_count;
+        public int session_id;
+        public int peak_virtual_size;
+        public int virtual_size;
+        public int peak_working_set_size;
+        public int working_set_size;
+        public int quota_paged_pool_usage;
+        public int quota_non_paged_pool_usage;
+        public int page_file_usage;
+        public int peak_page_file_usage;
+        public int private_page_count;
     }
 
     internal class NemesisImports

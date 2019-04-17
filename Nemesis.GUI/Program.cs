@@ -12,12 +12,6 @@ namespace Nemesis
         [STAThread]
         private static void Main()
         {
-            var driverList = NemesisApi.GetDriverList();
-            foreach (var driver in driverList)
-            {
-                Console.WriteLine(driver.FullPathName);
-            }
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Forms.Nemesis());

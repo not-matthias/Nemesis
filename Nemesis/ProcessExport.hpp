@@ -31,9 +31,9 @@ struct Module
 };
 
 /**
- * \brief The information about a process.
+ * \brief Contains all the information about a process.
  */
-struct ProcessInformation
+struct Process
 {
 	CHAR image_name[256];
 	HANDLE unique_process_id;
@@ -53,14 +53,6 @@ struct ProcessInformation
 };
 
 /**
- * \brief Contains all the information about a process.
- */
-struct Process
-{
-	ProcessInformation process_information;
-};
-
-/**
  * \brief Contains the list of processes.
  */
 struct ProcessList
@@ -75,4 +67,4 @@ struct ProcessList
  * \param process the process at the index
  * \return true if successful
  */
-auto GetProcessListElementExport(IN UINT index, OUT Process process) -> BOOL;
+auto GetProcessListElementExport(IN UINT index, OUT Process *process) -> BOOL;

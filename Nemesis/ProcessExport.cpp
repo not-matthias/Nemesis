@@ -2,7 +2,7 @@
 
 #include "ProcessUtils.hpp"
 
-auto GetProcessListElementExport(const UINT index, Process process) -> BOOL
+auto GetProcessListElementExport(const UINT index, Process *process) -> BOOL
 {
 	const auto process_list = ProcessUtils::GetProcessList();
 
@@ -14,7 +14,15 @@ auto GetProcessListElementExport(const UINT index, Process process) -> BOOL
 		return FALSE;
 	}
 
-	process = process_list[index];
+	//
+	// Check if process is valid
+	//
+	if (process == nullptr)
+	{
+		return FALSE;
+	}
+
+	*process = process_list.at(index);
 
 	return TRUE;
 }
