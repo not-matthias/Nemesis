@@ -12,7 +12,6 @@ namespace Nemesis.Utils
         public IntPtr[] MemorySources;
     }
 
-
     [StructLayout(LayoutKind.Sequential)]
     internal struct Driver
     {
@@ -23,7 +22,6 @@ namespace Nemesis.Utils
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string FullPathName;
     }
-
 
     [StructLayout(LayoutKind.Sequential)]
     internal struct Process
@@ -52,6 +50,7 @@ namespace Nemesis.Utils
     {
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
         public string module_name;
+
         public long base_address;
     }
 
@@ -62,38 +61,38 @@ namespace Nemesis.Utils
         public int region_size;
         public int state;
         public int type;
-    };
+    }
 
     internal class NemesisImports
     {
         [DllImport("Nemesis.dll")]
-        protected static extern bool DumpProcessExport(int processId, string fileName);
+        protected static extern bool DumpProcessExport([In] int processId, [In] string fileName);
 
         [DllImport("Nemesis.dll")]
-        protected static extern bool DumpModuleExport(int processId, IntPtr baseAddress, string fileName);
+        protected static extern bool DumpModuleExport([In] int processId, [In] IntPtr baseAddress, [In] string fileName);
 
         [DllImport("Nemesis.dll")]
-        protected static extern bool DumpMemoryExport(int processId, IntPtr startAddress, uint size, string fileName);
+        protected static extern bool DumpMemoryExport([In] int processId, [In] IntPtr startAddress, [In] uint size, [In] string fileName);
 
 
         [DllImport("Nemesis.dll")]
-        protected static extern void GetMemorySourcesExport(ref MemorySourcesStruct structure);
+        protected static extern void GetMemorySourcesExport([In] [Out] ref MemorySourcesStruct structure);
 
         [DllImport("Nemesis.dll")]
-        protected static extern bool SetMemorySourceExport(string memorySource);
+        protected static extern bool SetMemorySourceExport([In] string memorySource);
 
-        
-        [DllImport("D:\\3_Programming\\1_Github\\Nemesis\\x64\\Debug\\Nemesis.dll")]
-        protected static extern bool GetDriverListElementExport(uint index, ref Driver structure);
 
         [DllImport("D:\\3_Programming\\1_Github\\Nemesis\\x64\\Debug\\Nemesis.dll")]
-        protected static extern bool GetProcessListElementExport(uint index, ref Process structure);
+        protected static extern bool GetDriverListElementExport([In] uint index, [In] [Out] ref Driver structure);
 
         [DllImport("D:\\3_Programming\\1_Github\\Nemesis\\x64\\Debug\\Nemesis.dll")]
-        protected static extern bool GetModuleListElementExport(uint index, int processId, ref Module structure);
+        protected static extern bool GetProcessListElementExport([In] uint index, [In] [Out] ref Process structure);
 
         [DllImport("D:\\3_Programming\\1_Github\\Nemesis\\x64\\Debug\\Nemesis.dll")]
-        protected static extern bool GetMemoryListElementExport(uint index, int processId, ref Memory structure);
+        protected static extern bool GetModuleListElementExport([In] uint index, [In] int processId, [In] [Out] ref Module structure);
+
+        [DllImport("D:\\3_Programming\\1_Github\\Nemesis\\x64\\Debug\\Nemesis.dll")]
+        protected static extern bool GetMemoryListElementExport([In] uint index, [In] int processId, [In] [Out] ref Memory structure);
     }
 
     internal class NemesisApi : NemesisImports
