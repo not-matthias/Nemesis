@@ -70,7 +70,9 @@ struct ProcessList
 
 
 /**
- * \brief Creates a new process list.
- * \param process_list the output buffer
+ * \brief Returns the process at the specified index. (C# has maximal struct size)
+ * \param index the index in the list
+ * \param process the process at the index
+ * \return true if successful
  */
-auto GetProcessListExport(OUT ProcessList * process_list) -> VOID;
+auto GetProcessListElementExport(IN UINT index, OUT Process process) -> BOOL;

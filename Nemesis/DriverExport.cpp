@@ -1,21 +1,20 @@
 #include "DriverExport.hpp"
+
 #include "DriverUtils.hpp"
-#include <iostream>
 
-auto GetDriverListExport(OUT DriverList* driver_list) -> void
+auto GetDriverListElementExport(const UINT index, Driver driver) -> BOOL
 {
-	auto driver_list_vector = DriverUtils::GetDriverList();
+	const auto driver_list = DriverUtils::GetDriverList();
 
 	//
-	// Allocate memory for the driver list
+	// Check if in bounds
 	//
-	driver_list->drivers = new Driver[driver_list_vector.size()];
-
-	//
-	// Set the drivers in the array
-	//
-	for (auto i = 0; i < driver_list_vector.size(); ++i)
+	if (index < 0 || index >= driver_list.size())
 	{
-		driver_list->drivers[i] = driver_list_vector[i];
+		return FALSE;
 	}
+
+	driver = driver_list[index];
+
+	return TRUE;
 }

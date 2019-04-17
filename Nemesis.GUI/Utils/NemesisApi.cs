@@ -28,13 +28,14 @@ namespace Nemesis.Utils
     internal struct DriverListStruct
     {
         [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.Struct, SizeConst = 512)]
-        public Driver[] DriverList;
+        public IntPtr[] DriverList;
     }
 
 
     [StructLayout(LayoutKind.Sequential)]
     internal struct Process
     {
+
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -127,9 +128,23 @@ namespace Nemesis.Utils
             GetDriverListExport(ref structure);
 
             //
+            // Convert the pointers to structures and return the list
+            //
+            List<Driver> list = new List<Driver>();
+            foreach (var pointer in structure.DriverList)
+            {
+                if (pointer != IntPtr.Zero)
+                {
+                    list.Add(Marshal.PtrToStructure<Driver>(pointer));
+                }
+            }
+
+
+            //
             // Return the list
             //
-            return structure.DriverList.ToList();
+            //return structure.DriverList.ToList();
+            return list;
         }
 
         public static List<Process> GetProcessList()

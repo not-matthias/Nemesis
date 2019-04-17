@@ -1,20 +1,20 @@
 #include "ProcessExport.hpp"
+
 #include "ProcessUtils.hpp"
 
-auto GetProcessListExport(OUT ProcessList * process_list) -> VOID
+auto GetProcessListElementExport(const UINT index, Process process) -> BOOL
 {
-	auto process_list_vector = ProcessUtils::GetProcessList();
+	const auto process_list = ProcessUtils::GetProcessList();
 
 	//
-	// Allocate memory for the process list
+	// Check if in bounds
 	//
-	process_list->processes = new Process[process_list_vector.size()];
-
-	//
-	// Set the processes in the array
-	//
-	for (auto i = 0; i < process_list_vector.size(); ++i)
+	if (index < 0 || index >= process_list.size())
 	{
-		process_list->processes[i] = process_list_vector[i];
+		return FALSE;
 	}
+
+	process = process_list[index];
+
+	return TRUE;
 }

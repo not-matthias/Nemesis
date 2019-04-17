@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using Nemesis.Utils;
 
 namespace Nemesis
 {
@@ -11,10 +12,17 @@ namespace Nemesis
         [STAThread]
         private static void Main()
         {
+            Console.WriteLine(NemesisApi.GetProcessList().Count);
+            Console.WriteLine(NemesisApi.GetDriverList().Count);
+
+            foreach (var driver in NemesisApi.GetDriverList())
+            {
+                Console.WriteLine(driver.ImageBase);
+            }
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Forms.Nemesis());
-
         }
     }
 }

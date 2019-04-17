@@ -23,7 +23,9 @@ struct DriverList
 
 
 /**
- * \brief Creates a new driver_list list.
- * \param driver_list the output buffer.
+ * \brief Returns the driver at the specified index. (C# has maximal struct size)
+ * \param index the index in the list
+ * \param driver the driver at the index
+ * \return true if successful
  */
-auto GetDriverListExport(OUT DriverList * driver_list) -> VOID;
+auto GetDriverListElementExport(IN UINT index, OUT Driver driver) -> BOOL;
