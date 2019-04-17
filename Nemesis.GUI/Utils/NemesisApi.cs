@@ -47,6 +47,23 @@ namespace Nemesis.Utils
         public int private_page_count;
     }
 
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct Module
+    {
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+        public string module_name;
+        public long base_address;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct Memory
+    {
+        public long base_address;
+        public int region_size;
+        public int state;
+        public int type;
+    };
+
     internal class NemesisImports
     {
         [DllImport("Nemesis.dll")]
@@ -71,6 +88,12 @@ namespace Nemesis.Utils
 
         [DllImport("D:\\3_Programming\\1_Github\\Nemesis\\x64\\Debug\\Nemesis.dll")]
         protected static extern bool GetProcessListElementExport(uint index, ref Process structure);
+
+        [DllImport("D:\\3_Programming\\1_Github\\Nemesis\\x64\\Debug\\Nemesis.dll")]
+        protected static extern bool GetModuleListElementExport(uint index, int processId, ref Module structure);
+
+        [DllImport("D:\\3_Programming\\1_Github\\Nemesis\\x64\\Debug\\Nemesis.dll")]
+        protected static extern bool GetMemoryListElementExport(uint index, int processId, ref Memory structure);
     }
 
     internal class NemesisApi : NemesisImports
@@ -169,6 +192,74 @@ namespace Nemesis.Utils
                 // Get the driver at the specified index
                 //
                 if (!GetProcessListElementExport(index, ref structure))
+                {
+                    break;
+                }
+
+                //
+                // Add the item to the list
+                //
+                list.Add(structure);
+            }
+
+            //
+            // Return the list
+            //
+            return list;
+        }
+
+        public static List<Module> GetModuleList(int processId)
+        {
+            var list = new List<Module>();
+
+            //
+            // Get the memory sources
+            //
+            for (uint index = 0; index < 256; index++)
+            {
+                //
+                // Create the driver object
+                //
+                var structure = new Module();
+
+                //
+                // Get the driver at the specified index
+                //
+                if (!GetModuleListElementExport(index, processId, ref structure))
+                {
+                    break;
+                }
+
+                //
+                // Add the item to the list
+                //
+                list.Add(structure);
+            }
+
+            //
+            // Return the list
+            //
+            return list;
+        }
+
+        public static List<Memory> GetMemoryList(int processId)
+        {
+            var list = new List<Memory>();
+
+            //
+            // Get the memory sources
+            //
+            for (uint index = 0; index < 256; index++)
+            {
+                //
+                // Create the driver object
+                //
+                var structure = new Memory();
+
+                //
+                // Get the driver at the specified index
+                //
+                if (!GetMemoryListElementExport(index, processId, ref structure))
                 {
                     break;
                 }
