@@ -142,7 +142,7 @@ auto ProcessUtils::GetModuleList(const DWORD process_id) -> std::vector<Module>
 	return modules;
 }
 
-auto ProcessUtils::GetMemoryRegions(const DWORD process_id) -> std::vector<Memory>
+auto ProcessUtils::GetMemoryList(const DWORD process_id) -> std::vector<Memory>
 {
 	std::vector<Memory> memory_list;
 

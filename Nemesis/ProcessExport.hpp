@@ -62,9 +62,27 @@ struct ProcessList
 
 
 /**
- * \brief Returns the process at the specified index. (C# has maximal struct size)
+ * \brief Returns the process at the specified index. 
  * \param index the index in the list
- * \param process the process at the index
+ * \param process the process at the specified index
  * \return true if successful
  */
-auto GetProcessListElementExport(IN UINT index, OUT Process *process) -> BOOL;
+auto GetProcessListElementExport(IN UINT index, OUT Process * process) -> BOOL;
+
+/**
+ * \brief Returns the module at the specified index.
+ * \param index the index in the list
+ * \param process_id the id of the process
+ * \param module the module at the specified index
+ * \return true if successful
+ */
+auto GetModuleListElementExport(IN UINT index, IN DWORD process_id, OUT Module * module) -> BOOL;
+
+/**
+ * \brief Returns the memory at the specified index.
+ * \param index the index in the list
+ * \param process_id the id of the process
+ * \param memory the memory at the specified index
+ * \return true if successful
+ */
+auto GetMemoryListElementExport(IN UINT index, IN DWORD process_id, OUT Memory * memory) -> BOOL;

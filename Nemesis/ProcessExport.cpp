@@ -2,7 +2,7 @@
 
 #include "ProcessUtils.hpp"
 
-auto GetProcessListElementExport(const UINT index, Process *process) -> BOOL
+auto GetProcessListElementExport(const UINT index, Process * process) -> BOOL
 {
 	const auto process_list = ProcessUtils::GetProcessList();
 
@@ -23,6 +23,56 @@ auto GetProcessListElementExport(const UINT index, Process *process) -> BOOL
 	}
 
 	*process = process_list.at(index);
+
+	return TRUE;
+}
+
+auto GetModuleListElementExport(const UINT index, const DWORD process_id, Module * module) -> BOOL
+{
+	const auto module_list = ProcessUtils::GetModuleList(process_id);
+
+	//
+	// Check if in bounds
+	//
+	if (index < 0 || index >= module_list.size())
+	{
+		return FALSE;
+	}
+
+	//
+	// Check if module is valid
+	//
+	if (module == nullptr)
+	{
+		return FALSE;
+	}
+
+	*module = module_list.at(index);
+
+	return TRUE;
+}
+
+auto GetMemoryListElementExport(const UINT index, const DWORD process_id, Memory * memory) -> BOOL
+{
+	const auto memory_list = ProcessUtils::GetMemoryList(process_id);
+
+	//
+	// Check if in bounds
+	//
+	if (index < 0 || index >= memory_list.size())
+	{
+		return FALSE;
+	}
+
+	//
+	// Check if memory is valid
+	//
+	if (memory == nullptr)
+	{
+		return FALSE;
+	}
+
+	*memory = memory_list.at(index);
 
 	return TRUE;
 }

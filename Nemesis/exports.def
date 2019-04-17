@@ -8,3 +8,5 @@ EXPORTS
 
 	GetDriverListElementExport @6
 	GetProcessListElementExport @7
+	GetModuleListElementExport @8
+	GetMemoryListElementExport @9

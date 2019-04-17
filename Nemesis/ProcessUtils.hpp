@@ -27,5 +27,5 @@ public:
 	 * \param process_id the target process id
 	 * \return the memory array
 	 */
-	static auto GetMemoryRegions(DWORD process_id) -> std::vector<Memory>;
+	static auto GetMemoryList(DWORD process_id) -> std::vector<Memory>;
 };
