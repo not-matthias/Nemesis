@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
+using Nemesis.Utils;
 
 namespace Nemesis.Forms.Utils.Module
 {
@@ -14,12 +14,18 @@ namespace Nemesis.Forms.Utils.Module
             Sorting = SortOrder.Ascending;
         }
 
-        public void LoadModules(List<Nemesis.Utils.Module> modules)
+        public void LoadModules(int processId)
         {
+            var modules = NemesisApi.GetModuleList(processId);
+
             //
             // Remove all previous processes
             //
             Items.Clear();
+
+            //
+            // 
+            //
 
             //
             // Loop through all processes

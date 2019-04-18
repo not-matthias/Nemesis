@@ -190,7 +190,6 @@ namespace Nemesis.Forms
             //
             if (!(processListView.SelectedItems[0].Tag is ProcessListItem item)) return;
 
-
             //
             // Use cached process information if available
             //
@@ -198,6 +197,7 @@ namespace Nemesis.Forms
             var processInfo = _processInformationList.ContainsKey(processId) ? _processInformationList[processId] : new ProcessInformation(processId);
 
             _processInformationList[processId] = processInfo;
+
 
             processInfo.ShowDialog();
         }

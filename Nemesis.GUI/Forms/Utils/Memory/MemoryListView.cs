@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using MetroFramework.Forms;
-using Nemesis.Forms.Utils.Module;
+﻿using System.Windows.Forms;
+using Nemesis.Utils;
 
 namespace Nemesis.Forms.Utils.Memory
 {
@@ -25,8 +16,10 @@ namespace Nemesis.Forms.Utils.Memory
             Sorting = SortOrder.Ascending;
         }
 
-        public void LoadMemory(List<Nemesis.Utils.Memory> memory)
+        public void LoadMemory(int processId)
         {
+            var memory = NemesisApi.GetMemoryList(processId);
+
             //
             // Remove all previous processes
             //
