@@ -1,5 +1,6 @@
 ﻿using MetroFramework.Forms;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using Nemesis.Forms.Utils;
@@ -10,6 +11,8 @@ namespace Nemesis.Forms
 {
     public partial class NemesisForm : MetroForm
     {
+        private readonly Dictionary<int, ProcessInformation> _processInformationList = new Dictionary<int, ProcessInformation>();
+
         // 
         // Sets the process list
         // 
@@ -187,12 +190,16 @@ namespace Nemesis.Forms
             //
             if (!(processListView.SelectedItems[0].Tag is ProcessListItem item)) return;
 
+
             //
-            // Open the process information window
+            // Use cached process information if available
             //
-            var processInfo = new ProcessInformation(int.Parse(item.Id));
+            var processId = int.Parse(item.Id);
+            var processInfo = _processInformationList.ContainsKey(processId) ? _processInformationList[processId] : new ProcessInformation(processId);
+
+            _processInformationList[processId] = processInfo;
+
             processInfo.ShowDialog();
-            processInfo.Dispose();
         }
 
         //
