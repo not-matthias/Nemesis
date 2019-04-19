@@ -19,8 +19,8 @@ namespace Nemesis.Forms.Utils.Memory
 
         public ListViewItem GetListViewItem()
         {
-            var listViewItem = new ListViewItem(BaseAddress.ToString("X"));
-            listViewItem.SubItems.Add(RegionSize.ToString("X"));
+            var listViewItem = new ListViewItem(BaseAddress.ToString("X8"));
+            listViewItem.SubItems.Add(RegionSize.ToString("X8"));
             listViewItem.SubItems.Add(State.ToString());
             listViewItem.SubItems.Add(Type.ToString());
             listViewItem.Tag = this;

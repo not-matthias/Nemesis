@@ -5,6 +5,8 @@ namespace Nemesis.Forms.Utils.Memory
 {
     public sealed partial class MemoryListView: ListView
     {
+        private int _sortColumnIndex = 0;
+
         public MemoryListView()
         {
             Columns.Add("BaseAddress");
@@ -45,6 +47,36 @@ namespace Nemesis.Forms.Utils.Memory
             // Auto resize the columns
             //
             AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+
+            //
+            // Sort the list
+            //
+            ListViewItemSorter = new MemorySorter(_sortColumnIndex, Sorting);
+        }
+
+        protected override void OnColumnClick(ColumnClickEventArgs e)
+        {
+            //
+            // Check if another column clicked
+            //
+            if (e.Column != _sortColumnIndex)
+            {
+                MessageBox.Show(e.Column.ToString());
+                _sortColumnIndex = e.Column;
+                Sorting = SortOrder.Descending;
+            }
+            else
+            {
+                //
+                // Change the SortOrder to the opposite
+                //
+                Sorting = Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
+            }
+
+            //
+            // Sort the list
+            //
+            ListViewItemSorter = new MemorySorter(e.Column, Sorting);
         }
     }
 }

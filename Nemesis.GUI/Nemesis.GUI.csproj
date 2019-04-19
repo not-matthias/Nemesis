@@ -125,6 +125,7 @@
     <Compile Include="Forms\Utils\Memory\MemoryListView.Designer.cs">
       <DependentUpon>MemoryListView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Utils\Memory\MemorySorter.cs" />
     <Compile Include="Forms\Utils\Module\ModuleListItem.cs" />
     <Compile Include="Forms\Utils\Module\ModuleListView.cs">
       <SubType>Component</SubType>
@@ -132,6 +133,7 @@
     <Compile Include="Forms\Utils\Module\ModuleListView.Designer.cs">
       <DependentUpon>ModuleListView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Utils\Module\ModuleSorter.cs" />
     <Compile Include="Utils\Config.cs" />
     <Compile Include="Utils\MarshalUtils.cs" />
     <Compile Include="Utils\NemesisApi.cs" />
@@ -139,7 +141,7 @@
     <Compile Include="Forms\Utils\Process\ProcessListView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Forms\Utils\ProcessSorter.cs" />
+    <Compile Include="Forms\Utils\Process\ProcessSorter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\NemesisForm.resx">

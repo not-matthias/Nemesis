@@ -92,7 +92,6 @@ namespace Nemesis.Forms
             this.moduleListView.MultiSelect = false;
             this.moduleListView.Name = "moduleListView";
             this.moduleListView.Size = new System.Drawing.Size(470, 232);
-            this.moduleListView.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.moduleListView.TabIndex = 0;
             this.moduleListView.Text = "ModuleListView";
             this.moduleListView.UseCompatibleStateImageBehavior = false;
@@ -105,7 +104,6 @@ namespace Nemesis.Forms
             this.memoryListView.Location = new System.Drawing.Point(3, 12);
             this.memoryListView.Name = "memoryListView";
             this.memoryListView.Size = new System.Drawing.Size(470, 231);
-            this.memoryListView.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.memoryListView.TabIndex = 2;
             this.memoryListView.Text = "MemoryListView";
             this.memoryListView.UseCompatibleStateImageBehavior = false;

@@ -4,19 +4,19 @@ namespace Nemesis.Forms.Utils.Module
 {
     internal class ModuleListItem
     {
-        public string ModuleName { get; }
         public long BaseAddress { get; }
+        public string ModuleName { get; }
 
-        public ModuleListItem(string moduleName, long baseAddress)
+        public ModuleListItem(long baseAddress, string moduleName)
         {
-            ModuleName = moduleName;
             BaseAddress = baseAddress;
+            ModuleName = moduleName;
         }
 
         public ListViewItem GetListViewItem()
         {
-            var listViewItem = new ListViewItem(ModuleName);
-            listViewItem.SubItems.Add(BaseAddress.ToString("X"));
+            var listViewItem = new ListViewItem(BaseAddress.ToString("X8"));
+            listViewItem.SubItems.Add(ModuleName);
             listViewItem.Tag = this;
 
             return listViewItem;

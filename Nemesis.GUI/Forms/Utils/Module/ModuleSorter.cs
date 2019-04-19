@@ -1,24 +1,20 @@
 ﻿using System;
 using System.Collections;
 using System.Windows.Forms;
-using Nemesis.Forms.Utils.Process;
 
-namespace Nemesis.Forms.Utils
+namespace Nemesis.Forms.Utils.Module
 {
-    public class ProcessSorter : IComparer
+    internal class ModuleSorter : IComparer
     {
         private readonly int _columnIndex;
         private readonly SortOrder _sortOrder;
 
-        public ProcessSorter(int columnIndex, SortOrder sortOrder)
+        public ModuleSorter(int columnIndex, SortOrder sortOrder)
         {
             _columnIndex = columnIndex;
             _sortOrder = sortOrder;
         }
 
-        //
-        // Compare the two ProcessListItems
-        //
         public int Compare(object x, object y)
         {
             //
@@ -29,7 +25,7 @@ namespace Nemesis.Forms.Utils
             //
             // Check if the tag is a ProcesslistItem
             //
-            if (!(item1.Tag is ProcessListItem p1) || !(item2.Tag is ProcessListItem p2)) return 0;
+            if (!(item1.Tag is ModuleListItem p1) || !(item2.Tag is ModuleListItem p2)) return 0;
 
             var result = 0;
 
@@ -40,19 +36,16 @@ namespace Nemesis.Forms.Utils
             {
                 case 0:
                 {
-                    var pid1 = int.Parse(p1.Id);
-                    var pid2 = int.Parse(p2.Id);
-
-                    if (pid1 > pid2)
+                    if (p1.BaseAddress > p2.BaseAddress)
                         result = 1;
 
-                    if (pid1 < pid2)
+                    if (p1.BaseAddress < p2.BaseAddress)
                         result = -1;
                     break;
                 }
 
                 case 1:
-                    result = string.Compare(p1.ProcessName, p2.ProcessName, StringComparison.Ordinal);
+                    result = string.Compare(p1.ModuleName, p2.ModuleName, StringComparison.Ordinal);
                     break;
             }
 
