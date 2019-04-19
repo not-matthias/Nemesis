@@ -16,9 +16,14 @@ namespace Nemesis.Forms.Utils.Module
             Sorting = SortOrder.Ascending;
         }
 
-        public void LoadModules(int processId)
+        public bool LoadModules(int processId)
         {
             var modules = NemesisApi.GetModuleList(processId);
+
+            //
+            // Check if empty
+            //
+            if (modules.Count == 0) return false;
 
             //
             // Remove all previous processes
@@ -50,6 +55,8 @@ namespace Nemesis.Forms.Utils.Module
             // Sort the list
             //
             ListViewItemSorter = new ModuleSorter(_sortColumnIndex, Sorting);
+
+            return true;
         }
 
         protected override void OnColumnClick(ColumnClickEventArgs e)

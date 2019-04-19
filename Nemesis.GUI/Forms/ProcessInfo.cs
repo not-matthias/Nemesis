@@ -26,12 +26,30 @@ namespace Nemesis.Forms
             //
             // Module List View
             //
-            moduleListView.LoadModules(_processId);
+            if (moduleListView.LoadModules(_processId))
+            {
+                moduleListView.Show();
+                moduleLabel.Hide();
+            }
+            else
+            {
+                moduleListView.Hide();
+                moduleLabel.Show();
+            }
 
             //
             // Memory List View
             //
-            memoryListView.LoadMemory(_processId);
+            if(memoryListView.LoadMemory(_processId))
+            {
+                memoryListView.Show();
+                memoryLabel.Hide();
+            }
+            else
+            {
+                memoryListView.Hide();
+                memoryLabel.Show();
+            }
         }
     }
 }

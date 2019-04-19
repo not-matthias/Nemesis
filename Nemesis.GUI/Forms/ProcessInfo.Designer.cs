@@ -36,6 +36,8 @@ namespace Nemesis.Forms
             this.tabControl = new MetroFramework.Controls.MetroTabControl();
             this.moduleListView = new Nemesis.Forms.Utils.Module.ModuleListView();
             this.memoryListView = new Nemesis.Forms.Utils.Memory.MemoryListView();
+            this.moduleLabel = new MetroFramework.Controls.MetroLabel();
+            this.memoryLabel = new MetroFramework.Controls.MetroLabel();
             this.metroTabPage2.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -43,6 +45,7 @@ namespace Nemesis.Forms
             // 
             // metroTabPage2
             // 
+            this.metroTabPage2.Controls.Add(this.memoryLabel);
             this.metroTabPage2.Controls.Add(this.memoryListView);
             this.metroTabPage2.HorizontalScrollbarBarColor = true;
             this.metroTabPage2.HorizontalScrollbarHighlightOnWheel = false;
@@ -58,6 +61,7 @@ namespace Nemesis.Forms
             // 
             // metroTabPage1
             // 
+            this.metroTabPage1.Controls.Add(this.moduleLabel);
             this.metroTabPage1.Controls.Add(this.moduleListView);
             this.metroTabPage1.HorizontalScrollbarBarColor = true;
             this.metroTabPage1.HorizontalScrollbarHighlightOnWheel = false;
@@ -78,7 +82,7 @@ namespace Nemesis.Forms
             this.tabControl.ItemSize = new System.Drawing.Size(62, 34);
             this.tabControl.Location = new System.Drawing.Point(23, 63);
             this.tabControl.Name = "tabControl";
-            this.tabControl.SelectedIndex = 0;
+            this.tabControl.SelectedIndex = 1;
             this.tabControl.Size = new System.Drawing.Size(484, 288);
             this.tabControl.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
             this.tabControl.TabIndex = 0;
@@ -92,6 +96,7 @@ namespace Nemesis.Forms
             this.moduleListView.MultiSelect = false;
             this.moduleListView.Name = "moduleListView";
             this.moduleListView.Size = new System.Drawing.Size(470, 232);
+            this.moduleListView.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.moduleListView.TabIndex = 0;
             this.moduleListView.Text = "ModuleListView";
             this.moduleListView.UseCompatibleStateImageBehavior = false;
@@ -104,10 +109,31 @@ namespace Nemesis.Forms
             this.memoryListView.Location = new System.Drawing.Point(3, 12);
             this.memoryListView.Name = "memoryListView";
             this.memoryListView.Size = new System.Drawing.Size(470, 231);
+            this.memoryListView.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.memoryListView.TabIndex = 2;
             this.memoryListView.Text = "MemoryListView";
             this.memoryListView.UseCompatibleStateImageBehavior = false;
             this.memoryListView.View = System.Windows.Forms.View.Details;
+            // 
+            // moduleLabel
+            // 
+            this.moduleLabel.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.moduleLabel.Location = new System.Drawing.Point(13, 111);
+            this.moduleLabel.Name = "moduleLabel";
+            this.moduleLabel.Size = new System.Drawing.Size(448, 23);
+            this.moduleLabel.TabIndex = 2;
+            this.moduleLabel.Text = "Could not load module list.";
+            this.moduleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // memoryLabel
+            // 
+            this.memoryLabel.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.memoryLabel.Location = new System.Drawing.Point(14, 112);
+            this.memoryLabel.Name = "memoryLabel";
+            this.memoryLabel.Size = new System.Drawing.Size(448, 23);
+            this.memoryLabel.TabIndex = 3;
+            this.memoryLabel.Text = "Could not load memory list.";
+            this.memoryLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ProcessInformation
             // 
@@ -137,5 +163,7 @@ namespace Nemesis.Forms
         
         private ModuleListView moduleListView;
         private MemoryListView memoryListView;
+        private MetroFramework.Controls.MetroLabel moduleLabel;
+        private MetroFramework.Controls.MetroLabel memoryLabel;
     }
 }

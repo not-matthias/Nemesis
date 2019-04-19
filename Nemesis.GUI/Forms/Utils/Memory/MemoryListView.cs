@@ -18,9 +18,14 @@ namespace Nemesis.Forms.Utils.Memory
             Sorting = SortOrder.Ascending;
         }
 
-        public void LoadMemory(int processId)
+        public bool LoadMemory(int processId)
         {
             var memory = NemesisApi.GetMemoryList(processId);
+
+            //
+            // Check if empty
+            //
+            if (memory.Count == 0) return false;
 
             //
             // Remove all previous processes
@@ -52,6 +57,8 @@ namespace Nemesis.Forms.Utils.Memory
             // Sort the list
             //
             ListViewItemSorter = new MemorySorter(_sortColumnIndex, Sorting);
+
+            return true;
         }
 
         protected override void OnColumnClick(ColumnClickEventArgs e)
