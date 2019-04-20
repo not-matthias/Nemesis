@@ -71,7 +71,7 @@ namespace Nemesis.Utils
         [DllImport("Nemesis.dll")]
         protected static extern bool DumpModuleExport([In] int processId, [In] IntPtr baseAddress, [In] string fileName);
 
-        [DllImport("Nemesis.dll")]
+        [DllImport("D:\\3_Programming\\1_Github\\Nemesis\\x64\\Debug\\Nemesis.dll")]
         protected static extern bool DumpMemoryExport([In] int processId, [In] IntPtr startAddress, [In] uint size, [In] string fileName);
 
 

@@ -1,5 +1,11 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using MetroFramework.Forms;
+using Nemesis.Forms.Utils.Memory;
+using Nemesis.Forms.Utils.Module;
+using Nemesis.Utils;
 
 namespace Nemesis.Forms
 {
@@ -40,7 +46,7 @@ namespace Nemesis.Forms
             //
             // Memory List View
             //
-            if(memoryListView.LoadMemory(_processId))
+            if (memoryListView.LoadMemory(_processId))
             {
                 memoryListView.Show();
                 memoryLabel.Hide();
@@ -49,6 +55,126 @@ namespace Nemesis.Forms
             {
                 memoryListView.Hide();
                 memoryLabel.Show();
+            }
+        }
+
+        private void ModuleListView_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right) return;
+
+            //
+            // Check if intersecting
+            //
+            if ((moduleListView.FocusedItem == null || !moduleListView.FocusedItem.Bounds.Contains(e.Location)))
+                return;
+
+            moduleContextMenu.Show(Cursor.Position);
+        }
+
+        private void MemoryListView_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right) return;
+
+            //
+            // Check if intersecting
+            //
+            if (memoryListView.FocusedItem == null || !memoryListView.FocusedItem.Bounds.Contains(e.Location))
+                return;
+
+            memoryContextMenu.Show(Cursor.Position);
+        }
+
+
+        private void DumpToolStripMenuItem_Click(object sender, System.EventArgs e)
+        {
+            if (moduleListView.SelectedItems.Count == 0) return;
+            if (moduleListView.SelectedItems.Count == 0) return;
+            if (!(moduleListView.SelectedItems[0].Tag is ModuleListItem module)) return;
+
+            DumpModule(module);
+        }
+
+        private void MemoryContextMenu_Click(object sender, EventArgs e)
+        {
+            if (memoryListView.SelectedItems.Count == 0) return;
+            if (memoryListView.SelectedItems.Count == 0) return;
+            if (!(memoryListView.SelectedItems[0].Tag is MemoryListItem memory)) return;
+
+            DumpMemory(memory);
+        }
+
+
+        private void DumpModule(ModuleListItem module)
+        {
+            //
+            // Get the destination path
+            //
+            string path;
+            var saveFile = new SaveFileDialog
+            {
+                FileName = $@"{Path.GetFileName(module.ModuleName)}",
+                Filter = @"Executable File (.dll)|*.dll"
+            };
+
+            //
+            // Show the dialog
+            //
+            if (saveFile.ShowDialog() == DialogResult.OK)
+            {
+                path = saveFile.FileName;
+            }
+            else
+            {
+                return;
+            }
+
+            //
+            // Dump module
+            //
+            if (!NemesisApi.DumpModule(_processId, (IntPtr) module.BaseAddress, path))
+            {
+                MessageBox.Show("Failed to dump module.");
+            }
+            else
+            {
+                MessageBox.Show("Successfully dumped the module.");
+            }
+        }
+
+        private void DumpMemory(MemoryListItem memory)
+        {
+            //
+            // Get the destination path
+            //
+            string path;
+            var saveFile = new SaveFileDialog
+            {
+                FileName = $@"MEM_{memory.BaseAddress:X8}_{memory.RegionSize}.bin",
+                Filter = @"Executable File (.bin)|*.bin"
+            };
+
+            //
+            // Show the dialog
+            //
+            if (saveFile.ShowDialog() == DialogResult.OK)
+            {
+                path = saveFile.FileName;
+            }
+            else
+            {
+                return;
+            }
+
+            //
+            // Dump module
+            //
+            if (!NemesisApi.DumpMemory(_processId, (IntPtr) memory.BaseAddress, (uint) memory.RegionSize, path))
+            {
+                MessageBox.Show("Failed to dump module.");
+            }
+            else
+            {
+                MessageBox.Show("Successfully dumped the module.");
             }
         }
     }
