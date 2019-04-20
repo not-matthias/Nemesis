@@ -68,7 +68,6 @@ namespace Nemesis.Forms.Utils.Memory
             //
             if (e.Column != _sortColumnIndex)
             {
-                MessageBox.Show(e.Column.ToString());
                 _sortColumnIndex = e.Column;
                 Sorting = SortOrder.Descending;
             }

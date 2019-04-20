@@ -37,6 +37,7 @@ auto FileWriter::WriteToFile(Module * module) -> BOOL
 	DWORD file_offset = 0, write_size = sizeof(IMAGE_DOS_HEADER);
 	if (!WriteMemoryToFile(file_offset, write_size, module->dos_header))
 	{
+		CloseHandle(file_handle);
 		return FALSE;
 	}
 	file_offset += write_size;
@@ -50,6 +51,7 @@ auto FileWriter::WriteToFile(Module * module) -> BOOL
 		write_size = module->dos_stub_size;
 		if (!WriteMemoryToFile(file_offset, write_size, module->dos_stub))
 		{
+			CloseHandle(file_handle);
 			return FALSE;
 		}
 		file_offset += write_size;
@@ -65,6 +67,7 @@ auto FileWriter::WriteToFile(Module * module) -> BOOL
 
 		if (!WriteMemoryToFile(file_offset, write_size, module->nt_header32))
 		{
+			CloseHandle(file_handle);
 			return FALSE;
 		}
 
@@ -76,6 +79,7 @@ auto FileWriter::WriteToFile(Module * module) -> BOOL
 
 		if (!WriteMemoryToFile(file_offset, write_size, module->nt_header64))
 		{
+			CloseHandle(file_handle);
 			return FALSE;
 		}
 
@@ -90,6 +94,7 @@ auto FileWriter::WriteToFile(Module * module) -> BOOL
 	{
 		if (!WriteMemoryToFile(file_offset, write_size, &module->sections[i].section_header))
 		{
+			CloseHandle(file_handle);
 			return FALSE;
 		}
 
@@ -123,6 +128,7 @@ auto FileWriter::WriteToFile(Module * module) -> BOOL
 			//
 			if (!WriteZeroMemoryToFile(file_offset, write_size))
 			{
+				CloseHandle(file_handle);
 				return FALSE;
 			}
 
@@ -136,6 +142,7 @@ auto FileWriter::WriteToFile(Module * module) -> BOOL
 
 		if (!WriteMemoryToFile(module->sections[i].section_header.PointerToRawData, write_size, module->sections[i].buffer))
 		{
+			CloseHandle(file_handle);
 			return FALSE;
 		}
 
@@ -157,6 +164,7 @@ auto FileWriter::WriteToFile(Module * module) -> BOOL
 			//
 			if (!WriteZeroMemoryToFile(file_offset, write_size))
 			{
+				CloseHandle(file_handle);
 				return FALSE;
 			}
 
@@ -212,6 +220,7 @@ auto FileWriter::WriteToFile(Memory * memory) -> BOOL
 	//
 	if (WriteMemoryToFile(0, memory->memory_size, memory->memory_buffer))
 	{
+		CloseHandle(file_handle);
 		return FALSE;
 	}
 
@@ -224,10 +233,7 @@ auto FileWriter::WriteToFile(Memory * memory) -> BOOL
 	//
 	// Close the handle
 	//
-	if (file_handle != INVALID_HANDLE_VALUE)
-	{
-		CloseHandle(file_handle);
-	}
+	CloseHandle(file_handle);
 
 	return TRUE;
 }
