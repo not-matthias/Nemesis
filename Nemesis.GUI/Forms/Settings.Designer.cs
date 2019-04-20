@@ -43,12 +43,17 @@
             this.metroLabel4 = new MetroFramework.Controls.MetroLabel();
             this.askForLocationToggle = new MetroFramework.Controls.MetroToggle();
             this.metroLabel7 = new MetroFramework.Controls.MetroLabel();
+            this.metroTabControl1 = new MetroFramework.Controls.MetroTabControl();
+            this.metroTabPage1 = new MetroFramework.Controls.MetroTabPage();
+            this.metroTabPage2 = new MetroFramework.Controls.MetroTabPage();
+            this.metroTabControl1.SuspendLayout();
+            this.metroTabPage1.SuspendLayout();
             this.SuspendLayout();
             // 
             // metroLabel1
             // 
             this.metroLabel1.AutoSize = true;
-            this.metroLabel1.Location = new System.Drawing.Point(23, 60);
+            this.metroLabel1.Location = new System.Drawing.Point(2, 18);
             this.metroLabel1.Name = "metroLabel1";
             this.metroLabel1.Size = new System.Drawing.Size(105, 19);
             this.metroLabel1.TabIndex = 0;
@@ -57,7 +62,7 @@
             // metroLabel2
             // 
             this.metroLabel2.AutoSize = true;
-            this.metroLabel2.Location = new System.Drawing.Point(23, 128);
+            this.metroLabel2.Location = new System.Drawing.Point(2, 86);
             this.metroLabel2.Name = "metroLabel2";
             this.metroLabel2.Size = new System.Drawing.Size(146, 19);
             this.metroLabel2.TabIndex = 3;
@@ -65,7 +70,7 @@
             // 
             // saveButton
             // 
-            this.saveButton.Location = new System.Drawing.Point(432, 254);
+            this.saveButton.Location = new System.Drawing.Point(500, 322);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(75, 23);
             this.saveButton.TabIndex = 4;
@@ -76,7 +81,7 @@
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(351, 254);
+            this.cancelButton.Location = new System.Drawing.Point(419, 322);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 5;
@@ -86,7 +91,7 @@
             // customDumpLocationToggle
             // 
             this.customDumpLocationToggle.AutoSize = true;
-            this.customDumpLocationToggle.Location = new System.Drawing.Point(207, 130);
+            this.customDumpLocationToggle.Location = new System.Drawing.Point(186, 88);
             this.customDumpLocationToggle.Name = "customDumpLocationToggle";
             this.customDumpLocationToggle.Size = new System.Drawing.Size(80, 17);
             this.customDumpLocationToggle.TabIndex = 6;
@@ -109,7 +114,7 @@
             this.dumpLocation.CustomButton.UseSelectable = true;
             this.dumpLocation.CustomButton.Visible = false;
             this.dumpLocation.Lines = new string[0];
-            this.dumpLocation.Location = new System.Drawing.Point(207, 60);
+            this.dumpLocation.Location = new System.Drawing.Point(186, 18);
             this.dumpLocation.MaxLength = 32767;
             this.dumpLocation.Name = "dumpLocation";
             this.dumpLocation.PasswordChar = '\0';
@@ -128,7 +133,7 @@
             // metroLabel3
             // 
             this.metroLabel3.AutoSize = true;
-            this.metroLabel3.Location = new System.Drawing.Point(23, 151);
+            this.metroLabel3.Location = new System.Drawing.Point(2, 109);
             this.metroLabel3.Name = "metroLabel3";
             this.metroLabel3.Size = new System.Drawing.Size(159, 19);
             this.metroLabel3.TabIndex = 8;
@@ -137,7 +142,7 @@
             // createFolderToggle
             // 
             this.createFolderToggle.AutoSize = true;
-            this.createFolderToggle.Location = new System.Drawing.Point(207, 153);
+            this.createFolderToggle.Location = new System.Drawing.Point(186, 111);
             this.createFolderToggle.Name = "createFolderToggle";
             this.createFolderToggle.Size = new System.Drawing.Size(80, 17);
             this.createFolderToggle.TabIndex = 9;
@@ -148,7 +153,7 @@
             // metroLabel5
             // 
             this.metroLabel5.AutoSize = true;
-            this.metroLabel5.Location = new System.Drawing.Point(23, 86);
+            this.metroLabel5.Location = new System.Drawing.Point(2, 44);
             this.metroLabel5.Name = "metroLabel5";
             this.metroLabel5.Size = new System.Drawing.Size(76, 19);
             this.metroLabel5.TabIndex = 12;
@@ -170,7 +175,7 @@
             this.fileName.CustomButton.Visible = false;
             this.fileName.Lines = new string[] {
         "_dump.exe"};
-            this.fileName.Location = new System.Drawing.Point(207, 86);
+            this.fileName.Location = new System.Drawing.Point(186, 44);
             this.fileName.MaxLength = 32767;
             this.fileName.Name = "fileName";
             this.fileName.PasswordChar = '\0';
@@ -189,7 +194,7 @@
             // metroLabel6
             // 
             this.metroLabel6.AutoSize = true;
-            this.metroLabel6.Location = new System.Drawing.Point(25, 170);
+            this.metroLabel6.Location = new System.Drawing.Point(4, 128);
             this.metroLabel6.Name = "metroLabel6";
             this.metroLabel6.Size = new System.Drawing.Size(103, 19);
             this.metroLabel6.TabIndex = 14;
@@ -198,7 +203,7 @@
             // createTimestampFolderToggle
             // 
             this.createTimestampFolderToggle.AutoSize = true;
-            this.createTimestampFolderToggle.Location = new System.Drawing.Point(207, 176);
+            this.createTimestampFolderToggle.Location = new System.Drawing.Point(186, 134);
             this.createTimestampFolderToggle.Name = "createTimestampFolderToggle";
             this.createTimestampFolderToggle.Size = new System.Drawing.Size(80, 17);
             this.createTimestampFolderToggle.TabIndex = 15;
@@ -209,7 +214,7 @@
             // metroLabel4
             // 
             this.metroLabel4.AutoSize = true;
-            this.metroLabel4.Location = new System.Drawing.Point(23, 197);
+            this.metroLabel4.Location = new System.Drawing.Point(2, 155);
             this.metroLabel4.Name = "metroLabel4";
             this.metroLabel4.Size = new System.Drawing.Size(124, 19);
             this.metroLabel4.TabIndex = 16;
@@ -218,7 +223,7 @@
             // askForLocationToggle
             // 
             this.askForLocationToggle.AutoSize = true;
-            this.askForLocationToggle.Location = new System.Drawing.Point(207, 199);
+            this.askForLocationToggle.Location = new System.Drawing.Point(186, 157);
             this.askForLocationToggle.Name = "askForLocationToggle";
             this.askForLocationToggle.Size = new System.Drawing.Size(80, 17);
             this.askForLocationToggle.TabIndex = 17;
@@ -229,33 +234,73 @@
             // metroLabel7
             // 
             this.metroLabel7.AutoSize = true;
-            this.metroLabel7.Location = new System.Drawing.Point(23, 174);
+            this.metroLabel7.Location = new System.Drawing.Point(2, 132);
             this.metroLabel7.Name = "metroLabel7";
             this.metroLabel7.Size = new System.Drawing.Size(157, 19);
             this.metroLabel7.TabIndex = 14;
             this.metroLabel7.Text = "Create timestamp folder:";
+            // 
+            // metroTabControl1
+            // 
+            this.metroTabControl1.Controls.Add(this.metroTabPage1);
+            this.metroTabControl1.Controls.Add(this.metroTabPage2);
+            this.metroTabControl1.Location = new System.Drawing.Point(23, 63);
+            this.metroTabControl1.Name = "metroTabControl1";
+            this.metroTabControl1.SelectedIndex = 0;
+            this.metroTabControl1.Size = new System.Drawing.Size(552, 253);
+            this.metroTabControl1.TabIndex = 18;
+            this.metroTabControl1.UseSelectable = true;
+            // 
+            // metroTabPage1
+            // 
+            this.metroTabPage1.Controls.Add(this.askForLocationToggle);
+            this.metroTabPage1.Controls.Add(this.metroLabel4);
+            this.metroTabPage1.Controls.Add(this.dumpLocation);
+            this.metroTabPage1.Controls.Add(this.createTimestampFolderToggle);
+            this.metroTabPage1.Controls.Add(this.metroLabel1);
+            this.metroTabPage1.Controls.Add(this.metroLabel7);
+            this.metroTabPage1.Controls.Add(this.metroLabel2);
+            this.metroTabPage1.Controls.Add(this.metroLabel6);
+            this.metroTabPage1.Controls.Add(this.customDumpLocationToggle);
+            this.metroTabPage1.Controls.Add(this.fileName);
+            this.metroTabPage1.Controls.Add(this.metroLabel3);
+            this.metroTabPage1.Controls.Add(this.metroLabel5);
+            this.metroTabPage1.Controls.Add(this.createFolderToggle);
+            this.metroTabPage1.HorizontalScrollbarBarColor = true;
+            this.metroTabPage1.HorizontalScrollbarHighlightOnWheel = false;
+            this.metroTabPage1.HorizontalScrollbarSize = 10;
+            this.metroTabPage1.Location = new System.Drawing.Point(4, 38);
+            this.metroTabPage1.Name = "metroTabPage1";
+            this.metroTabPage1.Size = new System.Drawing.Size(544, 211);
+            this.metroTabPage1.TabIndex = 0;
+            this.metroTabPage1.Text = "General";
+            this.metroTabPage1.VerticalScrollbarBarColor = true;
+            this.metroTabPage1.VerticalScrollbarHighlightOnWheel = false;
+            this.metroTabPage1.VerticalScrollbarSize = 10;
+            // 
+            // metroTabPage2
+            // 
+            this.metroTabPage2.HorizontalScrollbarBarColor = true;
+            this.metroTabPage2.HorizontalScrollbarHighlightOnWheel = false;
+            this.metroTabPage2.HorizontalScrollbarSize = 10;
+            this.metroTabPage2.Location = new System.Drawing.Point(4, 38);
+            this.metroTabPage2.Name = "metroTabPage2";
+            this.metroTabPage2.Size = new System.Drawing.Size(544, 249);
+            this.metroTabPage2.TabIndex = 1;
+            this.metroTabPage2.Text = "Styles";
+            this.metroTabPage2.VerticalScrollbarBarColor = true;
+            this.metroTabPage2.VerticalScrollbarHighlightOnWheel = false;
+            this.metroTabPage2.VerticalScrollbarSize = 10;
             // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(530, 300);
-            this.Controls.Add(this.askForLocationToggle);
-            this.Controls.Add(this.metroLabel4);
-            this.Controls.Add(this.createTimestampFolderToggle);
-            this.Controls.Add(this.metroLabel7);
-            this.Controls.Add(this.metroLabel6);
-            this.Controls.Add(this.fileName);
-            this.Controls.Add(this.metroLabel5);
-            this.Controls.Add(this.createFolderToggle);
-            this.Controls.Add(this.metroLabel3);
-            this.Controls.Add(this.dumpLocation);
-            this.Controls.Add(this.customDumpLocationToggle);
+            this.ClientSize = new System.Drawing.Size(598, 356);
+            this.Controls.Add(this.metroTabControl1);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.saveButton);
-            this.Controls.Add(this.metroLabel2);
-            this.Controls.Add(this.metroLabel1);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Settings";
@@ -263,8 +308,10 @@
             this.ShadowType = MetroFramework.Forms.MetroFormShadowType.AeroShadow;
             this.ShowInTaskbar = false;
             this.Text = "Settings";
+            this.metroTabControl1.ResumeLayout(false);
+            this.metroTabPage1.ResumeLayout(false);
+            this.metroTabPage1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -285,5 +332,8 @@
         private MetroFramework.Controls.MetroLabel metroLabel4;
         private MetroFramework.Controls.MetroToggle askForLocationToggle;
         private MetroFramework.Controls.MetroLabel metroLabel7;
+        private MetroFramework.Controls.MetroTabControl metroTabControl1;
+        private MetroFramework.Controls.MetroTabPage metroTabPage1;
+        private MetroFramework.Controls.MetroTabPage metroTabPage2;
     }
 }
