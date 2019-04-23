@@ -37,122 +37,140 @@ namespace Nemesis.Forms
         //
         private void DumpButton_Click(object sender, EventArgs e)
         {
-            if (processListView.SelectedItems.Count > 0)
+            if (processListView.SelectedItems.Count <= 0 && driverListView.SelectedItems.Count <= 0) return;
+
+            //
+            // Set the variables
+            //
+            var extension = tabControl.SelectedIndex == 0 ? ".exe" : ".sys";
+            var filter = tabControl.SelectedIndex == 0 ? "Executable File (.exe)|*.exe" : "System file (.sys)|*.sys";
+            var name = tabControl.SelectedIndex == 0
+                ? processListView.SelectedItems[0].SubItems[1].Text
+                : Path.GetFileNameWithoutExtension(driverListView.SelectedItems[0].SubItems[0].Text);
+
+            var path = "";
+
+
+            //
+            // Ask for location
+            //
+            if (Config.GetValue("ask_for_location") == "On")
             {
-                var selectedItem = processListView.SelectedItems[0];
-                var processId = int.Parse(selectedItem.SubItems[0].Text);
-                var processName = selectedItem.SubItems[1].Text;
-                var path = "";
-
-
                 //
-                // Ask for location
+                // Open the dialog
                 //
-                if (Config.GetValue("ask_for_location") == "On")
+                var saveFile = new SaveFileDialog
                 {
-                    //
-                    // Open the dialog
-                    //
-                    var saveFile = new SaveFileDialog
-                    {
-                        // 
-                        // Set the default name
-                        // 
-                        FileName = $@"{processName}{Config.GetValue("file_name")}",
+                    // 
+                    // Set the default name
+                    // 
+                    FileName = $@"{name}{Config.GetValue("file_name")}{extension}",
 
-                        // 
-                        // Set the filters
-                        // 
-                        Filter = @"Executable File (.exe)|*.exe"
-                    };
+                    // 
+                    // Set the filters
+                    // 
+                    Filter = filter
+                };
 
-                    //
-                    // Show the dialog
-                    //
-                    if (saveFile.ShowDialog() == DialogResult.OK)
-                    {
-                        path = saveFile.FileName;
-                    }
-                    else
-                    {
-                        return;
-                    }
+                //
+                // Show the dialog
+                //
+                if (saveFile.ShowDialog() == DialogResult.OK)
+                {
+                    path = saveFile.FileName;
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            //
+            // Use custom dump location
+            //
+            if ((Config.GetValue("custom_dump_location")) == "On")
+            {
+                var dumpLocation = Path.GetFullPath(Config.GetValue("dump_location"));
+
+                //
+                // Absolute path
+                //
+                if (Path.IsPathRooted(path))
+                {
+                    path = dumpLocation;
                 }
 
                 //
-                // Use custom dump location
+                // Relative path
                 //
-                if ((Config.GetValue("custom_dump_location")) == "On")
+                if (!Path.IsPathRooted(path))
                 {
-                    var dumpLocation = Path.GetFullPath(Config.GetValue("dump_location"));
-
-                    //
-                    // Absolute path
-                    //
-                    if (Path.IsPathRooted(path))
-                    {
-                        path = dumpLocation;
-                    }
-
-                    //
-                    // Relative path
-                    //
-                    if (!Path.IsPathRooted(path))
-                    {
-                        path = $@"{Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), dumpLocation)}";
-                    }
-
-                    //
-                    // Create process folder
-                    //
-                    if (Config.GetValue("create_process_folder") == "On")
-                    {
-                        path = Path.Combine(path, processName);
-                    }
-
-                    //
-                    // Create timestamp folder
-                    //
-                    if (Config.GetValue("create_timestamp_folder") == "On")
-                    {
-                        path = Path.Combine(path, $@"{DateTime.Now:dd-MM-yyyy HH-mm-ss}");
-                    }
-
-                    //
-                    // Create the directories (in case they are not existing)
-                    //
-                    try
-                    {
-                        Directory.CreateDirectory(path);
-
-                        path = Path.Combine(path, $@"{processName}{Config.GetValue("file_name")}");
-                    }
-                    catch (Exception exception)
-                    {
-                        MessageBox.Show($@"{exception.Message}", @"Warning");
-                        return;
-                    }
+                    path = $@"{Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), dumpLocation)}";
                 }
 
                 //
-                // Dump it
+                // Create process folder
+                //
+                if (Config.GetValue("create_process_folder") == "On")
+                {
+                    path = Path.Combine(path, name);
+                }
+
+                //
+                // Create timestamp folder
+                //
+                if (Config.GetValue("create_timestamp_folder") == "On")
+                {
+                    path = Path.Combine(path, $@"{DateTime.Now:dd-MM-yyyy HH-mm-ss}");
+                }
+
+                //
+                // Create the directories (in case they are not existing)
                 //
                 try
                 {
-                    var status = NemesisApi.DumpProcess(processId, path);
-                    if (status)
-                    {
-                        MessageBox.Show(@"Successfully dumped the process.", @"Success");
-                    }
-                    else
-                    {
-                        MessageBox.Show(@"Failed to dump the process.", @"Warning");
-                    }
+                    Directory.CreateDirectory(path);
+
+                    path = Path.Combine(path, $@"{name}{Config.GetValue("file_name")}");
                 }
-                catch (Exception)
+                catch (Exception exception)
                 {
-                    MessageBox.Show(@"Nemesis threw an exception.", @"Warning");
+                    MessageBox.Show($@"{exception.Message}", @"Warning");
+                    return;
                 }
+            }
+
+            try
+            {
+                //
+                // Dump it
+                //
+                bool status;
+                if (tabControl.SelectedIndex == 0)
+                {
+                    status = NemesisApi.DumpProcess(int.Parse(processListView.SelectedItems[0].SubItems[0].Text), path);
+                }
+                else
+                {
+                    status = true; // NemesisApi.DumpDriver();
+                }
+
+                //
+                // Check status
+                //
+                var type = tabControl.SelectedIndex == 0 ? "process" : "driver";
+                if (status)
+                {
+                    MessageBox.Show($@"Successfully dumped the {type}.", @"Success");
+                }
+                else
+                {
+                    MessageBox.Show($@"Failed to dump the {type}.", @"Warning");
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(@"Nemesis threw an exception.", @"Warning");
             }
         }
 

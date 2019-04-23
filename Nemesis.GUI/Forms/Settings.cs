@@ -19,7 +19,7 @@ namespace Nemesis.Forms
             //
             if (Config.GetValue("first_time_started") == null)
             {
-                Config.SetValue("file_name", "_dump.exe");
+                Config.SetValue("file_name", "_dump");
                 Config.SetValue("ask_for_location", "On");
 
                 Config.SetValue("first_time_started", ".");

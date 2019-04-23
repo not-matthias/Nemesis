@@ -174,7 +174,7 @@
             this.fileName.CustomButton.UseSelectable = true;
             this.fileName.CustomButton.Visible = false;
             this.fileName.Lines = new string[] {
-        "_dump.exe"};
+        "_dump"};
             this.fileName.Location = new System.Drawing.Point(186, 44);
             this.fileName.MaxLength = 32767;
             this.fileName.Name = "fileName";
@@ -186,7 +186,7 @@
             this.fileName.ShortcutsEnabled = true;
             this.fileName.Size = new System.Drawing.Size(242, 23);
             this.fileName.TabIndex = 13;
-            this.fileName.Text = "_dump.exe";
+            this.fileName.Text = "_dump";
             this.fileName.UseSelectable = true;
             this.fileName.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
             this.fileName.WaterMarkFont = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Pixel);
