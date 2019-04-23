@@ -5,7 +5,7 @@ namespace Nemesis.Forms.Utils.Memory
 {
     public sealed partial class MemoryListView: ListView
     {
-        private int _sortColumnIndex = 0;
+        private int _sortColumnIndex;
 
         public MemoryListView()
         {

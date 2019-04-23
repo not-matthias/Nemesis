@@ -1,10 +1,8 @@
 ﻿using MetroFramework.Forms;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
-using Nemesis.Forms.Utils;
 using Nemesis.Forms.Utils.Module;
 using Nemesis.Forms.Utils.Process;
 using Nemesis.Utils;
@@ -107,13 +105,13 @@ namespace Nemesis.Forms
                 //
                 if (!Path.IsPathRooted(path))
                 {
-                    path = $@"{Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), dumpLocation)}";
+                    path = $@"{Path.Combine(Path.GetDirectoryName(Application.ExecutablePath) ?? throw new InvalidOperationException(), dumpLocation)}";
                 }
 
                 //
                 // Create process folder
                 //
-                if (Config.GetValue("create_process_folder") == "On")
+                if (Config.GetValue("create_process_folder") == "On" && name != null)
                 {
                     path = Path.Combine(path, name);
                 }

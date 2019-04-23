@@ -4,7 +4,7 @@ namespace Nemesis.Forms.Utils.Process
 {
     internal sealed class ProcessListView : ListView
     {
-        private int _sortColumnIndex = 0;
+        private int _sortColumnIndex;
 
         //
         // Sets some properties

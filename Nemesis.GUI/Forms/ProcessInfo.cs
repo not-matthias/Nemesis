@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using MetroFramework.Forms;
 using Nemesis.Forms.Utils.Memory;
@@ -85,7 +84,7 @@ namespace Nemesis.Forms
         }
 
 
-        private void DumpToolStripMenuItem_Click(object sender, System.EventArgs e)
+        private void DumpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (moduleListView.SelectedItems.Count == 0) return;
             if (moduleListView.SelectedItems.Count == 0) return;
