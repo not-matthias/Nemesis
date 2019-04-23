@@ -161,7 +161,6 @@ namespace Nemesis.Forms
         //
         private void AboutButton_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(tabControl.SelectedIndex.ToString());
             var about = new About();
             about.ShowDialog();
             about.Dispose();

@@ -5,15 +5,10 @@ namespace Nemesis.Forms.Utils.Driver
 {
     public sealed partial class DriverListView : ListView
     {
-        private int _sortColumnIndex = 0;
+        private int _sortColumnIndex;
 
         public DriverListView()
         {
-            //Columns.Add("Name", 191);
-            //Columns.Add("Image Base", 115);
-            //Columns.Add("Size", 90);
-            //Columns.Add("Path", 315);
-
             DoubleBuffered = true;
             Sorting = SortOrder.Ascending;
         }
@@ -59,8 +54,6 @@ namespace Nemesis.Forms.Utils.Driver
 
         protected override void OnColumnClick(ColumnClickEventArgs e)
         {
-            MessageBox.Show(Columns[1].Width.ToString());
-
             //
             // Check if another column clicked
             //
