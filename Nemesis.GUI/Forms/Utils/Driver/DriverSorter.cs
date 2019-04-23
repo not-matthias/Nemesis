@@ -1,14 +1,15 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Windows.Forms;
 
-namespace Nemesis.Forms.Utils.Memory
+namespace Nemesis.Forms.Utils.Driver
 {
-    internal class MemorySorter : IComparer
+    internal class DriverSorter : IComparer
     {
         private readonly int _columnIndex;
         private readonly SortOrder _sortOrder;
 
-        public MemorySorter(int columnIndex, SortOrder sortOrder)
+        public DriverSorter(int columnIndex, SortOrder sortOrder)
         {
             _columnIndex = columnIndex;
             _sortOrder = sortOrder;
@@ -24,7 +25,7 @@ namespace Nemesis.Forms.Utils.Memory
             //
             // Check if the tag is a ProcesslistItem
             //
-            if (!(item1.Tag is MemoryListItem p1) || !(item2.Tag is MemoryListItem p2)) return 0;
+            if (!(item1.Tag is DriverListItem p1) || !(item2.Tag is DriverListItem p2)) return 0;
 
             var result = 0;
 
@@ -33,42 +34,35 @@ namespace Nemesis.Forms.Utils.Memory
             //
             switch (_columnIndex)
             {
-                // BaseAddress
+                // Name
                 case 0:
                 {
-                    if (p1.BaseAddress > p2.BaseAddress)
-                        result = 1;
-
-                    if (p1.BaseAddress < p2.BaseAddress)
-                        result = -1;
+                    result = string.Compare(p1.FullPathName.Substring(p1.OffsetToFileName), p2.FullPathName.Substring(p2.OffsetToFileName),
+                        StringComparison.Ordinal);
                     break;
                 }
 
-                // RegionSize
+                // ImageBase
                 case 1:
-                    if (p1.RegionSize > p2.RegionSize)
+                    if (p1.ImageBase > p2.ImageBase)
                         result = 1;
 
-                    if (p1.RegionSize < p2.RegionSize)
+                    if (p1.ImageBase < p2.ImageBase)
                         result = -1;
                     break;
 
-                // State
+                // ImageSize
                 case 2:
-                    if (p1.State > p2.State)
+                    if (p1.ImageSize > p2.ImageSize)
                         result = 1;
 
-                    if (p1.State < p2.State)
+                    if (p1.ImageSize < p2.ImageSize)
                         result = -1;
                     break;
 
-                // Type
+                // FullPathName
                 case 3:
-                    if (p1.Type > p2.Type)
-                        result = 1;
-
-                    if (p1.Type < p2.Type)
-                        result = -1;
+                    result = string.Compare(p1.FullPathName, p2.FullPathName, StringComparison.Ordinal);
                     break;
             }
 

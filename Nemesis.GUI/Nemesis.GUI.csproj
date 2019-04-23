@@ -118,6 +118,14 @@
     <Compile Include="Forms\Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Utils\Driver\DriverListItem.cs" />
+    <Compile Include="Forms\Utils\Driver\DriverListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\Utils\Driver\DriverListView.Designer.cs">
+      <DependentUpon>DriverListView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Utils\Driver\DriverSorter.cs" />
     <Compile Include="Forms\Utils\Memory\MemoryListItem.cs" />
     <Compile Include="Forms\Utils\Memory\MemoryListView.cs">
       <SubType>Component</SubType>
