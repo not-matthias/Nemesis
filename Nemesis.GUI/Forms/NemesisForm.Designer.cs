@@ -95,7 +95,7 @@ namespace Nemesis.Forms
             this.tabControl.Controls.Add(this.metroTabPage2);
             this.tabControl.Location = new System.Drawing.Point(23, 63);
             this.tabControl.Name = "tabControl";
-            this.tabControl.SelectedIndex = 1;
+            this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(754, 334);
             this.tabControl.TabIndex = 6;
             this.tabControl.UseSelectable = true;
@@ -167,17 +167,17 @@ namespace Nemesis.Forms
             // columnName
             // 
             this.columnName.Text = "Name";
-            this.columnName.Width = 192;
+            this.columnName.Width = 190;
             // 
             // columnBase
             // 
             this.columnBase.Text = "ImageBase";
-            this.columnBase.Width = 124;
+            this.columnBase.Width = 125;
             // 
             // columnSize
             // 
             this.columnSize.Text = "ImageSize";
-            this.columnSize.Width = 79;
+            this.columnSize.Width = 80;
             // 
             // columnPath
             // 

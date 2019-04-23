@@ -5,12 +5,12 @@ namespace Nemesis.Forms.Utils.Module
 {
     public sealed partial class ModuleListView : ListView
     {
-        private int _sortColumnIndex = 0;
+        private int _sortColumnIndex;
 
         public ModuleListView()
         {
-            Columns.Add("ImageBase");
-            Columns.Add("Path");
+            //Columns.Add("ImageBase");
+            //Columns.Add("Path");
 
             DoubleBuffered = true;
             Sorting = SortOrder.Ascending;
@@ -49,7 +49,7 @@ namespace Nemesis.Forms.Utils.Module
             //
             // Auto resize the columns
             //
-            AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            AutoResizeColumns(ColumnHeaderAutoResizeStyle.None);
 
             //
             // Sort the list

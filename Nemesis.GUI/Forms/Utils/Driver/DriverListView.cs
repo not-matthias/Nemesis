@@ -41,7 +41,6 @@ namespace Nemesis.Forms.Utils.Driver
             //
             // Auto resize the columns
             //
-            //AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
             AutoResizeColumns(ColumnHeaderAutoResizeStyle.None);
 
             //

@@ -38,6 +38,8 @@ namespace Nemesis.Forms
             this.metroTabPage1 = new MetroFramework.Controls.MetroTabPage();
             this.moduleLabel = new MetroFramework.Controls.MetroLabel();
             this.moduleListView = new Nemesis.Forms.Utils.Module.ModuleListView();
+            this.columnBase = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabControl = new MetroFramework.Controls.MetroTabControl();
             this.moduleContextMenu = new MetroFramework.Controls.MetroContextMenu(this.components);
             this.dumpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -118,6 +120,9 @@ namespace Nemesis.Forms
             // 
             // moduleListView
             // 
+            this.moduleListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnBase,
+            this.columnName});
             this.moduleListView.FullRowSelect = true;
             this.moduleListView.HideSelection = false;
             this.moduleListView.Location = new System.Drawing.Point(3, 12);
@@ -130,6 +135,16 @@ namespace Nemesis.Forms
             this.moduleListView.UseCompatibleStateImageBehavior = false;
             this.moduleListView.View = System.Windows.Forms.View.Details;
             this.moduleListView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ModuleListView_MouseUp);
+            // 
+            // columnBase
+            // 
+            this.columnBase.Text = "ImageBase";
+            this.columnBase.Width = 125;
+            // 
+            // columnName
+            // 
+            this.columnName.Text = "Name";
+            this.columnName.Width = 420;
             // 
             // tabControl
             // 
@@ -163,7 +178,7 @@ namespace Nemesis.Forms
             this.memoryContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem1});
             this.memoryContextMenu.Name = "moduleContextMenu";
-            this.memoryContextMenu.Size = new System.Drawing.Size(181, 48);
+            this.memoryContextMenu.Size = new System.Drawing.Size(108, 26);
             this.memoryContextMenu.Click += new System.EventHandler(this.MemoryContextMenu_Click);
             // 
             // toolStripMenuItem1
@@ -208,5 +223,7 @@ namespace Nemesis.Forms
         private System.Windows.Forms.ToolStripMenuItem dumpToolStripMenuItem;
         private MetroFramework.Controls.MetroContextMenu memoryContextMenu;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ColumnHeader columnBase;
+        private System.Windows.Forms.ColumnHeader columnName;
     }
 }
