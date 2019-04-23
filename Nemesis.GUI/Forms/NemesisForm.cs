@@ -1,9 +1,11 @@
 ﻿using MetroFramework.Forms;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
 using Nemesis.Forms.Utils;
+using Nemesis.Forms.Utils.Module;
 using Nemesis.Forms.Utils.Process;
 using Nemesis.Utils;
 
@@ -145,14 +147,28 @@ namespace Nemesis.Forms
                 //
                 // Dump it
                 //
-                bool status;
+                var status = false;
                 if (tabControl.SelectedIndex == 0)
                 {
-                    status = NemesisApi.DumpProcess(int.Parse(processListView.SelectedItems[0].SubItems[0].Text), path);
+                    //
+                    // Process
+                    //
+                    if (processListView.SelectedItems[0].Tag is ProcessListItem process)
+                    {
+                        var processId = int.Parse(process.Id);
+                        status = NemesisApi.DumpProcess(processId, path);
+                    }
                 }
                 else
                 {
-                    status = true; // NemesisApi.DumpDriver();
+                    //
+                    // Driver
+                    //
+                    if (driverListView.SelectedItems[0].Tag is ModuleListItem module)
+                    {
+                        var baseAddress = module.BaseAddress;
+                        status = NemesisApi.DumpModule(4, (IntPtr) baseAddress, path);
+                    }
                 }
 
                 //
