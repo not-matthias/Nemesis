@@ -12,7 +12,7 @@ auto ProcessUtils::GetProcessList() -> std::vector<Process>
 	//
 	// Allocate memory for the buffer
 	//
-	LPVOID buffer = nullptr;
+	LPVOID buffer;
 	if (!(buffer = VirtualAlloc(nullptr, 1024 * 1024, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE)))
 	{
 		return std::vector<Process>();
@@ -35,7 +35,6 @@ auto ProcessUtils::GetProcessList() -> std::vector<Process>
 	//
 	// Create the process list
 	//
-	auto index = 0;
 	while (system_process_info->NextEntryOffset)
 	{
 		//

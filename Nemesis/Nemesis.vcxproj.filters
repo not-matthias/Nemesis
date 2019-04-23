@@ -116,9 +116,6 @@
     <ClCompile Include="KernelMemory.cpp">
       <Filter>Source Files\Memory\Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Module.cpp">
       <Filter>Source Files\PortableExecutable</Filter>
     </ClCompile>

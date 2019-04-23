@@ -45,7 +45,6 @@
     <ClCompile Include="IMemorySource.cpp" />
     <ClCompile Include="KernelMemory.cpp" />
     <ClCompile Include="Logger.cpp" />
-    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Memory.cpp" />
     <ClCompile Include="MemorySource.cpp" />
     <ClCompile Include="MemorySourceExport.cpp" />

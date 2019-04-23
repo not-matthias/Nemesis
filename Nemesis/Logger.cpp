@@ -13,9 +13,9 @@ auto Logger::Log(std::wstring format, ...) -> VOID
 	//
 	// Insert the prefix
 	//
-	std::wstring wprefix;
-	wprefix.assign(prefix.begin(), prefix.end());
-	format.insert(0, wprefix);
+	std::wstring wide_prefix;
+	wide_prefix.assign(prefix.begin(), prefix.end());
+	format.insert(0, wide_prefix);
 
 	//
 	// Insert new line
@@ -25,10 +25,10 @@ auto Logger::Log(std::wstring format, ...) -> VOID
 	//
 	// Print it
 	//
-	va_list va_alist;
-	va_start(va_alist, format);
-	vwprintf(format.data(), va_alist);
-	va_end(va_alist);
+	va_list arg_list;
+	va_start(arg_list, format);
+	vwprintf(format.data(), arg_list);
+	va_end(arg_list);
 }
 
 auto Logger::Log(std::string format, ...) -> VOID
@@ -50,8 +50,8 @@ auto Logger::Log(std::string format, ...) -> VOID
 	//
 	// Print it
 	//
-	va_list va_alist;
-	va_start(va_alist, format);
-	vprintf(format.data(), va_alist);
-	va_end(va_alist);
+	va_list arg_list;
+	va_start(arg_list, format);
+	vprintf(format.data(), arg_list);
+	va_end(arg_list);
 }
