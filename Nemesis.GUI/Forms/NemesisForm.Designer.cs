@@ -38,14 +38,14 @@ namespace Nemesis.Forms
             this.aboutButton = new MetroFramework.Controls.MetroButton();
             this.tabControl = new MetroFramework.Controls.MetroTabControl();
             this.processesTabPage = new MetroFramework.Controls.MetroTabPage();
-            this.processListView = new Nemesis.Forms.Utils.Process.ProcessListView();
             this.metroTabPage2 = new MetroFramework.Controls.MetroTabPage();
+            this.styleManager = new MetroFramework.Components.MetroStyleManager(this.components);
+            this.processListView = new Nemesis.Forms.Utils.Process.ProcessListView();
             this.driverListView = new Nemesis.Forms.Utils.Driver.DriverListView();
             this.columnName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnBase = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnSize = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnPath = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.styleManager = new MetroFramework.Components.MetroStyleManager(this.components);
             this.tabControl.SuspendLayout();
             this.processesTabPage.SuspendLayout();
             this.metroTabPage2.SuspendLayout();
@@ -118,21 +118,6 @@ namespace Nemesis.Forms
             this.processesTabPage.VerticalScrollbarHighlightOnWheel = false;
             this.processesTabPage.VerticalScrollbarSize = 10;
             // 
-            // processListView
-            // 
-            this.processListView.Alignment = System.Windows.Forms.ListViewAlignment.Default;
-            this.processListView.FullRowSelect = true;
-            this.processListView.HideSelection = false;
-            this.processListView.Location = new System.Drawing.Point(3, 12);
-            this.processListView.MultiSelect = false;
-            this.processListView.Name = "processListView";
-            this.processListView.Size = new System.Drawing.Size(740, 277);
-            this.processListView.Sorting = System.Windows.Forms.SortOrder.Ascending;
-            this.processListView.TabIndex = 0;
-            this.processListView.UseCompatibleStateImageBehavior = false;
-            this.processListView.View = System.Windows.Forms.View.Details;
-            this.processListView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ProcessListView_MouseDoubleClick);
-            // 
             // metroTabPage2
             // 
             this.metroTabPage2.Controls.Add(this.driverListView);
@@ -147,6 +132,25 @@ namespace Nemesis.Forms
             this.metroTabPage2.VerticalScrollbarBarColor = true;
             this.metroTabPage2.VerticalScrollbarHighlightOnWheel = false;
             this.metroTabPage2.VerticalScrollbarSize = 10;
+            // 
+            // styleManager
+            // 
+            this.styleManager.Owner = this;
+            // 
+            // processListView
+            // 
+            this.processListView.Alignment = System.Windows.Forms.ListViewAlignment.Default;
+            this.processListView.FullRowSelect = true;
+            this.processListView.HideSelection = false;
+            this.processListView.Location = new System.Drawing.Point(3, 12);
+            this.processListView.MultiSelect = false;
+            this.processListView.Name = "processListView";
+            this.processListView.Size = new System.Drawing.Size(740, 277);
+            this.processListView.Sorting = System.Windows.Forms.SortOrder.Ascending;
+            this.processListView.TabIndex = 0;
+            this.processListView.UseCompatibleStateImageBehavior = false;
+            this.processListView.View = System.Windows.Forms.View.Details;
+            this.processListView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ProcessListView_MouseDoubleClick);
             // 
             // driverListView
             // 
@@ -186,10 +190,6 @@ namespace Nemesis.Forms
             // 
             this.columnPath.Text = "Path";
             this.columnPath.Width = 314;
-            // 
-            // styleManager
-            // 
-            this.styleManager.Owner = null;
             // 
             // NemesisForm
             // 

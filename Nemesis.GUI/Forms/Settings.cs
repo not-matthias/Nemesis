@@ -49,11 +49,7 @@ namespace Nemesis.Forms
             colorComboBox.Items.AddRange(new object[]
                 {"Default", "Black", "White", "Silver", "Blue", "Green", "Lime", "Teal", "Orange", "Brown", "Pink", "Magenta", "Purple", "Red", "Yellow"});
 
-            // Theme
-            themeComboBox.Text = Config.GetValue("theme");
-
-            // Style
-            colorComboBox.Text = Config.GetValue("style");
+            // Theme and Style: Located in NemesisForm (because StyleManager does not exist here yet)
         }
 
         //
@@ -154,34 +150,44 @@ namespace Nemesis.Forms
 
         private void ThemeComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            try
-            {
-                Enum.TryParse(themeComboBox.Text, out MetroThemeStyle color);
-
-                Theme = color;
-            }
-            catch (ArgumentException)
-            {
-                Theme = MetroThemeStyle.Default;
-            }
+            StyleManager.Theme = GetMetroThemeStyle(themeComboBox.Text);
 
             Refresh();
         }
 
         private void ColorComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            StyleManager.Style = GetMetroColorStyle(colorComboBox.Text);
+
+            Refresh();
+        }
+
+        public static MetroThemeStyle GetMetroThemeStyle(string name)
+        {
             try
             {
-                Enum.TryParse(colorComboBox.Text, out MetroColorStyle color);
+                Enum.TryParse(name, out MetroThemeStyle color);
 
-                Style = color;
+                return color;
             }
             catch (ArgumentException)
             {
-                Style = MetroColorStyle.Default;
+                return MetroThemeStyle.Default;
             }
+        }
 
-            Refresh();
+        public static MetroColorStyle GetMetroColorStyle(string name)
+        {
+            try
+            {
+                Enum.TryParse(name, out MetroColorStyle color);
+
+                return color;
+            }
+            catch (ArgumentException)
+            {
+                return MetroColorStyle.Default;
+            }
         }
     }
 }
