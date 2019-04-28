@@ -9,8 +9,7 @@ NTKERNELAPI NTSTATUS PsLookupProcessByProcessId(
 	OUT PEPROCESS *Process
 );
 
-NTKERNELAPI NTSTATUS NTAPI MmCopyVirtualMemory
-(
+NTKERNELAPI NTSTATUS NTAPI MmCopyVirtualMemory(
 	PEPROCESS SourceProcess,
 	PVOID SourceAddress,
 	PEPROCESS TargetProcess,

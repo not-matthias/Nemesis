@@ -14,53 +14,60 @@
 //
 // Structures
 //
+
+/**
+ * \brief The struct for the kernel read request.
+ */
 typedef struct _READ_REQUEST
 {
 	//
 	// In
 	//
-	ULONG Pid;
-	DWORD_PTR TargetAddress;
+	ULONG process_id;
+	DWORD_PTR target_address;
 
 	//
 	// Both
 	//
-	SIZE_T BufferSize;
+	SIZE_T buffer_size;
 
 	// 
 	// Out
 	// 
-	PVOID BufferAddress;
+	PVOID buffer_address;
 } READ_REQUEST, *PREAD_REQUEST;
 
+/**
+ * \brief The struct for the base address request.
+ */
 typedef struct _BASE_ADDRESS_REQUEST
 {
 	//
 	// In
 	//
-	ULONG Pid;
+	ULONG process_id;
 
 	// 
 	// Out
 	// 
-	PVOID BaseAddress;
+	PVOID base_address;
 } BASE_ADDRESS_REQUEST, *PBASE_ADDRESS_REQUEST;
 
 
 //
 // Variables
 //
-PDEVICE_OBJECT g_pDeviceObject;
-UNICODE_STRING g_DeviceName, g_SymbolicLinkName;
+PDEVICE_OBJECT g_device_object;
+UNICODE_STRING device_name, symbolic_link_name;
 
 
 //
 // Helper function
 //
-NTSTATUS CopyVirtualMemory(HANDLE ProcessId, PVOID pSrc, PVOID pDest, SIZE_T Size)
+NTSTATUS CopyVirtualMemory(const HANDLE process_id, const PVOID source_address, const PVOID destination_address, const SIZE_T size)
 {
-	PEPROCESS pProcess = NULL;
-	PSIZE_T pBytesCopied = NULL;
+	PEPROCESS process = NULL;
+	PSIZE_T bytes_copied = NULL;
 
 	Log("Reading virtual memory.");
 
@@ -69,23 +76,23 @@ NTSTATUS CopyVirtualMemory(HANDLE ProcessId, PVOID pSrc, PVOID pDest, SIZE_T Siz
 		//
 		// Open the process
 		//
-		if (NT_SUCCESS(PsLookupProcessByProcessId(ProcessId, &pProcess)))
+		if (NT_SUCCESS(PsLookupProcessByProcessId(process_id, &process)))
 		{
 			//
 			// Read virtual memory
 			//
-			if (NT_SUCCESS(MmCopyVirtualMemory(pProcess, pSrc, PsGetCurrentProcess(), pDest, Size, KernelMode, pBytesCopied)))
+			if (NT_SUCCESS(MmCopyVirtualMemory(process, source_address, PsGetCurrentProcess(), destination_address, size, KernelMode, bytes_copied)))
 			{
 				Log("Successfully read virtual memory.");
 
-				ObDereferenceObject(pProcess);
+				ObDereferenceObject(process);
 				return STATUS_SUCCESS;
 			}
 			else
 			{
 				Log("Failed to read virtual memory.");
 
-				ObDereferenceObject(pProcess);
+				ObDereferenceObject(process);
 				return STATUS_UNSUCCESSFUL;
 			}
 		}
@@ -95,7 +102,6 @@ NTSTATUS CopyVirtualMemory(HANDLE ProcessId, PVOID pSrc, PVOID pDest, SIZE_T Siz
 
 			return STATUS_UNSUCCESSFUL;
 		}
-
 	}
 	__except (EXCEPTION_EXECUTE_HANDLER)
 	{
@@ -109,78 +115,70 @@ NTSTATUS CopyVirtualMemory(HANDLE ProcessId, PVOID pSrc, PVOID pDest, SIZE_T Siz
 //
 // Device Handler
 //
-NTSTATUS DeviceControl(
-	IN PDEVICE_OBJECT pDeviceObject,
-	IN PIRP pIrp
-)
+NTSTATUS DeviceControl(PDEVICE_OBJECT device_object, const PIRP irp)
 {
-	UNREFERENCED_PARAMETER(pDeviceObject);
+	UNREFERENCED_PARAMETER(device_object);
 
 	//
 	// Return values
 	//
-	NTSTATUS Status = STATUS_UNSUCCESSFUL;
-	ULONG Bytes = 0;
+	NTSTATUS status = STATUS_UNSUCCESSFUL;
+	ULONG bytes = 0;
 
 	//
 	// Request stuff
 	//
-	PIO_STACK_LOCATION pStack = IoGetCurrentIrpStackLocation(pIrp);
-	ULONG ControlCode = pStack->Parameters.DeviceIoControl.IoControlCode;
+	const PIO_STACK_LOCATION stack_location = IoGetCurrentIrpStackLocation(irp);
+	const ULONG control_code = stack_location->Parameters.DeviceIoControl.IoControlCode;
 
-	PREAD_REQUEST pReadRequest;
-	PBASE_ADDRESS_REQUEST pBaseAddressRequest;
+	PREAD_REQUEST read_request;
+	PBASE_ADDRESS_REQUEST base_address_request;
 
 
 	//
 	// Handle the requests
 	//
-	switch (ControlCode)
+	switch (control_code)
 	{
-		//
-		// IOCTL_READ_REQUEST
-		//
 	case IOCTL_READ_REQUEST:
-		pReadRequest = (PREAD_REQUEST)pIrp->AssociatedIrp.SystemBuffer;
+		read_request = (PREAD_REQUEST)irp->AssociatedIrp.SystemBuffer;
 
 		//
 		// Check request data
 		//
-		if (pReadRequest != NULL && pReadRequest->TargetAddress < 0x7FFFFFFFFFFF)
+		if (read_request != NULL && read_request->target_address < 0x7FFFFFFFFFFF)
 		{
 			//
 			// Read virtual memory
 			//
-			Status = CopyVirtualMemory((HANDLE)pReadRequest->Pid, (PVOID)&pReadRequest->TargetAddress, (PVOID)pReadRequest->BufferAddress, pReadRequest->BufferSize);
-			Bytes = sizeof(READ_REQUEST);
+			status = CopyVirtualMemory((HANDLE)read_request->process_id, (PVOID)&read_request->target_address, (PVOID)read_request->buffer_address,
+			                           read_request->buffer_size);
+			bytes = sizeof(READ_REQUEST);
 		}
 		break;
 
-		//
-		// IOCTL_BASE_ADDRESS_REQUEST
-		//
+
 	case IOCTL_BASE_ADDRESS_REQUEST:
-		pBaseAddressRequest = (PBASE_ADDRESS_REQUEST)pIrp->AssociatedIrp.SystemBuffer;
+		base_address_request = (PBASE_ADDRESS_REQUEST)irp->AssociatedIrp.SystemBuffer;
 
 		//
 		// Check request data
 		//
-		if (pBaseAddressRequest != NULL)
+		if (base_address_request != NULL)
 		{
 			PEPROCESS pProcess;
 
 			//
 			// Get the process
 			//
-			Status = PsLookupProcessByProcessId((HANDLE)pBaseAddressRequest->Pid, &pProcess);
+			status = PsLookupProcessByProcessId((HANDLE)base_address_request->process_id, &pProcess);
 
 			// 
 			// Check if found (and return)
 			// 
-			if (!NT_SUCCESS(Status))
+			if (!NT_SUCCESS(status))
 			{
-				pBaseAddressRequest->BaseAddress = 0;
-				Status = STATUS_UNSUCCESSFUL;
+				base_address_request->base_address = 0;
 
 				break;
 			}
@@ -188,7 +186,7 @@ NTSTATUS DeviceControl(
 			// 
 			// Get the base address
 			// 
-			PVOID pBaseAddress = PsGetProcessSectionBaseAddress(pProcess);
+			const PVOID base_address = PsGetProcessSectionBaseAddress(pProcess);
 
 			//
 			// Cleanup
@@ -198,91 +196,87 @@ NTSTATUS DeviceControl(
 			//
 			// Return data
 			//
-			pBaseAddressRequest->BaseAddress = pBaseAddress;
-			Status = STATUS_SUCCESS;
-			Bytes = sizeof(BASE_ADDRESS_REQUEST);
+			base_address_request->base_address = base_address;
+			status = STATUS_SUCCESS;
+			bytes = sizeof(BASE_ADDRESS_REQUEST);
 		}
 		break;
 
+
 	default:
-		Status = STATUS_INVALID_PARAMETER;
-		Bytes = 0;
+		status = STATUS_INVALID_PARAMETER;
+		bytes = 0;
 	}
 
-	pIrp->IoStatus.Status = Status;
-	pIrp->IoStatus.Information = Bytes;
-	IoCompleteRequest(pIrp, IO_NO_INCREMENT);
+	irp->IoStatus.Status = status;
+	irp->IoStatus.Information = bytes;
+	IoCompleteRequest(irp, IO_NO_INCREMENT);
 
-	return Status;
+	return status;
 }
 
 
 //
 // Unload the driver
 //
-VOID DriverUnload(
-	PDRIVER_OBJECT pDriverObject
-)
+VOID DriverUnload(const PDRIVER_OBJECT driver_object)
 {
 	//
 	// Delete the symbolic link
 	//
-	IoDeleteSymbolicLink(&g_SymbolicLinkName);
+	IoDeleteSymbolicLink(&symbolic_link_name);
 
 	//
 	// Delete the device object
 	//
-	IoDeleteDevice(pDriverObject->DeviceObject);
+	IoDeleteDevice(driver_object->DeviceObject);
 
 	Log("Driver unloaded.\n");
 }
 
 
-NTSTATUS UnsupportedDispatch(PDEVICE_OBJECT pDeviceObject, PIRP pIrp)
+NTSTATUS UnsupportedDispatch(PDEVICE_OBJECT device_object, const PIRP irp)
 {
-	UNREFERENCED_PARAMETER(pDeviceObject);
+	UNREFERENCED_PARAMETER(device_object);
 
-	pIrp->IoStatus.Status = STATUS_NOT_SUPPORTED;
-	IoCompleteRequest(pIrp, IO_NO_INCREMENT);
-	return pIrp->IoStatus.Status;
+	irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
+	IoCompleteRequest(irp, IO_NO_INCREMENT);
+	return irp->IoStatus.Status;
 }
 
-NTSTATUS CreateDispatch(PDEVICE_OBJECT pDeviceObject, PIRP pIrp)
+NTSTATUS CreateDispatch(PDEVICE_OBJECT device_object, const PIRP irp)
 {
-	UNREFERENCED_PARAMETER(pDeviceObject);
+	UNREFERENCED_PARAMETER(device_object);
 
-	IoCompleteRequest(pIrp, IO_NO_INCREMENT);
-	return pIrp->IoStatus.Status;
+	IoCompleteRequest(irp, IO_NO_INCREMENT);
+	return irp->IoStatus.Status;
 }
 
-NTSTATUS CloseDispatch(PDEVICE_OBJECT pDeviceObject, PIRP pIrp)
+NTSTATUS CloseDispatch(PDEVICE_OBJECT device_object, const PIRP irp)
 {
-	UNREFERENCED_PARAMETER(pDeviceObject);
+	UNREFERENCED_PARAMETER(device_object);
 
-	IoCompleteRequest(pIrp, IO_NO_INCREMENT);
-	return pIrp->IoStatus.Status;
+	IoCompleteRequest(irp, IO_NO_INCREMENT);
+	return irp->IoStatus.Status;
 }
 
 //
 // Entry Point
 //
-NTSTATUS DriverEntry(
-	IN PDRIVER_OBJECT  pDriverObject,
-	IN PUNICODE_STRING pRegistryPath
-)
+NTSTATUS DriverEntry(PDRIVER_OBJECT driver_object, PUNICODE_STRING registry_path)
 {
-	UNREFERENCED_PARAMETER(pRegistryPath);
+	UNREFERENCED_PARAMETER(registry_path);
 
 	//
 	// Initialize the variables
 	//
-	RtlInitUnicodeString(&g_DeviceName, L"\\Device\\KernelMemory");
-	RtlInitUnicodeString(&g_SymbolicLinkName, L"\\DosDevices\\KernelMemory");
+	RtlInitUnicodeString(&device_name, L"\\Device\\KernelMemory");
+	RtlInitUnicodeString(&symbolic_link_name, L"\\DosDevices\\KernelMemory");
 
 	//
 	// Create the device object
 	//
-	if (!NT_SUCCESS(IoCreateDevice(pDriverObject, 0, &g_DeviceName, FILE_DEVICE_UNKNOWN, FILE_DEVICE_SECURE_OPEN, FALSE, &g_pDeviceObject)))
+	if (!NT_SUCCESS(IoCreateDevice(driver_object, 0, &device_name, FILE_DEVICE_UNKNOWN, FILE_DEVICE_SECURE_OPEN, FALSE, &g_device_object)))
 	{
 		Log("Failed to create device object.\n");
 		return STATUS_UNSUCCESSFUL;
@@ -291,10 +285,10 @@ NTSTATUS DriverEntry(
 	//
 	// Create symbolic link
 	//
-	if (!NT_SUCCESS(IoCreateSymbolicLink(&g_SymbolicLinkName, &g_DeviceName)))
+	if (!NT_SUCCESS(IoCreateSymbolicLink(&symbolic_link_name, &device_name)))
 	{
 		Log("Failed to create symbolic link.\n");
-		IoDeleteDevice(g_pDeviceObject);
+		IoDeleteDevice(g_device_object);
 
 		return STATUS_UNSUCCESSFUL;
 	}
@@ -303,18 +297,18 @@ NTSTATUS DriverEntry(
 	// Set major functions
 	//
 	for (ULONG i = 0; i <= IRP_MJ_MAXIMUM_FUNCTION; i++)
-		pDriverObject->MajorFunction[i] = &UnsupportedDispatch;
+		driver_object->MajorFunction[i] = &UnsupportedDispatch;
 
-	pDriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = DeviceControl;
-	pDriverObject->MajorFunction[IRP_MJ_CREATE] = &CreateDispatch;
-	pDriverObject->MajorFunction[IRP_MJ_CLOSE] = &CloseDispatch;
-	pDriverObject->DriverUnload = DriverUnload;
+	driver_object->MajorFunction[IRP_MJ_DEVICE_CONTROL] = DeviceControl;
+	driver_object->MajorFunction[IRP_MJ_CREATE] = &CreateDispatch;
+	driver_object->MajorFunction[IRP_MJ_CLOSE] = &CloseDispatch;
+	driver_object->DriverUnload = DriverUnload;
 
 	//
 	// Set flags
 	//
-	pDriverObject->Flags |= DO_BUFFERED_IO;
-	pDriverObject->Flags &= ~DO_DEVICE_INITIALIZING;
+	driver_object->Flags |= DO_BUFFERED_IO;
+	driver_object->Flags &= ~DO_DEVICE_INITIALIZING;
 
 	Log("Driver loaded.\n");
 

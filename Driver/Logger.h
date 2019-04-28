@@ -9,25 +9,25 @@
 //
 #ifdef DEBUG
 
-VOID Log(PCSTR Format, ...)
+VOID Log(const PCSTR format, ...)
 {
 	va_list args;
 
 	//
 	// Check the format
 	//
-	if (!Format)
+	if (!format)
 		return;
 
 	//
 	// Initialize the variable list
 	//
-	va_start(args, Format);
+	va_start(args, format);
 
 	//
 	// Print it
 	// 
-	DbgPrintEx(0, 0, Format, args);
+	DbgPrintEx(0, 0, format, args);
 
 	//
 	// Stop useing the variable list
