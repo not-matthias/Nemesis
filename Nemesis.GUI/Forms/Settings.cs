@@ -1,6 +1,7 @@
 ﻿using MetroFramework.Controls;
 using MetroFramework.Forms;
 using System;
+using System.Windows.Forms;
 using MetroFramework;
 using Nemesis.Utils;
 
@@ -42,14 +43,15 @@ namespace Nemesis.Forms
             createTimestampFolderToggle.Checked = Config.GetValue("create_timestamp_folder") == "On";
             askForLocationToggle.Checked = Config.GetValue("ask_for_location") == "On";
 
+            // Theme and Style: Located in NemesisForm (because StyleManager does not exist here yet)
+
             //
-            // Set the themes and colors
+            // Fill the combo boxes
             //
             themeComboBox.Items.AddRange(new object[] {"Dark", "Light"});
             colorComboBox.Items.AddRange(new object[]
                 {"Default", "Black", "White", "Silver", "Blue", "Green", "Lime", "Teal", "Orange", "Brown", "Pink", "Magenta", "Purple", "Red", "Yellow"});
-
-            // Theme and Style: Located in NemesisForm (because StyleManager does not exist here yet)
+            memoryComboBox.Items.AddRange(NemesisApi.GetMemorySources().ToArray());
         }
 
         //
@@ -187,6 +189,14 @@ namespace Nemesis.Forms
             catch (ArgumentException)
             {
                 return MetroColorStyle.Default;
+            }
+        }
+
+        private void MemoryComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!NemesisApi.SetMemorySource(memoryComboBox.Text))
+            {
+                MessageBox.Show("Failed to set new memory source.", "Error");
             }
         }
     }

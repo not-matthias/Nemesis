@@ -49,9 +49,12 @@
             this.colorComboBox = new MetroFramework.Controls.MetroComboBox();
             this.themeComboBox = new MetroFramework.Controls.MetroComboBox();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
+            this.metroTabPage3 = new MetroFramework.Controls.MetroTabPage();
+            this.memoryComboBox = new MetroFramework.Controls.MetroComboBox();
             this.metroTabControl1.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
             this.metroTabPage2.SuspendLayout();
+            this.metroTabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // metroLabel1
@@ -247,6 +250,7 @@
             // metroTabControl1
             // 
             this.metroTabControl1.Controls.Add(this.metroTabPage1);
+            this.metroTabControl1.Controls.Add(this.metroTabPage3);
             this.metroTabControl1.Controls.Add(this.metroTabPage2);
             this.metroTabControl1.Location = new System.Drawing.Point(23, 63);
             this.metroTabControl1.Name = "metroTabControl1";
@@ -305,7 +309,7 @@
             this.colorComboBox.Location = new System.Drawing.Point(3, 54);
             this.colorComboBox.Name = "colorComboBox";
             this.colorComboBox.PromptText = "Color";
-            this.colorComboBox.Size = new System.Drawing.Size(121, 29);
+            this.colorComboBox.Size = new System.Drawing.Size(161, 29);
             this.colorComboBox.TabIndex = 6;
             this.colorComboBox.UseSelectable = true;
             this.colorComboBox.SelectedIndexChanged += new System.EventHandler(this.ColorComboBox_SelectedIndexChanged);
@@ -317,10 +321,37 @@
             this.themeComboBox.Location = new System.Drawing.Point(3, 18);
             this.themeComboBox.Name = "themeComboBox";
             this.themeComboBox.PromptText = "Theme";
-            this.themeComboBox.Size = new System.Drawing.Size(121, 29);
+            this.themeComboBox.Size = new System.Drawing.Size(161, 29);
             this.themeComboBox.TabIndex = 5;
             this.themeComboBox.UseSelectable = true;
             this.themeComboBox.SelectedIndexChanged += new System.EventHandler(this.ThemeComboBox_SelectedIndexChanged);
+            // 
+            // metroTabPage3
+            // 
+            this.metroTabPage3.Controls.Add(this.memoryComboBox);
+            this.metroTabPage3.HorizontalScrollbarBarColor = true;
+            this.metroTabPage3.HorizontalScrollbarHighlightOnWheel = false;
+            this.metroTabPage3.HorizontalScrollbarSize = 10;
+            this.metroTabPage3.Location = new System.Drawing.Point(4, 38);
+            this.metroTabPage3.Name = "metroTabPage3";
+            this.metroTabPage3.Size = new System.Drawing.Size(544, 211);
+            this.metroTabPage3.TabIndex = 2;
+            this.metroTabPage3.Text = "Memory";
+            this.metroTabPage3.VerticalScrollbarBarColor = true;
+            this.metroTabPage3.VerticalScrollbarHighlightOnWheel = false;
+            this.metroTabPage3.VerticalScrollbarSize = 10;
+            // 
+            // memoryComboBox
+            // 
+            this.memoryComboBox.FormattingEnabled = true;
+            this.memoryComboBox.ItemHeight = 23;
+            this.memoryComboBox.Location = new System.Drawing.Point(3, 18);
+            this.memoryComboBox.Name = "memoryComboBox";
+            this.memoryComboBox.PromptText = "Memory Source";
+            this.memoryComboBox.Size = new System.Drawing.Size(161, 29);
+            this.memoryComboBox.TabIndex = 2;
+            this.memoryComboBox.UseSelectable = true;
+            this.memoryComboBox.SelectedIndexChanged += new System.EventHandler(this.MemoryComboBox_SelectedIndexChanged);
             // 
             // Settings
             // 
@@ -342,6 +373,7 @@
             this.metroTabPage1.ResumeLayout(false);
             this.metroTabPage1.PerformLayout();
             this.metroTabPage2.ResumeLayout(false);
+            this.metroTabPage3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -369,5 +401,7 @@
         private System.Windows.Forms.ColorDialog colorDialog;
         private MetroFramework.Controls.MetroComboBox themeComboBox;
         private MetroFramework.Controls.MetroComboBox colorComboBox;
+        private MetroFramework.Controls.MetroTabPage metroTabPage3;
+        private MetroFramework.Controls.MetroComboBox memoryComboBox;
     }
 }
