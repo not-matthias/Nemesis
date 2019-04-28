@@ -151,6 +151,9 @@
     <Compile Include="Forms\Utils\Process\ProcessSorter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Forms\About.resx">
+      <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\NemesisForm.resx">
       <DependentUpon>NemesisForm.cs</DependentUpon>
     </EmbeddedResource>

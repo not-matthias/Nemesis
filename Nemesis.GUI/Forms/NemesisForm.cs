@@ -14,7 +14,7 @@ namespace Nemesis.Forms
         private readonly Dictionary<int, ProcessInformation> _processInformationList = new Dictionary<int, ProcessInformation>();
 
         // 
-        // Sets the process list
+        // Sets the process list and set styles
         // 
         public NemesisForm()
         {
