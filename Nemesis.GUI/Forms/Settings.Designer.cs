@@ -46,8 +46,12 @@
             this.metroTabControl1 = new MetroFramework.Controls.MetroTabControl();
             this.metroTabPage1 = new MetroFramework.Controls.MetroTabPage();
             this.metroTabPage2 = new MetroFramework.Controls.MetroTabPage();
+            this.colorComboBox = new MetroFramework.Controls.MetroComboBox();
+            this.themeComboBox = new MetroFramework.Controls.MetroComboBox();
+            this.colorDialog = new System.Windows.Forms.ColorDialog();
             this.metroTabControl1.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
+            this.metroTabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
             // metroLabel1
@@ -246,7 +250,7 @@
             this.metroTabControl1.Controls.Add(this.metroTabPage2);
             this.metroTabControl1.Location = new System.Drawing.Point(23, 63);
             this.metroTabControl1.Name = "metroTabControl1";
-            this.metroTabControl1.SelectedIndex = 0;
+            this.metroTabControl1.SelectedIndex = 1;
             this.metroTabControl1.Size = new System.Drawing.Size(552, 253);
             this.metroTabControl1.TabIndex = 18;
             this.metroTabControl1.UseSelectable = true;
@@ -280,17 +284,43 @@
             // 
             // metroTabPage2
             // 
+            this.metroTabPage2.Controls.Add(this.colorComboBox);
+            this.metroTabPage2.Controls.Add(this.themeComboBox);
             this.metroTabPage2.HorizontalScrollbarBarColor = true;
             this.metroTabPage2.HorizontalScrollbarHighlightOnWheel = false;
             this.metroTabPage2.HorizontalScrollbarSize = 10;
             this.metroTabPage2.Location = new System.Drawing.Point(4, 38);
             this.metroTabPage2.Name = "metroTabPage2";
-            this.metroTabPage2.Size = new System.Drawing.Size(544, 249);
+            this.metroTabPage2.Size = new System.Drawing.Size(544, 211);
             this.metroTabPage2.TabIndex = 1;
             this.metroTabPage2.Text = "Styles";
             this.metroTabPage2.VerticalScrollbarBarColor = true;
             this.metroTabPage2.VerticalScrollbarHighlightOnWheel = false;
             this.metroTabPage2.VerticalScrollbarSize = 10;
+            // 
+            // colorComboBox
+            // 
+            this.colorComboBox.FormattingEnabled = true;
+            this.colorComboBox.ItemHeight = 23;
+            this.colorComboBox.Location = new System.Drawing.Point(3, 54);
+            this.colorComboBox.Name = "colorComboBox";
+            this.colorComboBox.PromptText = "Color";
+            this.colorComboBox.Size = new System.Drawing.Size(121, 29);
+            this.colorComboBox.TabIndex = 6;
+            this.colorComboBox.UseSelectable = true;
+            this.colorComboBox.SelectedIndexChanged += new System.EventHandler(this.ColorComboBox_SelectedIndexChanged);
+            // 
+            // themeComboBox
+            // 
+            this.themeComboBox.FormattingEnabled = true;
+            this.themeComboBox.ItemHeight = 23;
+            this.themeComboBox.Location = new System.Drawing.Point(3, 18);
+            this.themeComboBox.Name = "themeComboBox";
+            this.themeComboBox.PromptText = "Theme";
+            this.themeComboBox.Size = new System.Drawing.Size(121, 29);
+            this.themeComboBox.TabIndex = 5;
+            this.themeComboBox.UseSelectable = true;
+            this.themeComboBox.SelectedIndexChanged += new System.EventHandler(this.ThemeComboBox_SelectedIndexChanged);
             // 
             // Settings
             // 
@@ -311,6 +341,7 @@
             this.metroTabControl1.ResumeLayout(false);
             this.metroTabPage1.ResumeLayout(false);
             this.metroTabPage1.PerformLayout();
+            this.metroTabPage2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -335,5 +366,8 @@
         private MetroFramework.Controls.MetroTabControl metroTabControl1;
         private MetroFramework.Controls.MetroTabPage metroTabPage1;
         private MetroFramework.Controls.MetroTabPage metroTabPage2;
+        private System.Windows.Forms.ColorDialog colorDialog;
+        private MetroFramework.Controls.MetroComboBox themeComboBox;
+        private MetroFramework.Controls.MetroComboBox colorComboBox;
     }
 }

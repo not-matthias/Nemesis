@@ -1,6 +1,7 @@
 ﻿using MetroFramework.Controls;
 using MetroFramework.Forms;
 using System;
+using MetroFramework;
 using Nemesis.Utils;
 
 namespace Nemesis.Forms
@@ -23,6 +24,8 @@ namespace Nemesis.Forms
                 Config.SetValue("ask_for_location", "On");
 
                 Config.SetValue("first_time_started", ".");
+                Config.SetValue("theme", "Default");
+                Config.SetValue("style", "Default");
             }
 
             //
@@ -34,11 +37,23 @@ namespace Nemesis.Forms
             //
             // Toggles
             //
-            // TODO: Find a better way
             customDumpLocationToggle.Checked = Config.GetValue("custom_dump_location") == "On";
             createFolderToggle.Checked = Config.GetValue("create_process_folder") == "On";
             createTimestampFolderToggle.Checked = Config.GetValue("create_timestamp_folder") == "On";
             askForLocationToggle.Checked = Config.GetValue("ask_for_location") == "On";
+
+            //
+            // Set the themes and colors
+            //
+            themeComboBox.Items.AddRange(new object[] {"Dark", "Light"});
+            colorComboBox.Items.AddRange(new object[]
+                {"Default", "Black", "White", "Silver", "Blue", "Green", "Lime", "Teal", "Orange", "Brown", "Pink", "Magenta", "Purple", "Red", "Yellow"});
+
+            // Theme
+            themeComboBox.Text = Config.GetValue("theme");
+
+            // Style
+            colorComboBox.Text = Config.GetValue("style");
         }
 
         //
@@ -53,6 +68,9 @@ namespace Nemesis.Forms
             Config.SetValue("create_process_folder", createFolderToggle.Text);
             Config.SetValue("create_timestamp_folder", createTimestampFolderToggle.Text);
             Config.SetValue("ask_for_location", askForLocationToggle.Text);
+
+            Config.SetValue("theme", themeComboBox.Text);
+            Config.SetValue("style", colorComboBox.Text);
 
             Close();
         }
@@ -132,6 +150,38 @@ namespace Nemesis.Forms
                 createFolderToggle.Checked = false;
                 createTimestampFolderToggle.Checked = false;
             }
+        }
+
+        private void ThemeComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                Enum.TryParse(themeComboBox.Text, out MetroThemeStyle color);
+
+                Theme = color;
+            }
+            catch (ArgumentException)
+            {
+                Theme = MetroThemeStyle.Default;
+            }
+
+            Refresh();
+        }
+
+        private void ColorComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                Enum.TryParse(colorComboBox.Text, out MetroColorStyle color);
+
+                Style = color;
+            }
+            catch (ArgumentException)
+            {
+                Style = MetroColorStyle.Default;
+            }
+
+            Refresh();
         }
     }
 }

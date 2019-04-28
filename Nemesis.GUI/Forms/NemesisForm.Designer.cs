@@ -31,6 +31,7 @@ namespace Nemesis.Forms
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.dumpButton = new MetroFramework.Controls.MetroButton();
             this.refreshButton = new MetroFramework.Controls.MetroButton();
             this.settingsButton = new MetroFramework.Controls.MetroButton();
@@ -44,9 +45,11 @@ namespace Nemesis.Forms
             this.columnBase = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnSize = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnPath = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.styleManager = new MetroFramework.Components.MetroStyleManager(this.components);
             this.tabControl.SuspendLayout();
             this.processesTabPage.SuspendLayout();
             this.metroTabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.styleManager)).BeginInit();
             this.SuspendLayout();
             // 
             // dumpButton
@@ -184,6 +187,10 @@ namespace Nemesis.Forms
             this.columnPath.Text = "Path";
             this.columnPath.Width = 314;
             // 
+            // styleManager
+            // 
+            this.styleManager.Owner = null;
+            // 
             // NemesisForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -202,6 +209,7 @@ namespace Nemesis.Forms
             this.tabControl.ResumeLayout(false);
             this.processesTabPage.ResumeLayout(false);
             this.metroTabPage2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.styleManager)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -221,6 +229,7 @@ namespace Nemesis.Forms
         private System.Windows.Forms.ColumnHeader columnBase;
         private System.Windows.Forms.ColumnHeader columnSize;
         private System.Windows.Forms.ColumnHeader columnPath;
+        public MetroFramework.Components.MetroStyleManager styleManager;
     }
 }
 
