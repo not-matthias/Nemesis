@@ -71,7 +71,7 @@ namespace Nemesis.Utils
         [DllImport("Nemesis.dll")]
         protected static extern bool DumpModuleExport([In] int processId, [In] IntPtr baseAddress, [In] string fileName);
 
-        [DllImport("D:\\3_Programming\\1_Github\\Nemesis\\x64\\Debug\\Nemesis.dll")]
+        [DllImport("Nemesis.dll")]
         protected static extern bool DumpMemoryExport([In] int processId, [In] IntPtr startAddress, [In] uint size, [In] string fileName);
 
 
@@ -82,16 +82,16 @@ namespace Nemesis.Utils
         protected static extern bool SetMemorySourceExport([In] string memorySource);
 
 
-        [DllImport("D:\\3_Programming\\1_Github\\Nemesis\\x64\\Debug\\Nemesis.dll")]
+        [DllImport("Nemesis.dll")]
         protected static extern bool GetDriverListElementExport([In] uint index, [In] [Out] ref Driver structure);
 
-        [DllImport("D:\\3_Programming\\1_Github\\Nemesis\\x64\\Debug\\Nemesis.dll")]
+        [DllImport("Nemesis.dll")]
         protected static extern bool GetProcessListElementExport([In] uint index, [In] [Out] ref Process structure);
 
-        [DllImport("D:\\3_Programming\\1_Github\\Nemesis\\x64\\Debug\\Nemesis.dll")]
+        [DllImport("Nemesis.dll")]
         protected static extern bool GetModuleListElementExport([In] uint index, [In] int processId, [In] [Out] ref Module structure);
 
-        [DllImport("D:\\3_Programming\\1_Github\\Nemesis\\x64\\Debug\\Nemesis.dll")]
+        [DllImport("Nemesis.dll")]
         protected static extern bool GetMemoryListElementExport([In] uint index, [In] int processId, [In] [Out] ref Memory structure);
     }
 
