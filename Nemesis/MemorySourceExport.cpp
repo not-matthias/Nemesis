@@ -41,7 +41,7 @@ auto SetMemorySourceExport(const char * memory_source_name) -> BOOL
 	//
 	// Check if memory source exists
 	//
-	if (std::find(memory_sources.begin(), memory_sources.end(), memory_source_name) != memory_sources.end())
+	if (std::find(memory_sources.begin(), memory_sources.end(), memory_source_name) == memory_sources.end())
 	{
 		return FALSE;
 	}
