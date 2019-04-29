@@ -13,9 +13,9 @@ auto GetMemorySourcesExport(MemorySources * memory_sources) -> VOID
 	for (auto & memory_source : MemorySource::GetMemorySources())
 	{
 		//
-		// Add the null terminator
+		// Add a string to set the end
 		//
-		memory_source.append("\0");
+		memory_source.append("|");
 
 		//
 		// Create the char array

@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 namespace Nemesis.Utils
 {
     [StructLayout(LayoutKind.Sequential)]
-    internal struct MemorySourcesStruct
+    internal struct MemorySource
     {
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         public IntPtr[] MemorySources;
@@ -76,11 +76,11 @@ namespace Nemesis.Utils
 
 
         [DllImport("Nemesis.dll")]
-        protected static extern void GetMemorySourcesExport([In] [Out] ref MemorySourcesStruct structure);
+        protected static extern void GetMemorySourcesExport([In] [Out] ref MemorySource structure);
 
         [DllImport("Nemesis.dll")]
         protected static extern bool SetMemorySourceExport([In] string memorySource);
-
+        
 
         [DllImport("Nemesis.dll")]
         protected static extern bool GetDriverListElementExport([In] uint index, [In] [Out] ref Driver structure);
@@ -123,7 +123,7 @@ namespace Nemesis.Utils
             //
             // Create a new struct
             //
-            var structure = new MemorySourcesStruct();
+            var structure = new MemorySource();
 
             //
             // Get the memory sources
@@ -135,7 +135,7 @@ namespace Nemesis.Utils
             //
             return (from pointer in structure.MemorySources
                 where pointer != IntPtr.Zero
-                select Marshal.PtrToStringAnsi(pointer)).ToList();
+                select Marshal.PtrToStringAnsi(pointer)?.Split('|')[0]).ToList();
         }
 
 
