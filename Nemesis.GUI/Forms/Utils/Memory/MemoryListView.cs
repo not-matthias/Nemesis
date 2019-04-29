@@ -40,7 +40,7 @@ namespace Nemesis.Forms.Utils.Memory
                 //
                 // Create a new ProcessListItem
                 //
-                var memoryListItem = new MemoryListItem(item.base_address, item.region_size, item.state, item.type);
+                var memoryListItem = new MemoryListItem(item.BaseAddress, item.RegionSize, item.State, item.Type);
 
                 //
                 // Add it to the ListView

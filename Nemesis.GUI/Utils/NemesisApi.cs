@@ -27,22 +27,22 @@ namespace Nemesis.Utils
     internal struct Process
     {
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
-        public string image_name;
+        public string ImageName;
 
-        public int unique_process_id;
-        public int number_of_threads;
-        public int base_priority;
-        public int handle_count;
-        public int session_id;
-        public int peak_virtual_size;
-        public int virtual_size;
-        public int peak_working_set_size;
-        public int working_set_size;
-        public int quota_paged_pool_usage;
-        public int quota_non_paged_pool_usage;
-        public int page_file_usage;
-        public int peak_page_file_usage;
-        public int private_page_count;
+        public int UniqueProcessId;
+        public int NumberOfThreads;
+        public int BasePriority;
+        public int HandleCount;
+        public int SessionId;
+        public int PeakVirtualSize;
+        public int VirtualSize;
+        public int PeakWorkingSetSize;
+        public int WorkingSetSize;
+        public int QuotaPagedPoolUsage;
+        public int QuotaNonPagedPoolUsage;
+        public int PageFileUsage;
+        public int PeakPageFileUsage;
+        public int PrivatePageCount;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -57,10 +57,10 @@ namespace Nemesis.Utils
     [StructLayout(LayoutKind.Sequential)]
     public struct Memory
     {
-        public long base_address;
-        public int region_size;
-        public int state;
-        public int type;
+        public long BaseAddress;
+        public int RegionSize;
+        public int State;
+        public int Type;
     }
 
     internal class NemesisImports
