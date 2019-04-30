@@ -27,6 +27,7 @@ namespace Nemesis.Forms
                 Config.SetValue("first_time_started", ".");
                 Config.SetValue("theme", "Default");
                 Config.SetValue("style", "Default");
+                Config.SetValue("memory_source", "user_mode");
             }
 
             //
@@ -52,6 +53,13 @@ namespace Nemesis.Forms
             colorComboBox.Items.AddRange(new object[]
                 {"Default", "Black", "White", "Silver", "Blue", "Green", "Lime", "Teal", "Orange", "Brown", "Pink", "Magenta", "Purple", "Red", "Yellow"});
             memoryComboBox.Items.AddRange(NemesisApi.GetMemorySources().ToArray());
+
+            //
+            // Set the combo box values
+            //
+            themeComboBox.SelectedIndex = GetItemIndex(themeComboBox, Config.GetValue("theme"));
+            colorComboBox.SelectedIndex = GetItemIndex(colorComboBox, Config.GetValue("style"));
+            memoryComboBox.SelectedIndex = GetItemIndex(memoryComboBox, Config.GetValue("memory_source"));
         }
 
         //
@@ -69,6 +77,8 @@ namespace Nemesis.Forms
 
             Config.SetValue("theme", themeComboBox.Text);
             Config.SetValue("style", colorComboBox.Text);
+
+            Config.SetValue("memory_source", memoryComboBox.Text);
 
             Close();
         }
@@ -152,6 +162,8 @@ namespace Nemesis.Forms
 
         private void ThemeComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (StyleManager == null) return;
+
             StyleManager.Theme = GetMetroThemeStyle(themeComboBox.Text);
 
             Refresh();
@@ -159,6 +171,8 @@ namespace Nemesis.Forms
 
         private void ColorComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (StyleManager == null) return;
+
             StyleManager.Style = GetMetroColorStyle(colorComboBox.Text);
 
             Refresh();
@@ -198,6 +212,19 @@ namespace Nemesis.Forms
             {
                 MessageBox.Show("Failed to set new memory source.", "Error");
             }
+        }
+
+        private int GetItemIndex(ComboBox comboBox, string value)
+        {
+            foreach (var item in comboBox.Items)
+            {
+                if (item as string == value)
+                {
+                    return comboBox.Items.IndexOf(item);
+                }
+            }
+
+            return -1;
         }
     }
 }
