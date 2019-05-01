@@ -9,6 +9,13 @@ namespace Nemesis.Forms.Utils.Memory
         public int State { get; }
         public int Type { get; }
 
+        /// <summary>
+        /// Sets the specified data.
+        /// </summary>
+        /// <param name="baseAddress">The base address of the memory region</param>
+        /// <param name="regionSize">The size of the memory region</param>
+        /// <param name="state">The state of the memory region (MEM_COMMIT, MEM_RESERVE, MEM_FREE, MEM_PRIVATE, MEM_MAPPED, or MEM_IMAGE)</param>
+        /// <param name="type">The type of the memory region (MEM_IMAGE, MEM_MAPPED or MEM_PRIVATE)</param>
         public MemoryListItem(long baseAddress, int regionSize, int state, int type)
         {
             BaseAddress = baseAddress;
@@ -17,6 +24,10 @@ namespace Nemesis.Forms.Utils.Memory
             Type = type;
         }
 
+        /// <summary>
+        /// Returns the list view item for the memory list.
+        /// </summary>
+        /// <returns>ListViewItem</returns>
         public ListViewItem GetListViewItem()
         {
             var listViewItem = new ListViewItem(BaseAddress.ToString("X8"));

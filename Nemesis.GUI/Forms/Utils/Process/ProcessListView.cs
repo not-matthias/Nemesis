@@ -6,9 +6,10 @@ namespace Nemesis.Forms.Utils.Process
     {
         private int _sortColumnIndex;
 
-        //
-        // Sets some properties
-        //
+        /// <inheritdoc />
+        /// <summary>
+        /// Sets list view properties.
+        /// </summary>
         public ProcessListView()
         {
             Columns.Add("Pid");
@@ -18,9 +19,10 @@ namespace Nemesis.Forms.Utils.Process
             Sorting = SortOrder.Ascending;
         }
 
-        //
-        // Sets the processes in the list
-        //
+        /// <summary>
+        /// Loads the processes and adds them to the list.
+        /// </summary>
+        /// <returns>True if successful</returns>
         public void LoadProcesses()
         {
             //
@@ -60,9 +62,11 @@ namespace Nemesis.Forms.Utils.Process
             ListViewItemSorter = new ProcessSorter(_sortColumnIndex, Sorting);
         }
 
-        //
-        // Sort the columns on click
-        //
+        /// <inheritdoc />
+        /// <summary>
+        /// Sorts the list by the clicked column.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnColumnClick(ColumnClickEventArgs e)
         {
             //

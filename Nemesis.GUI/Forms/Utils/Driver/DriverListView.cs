@@ -7,12 +7,20 @@ namespace Nemesis.Forms.Utils.Driver
     {
         private int _sortColumnIndex;
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Sets list view properties.
+        /// </summary>
         public DriverListView()
         {
             DoubleBuffered = true;
             Sorting = SortOrder.Ascending;
         }
 
+        /// <summary>
+        /// Loads the drivers and adds them to the list.
+        /// </summary>
+        /// <returns>True if successful</returns>
         public bool LoadDrivers()
         {
             var drivers = NemesisApi.GetDriverList();
@@ -51,6 +59,11 @@ namespace Nemesis.Forms.Utils.Driver
             return true;
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Sorts the list by the clicked column.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnColumnClick(ColumnClickEventArgs e)
         {
             //

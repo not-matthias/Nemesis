@@ -9,6 +9,13 @@ namespace Nemesis.Forms.Utils.Driver
         public ushort OffsetToFileName { get; }
         public string FullPathName { get; }
 
+        /// <summary>
+        /// Sets the specified data.
+        /// </summary>
+        /// <param name="imageBase">The base address of the driver</param>
+        /// <param name="imageSize">The size of the driver memory</param>
+        /// <param name="offsetToFileName">The offset to the filename</param>
+        /// <param name="fullPathName">The full path name</param>
         public DriverListItem(long imageBase, int imageSize, ushort offsetToFileName, string fullPathName)
         {
             ImageBase = imageBase;
@@ -17,6 +24,10 @@ namespace Nemesis.Forms.Utils.Driver
             FullPathName = fullPathName;
         }
 
+        /// <summary>
+        /// Returns the list view item for the driver list.
+        /// </summary>
+        /// <returns>ListViewItem</returns>
         public ListViewItem GetListViewItem()
         {
             var listViewItem = new ListViewItem(FullPathName.Substring(OffsetToFileName));

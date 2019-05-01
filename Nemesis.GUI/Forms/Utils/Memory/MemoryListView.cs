@@ -7,6 +7,10 @@ namespace Nemesis.Forms.Utils.Memory
     {
         private int _sortColumnIndex;
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Sets list view properties and columns.
+        /// </summary>
         public MemoryListView()
         {
             Columns.Add("BaseAddress");
@@ -18,6 +22,10 @@ namespace Nemesis.Forms.Utils.Memory
             Sorting = SortOrder.Ascending;
         }
 
+        /// <summary>
+        /// Loads the memory regions and adds them to the list.
+        /// </summary>
+        /// <returns>True if successful</returns>
         public bool LoadMemory(int processId)
         {
             var memory = NemesisApi.GetMemoryList(processId);
@@ -61,6 +69,11 @@ namespace Nemesis.Forms.Utils.Memory
             return true;
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Sorts the list by the clicked column.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnColumnClick(ColumnClickEventArgs e)
         {
             //

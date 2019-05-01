@@ -7,15 +7,21 @@ namespace Nemesis.Forms.Utils.Process
         public string Id { get; }
         public string ProcessName { get; }
 
+        /// <summary>
+        /// Sets the specified data.
+        /// </summary>
+        /// <param name="id">The id of the process</param>
+        /// <param name="processName">The name of the process</param>
         public ProcessListItem(string id, string processName)
         {
             Id = id;
             ProcessName = processName;
         }
 
-        //
-        // Creates a new ListViewItem from the id and name
-        //
+        /// <summary>
+        /// Returns the list view item for the process list.
+        /// </summary>
+        /// <returns>ListViewItem</returns>
         public ListViewItem GetListViewItem()
         {
             var listViewItem = new ListViewItem(Id);

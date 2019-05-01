@@ -7,15 +7,20 @@ namespace Nemesis.Forms.Utils.Module
     {
         private int _sortColumnIndex;
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Sets list view properties.
+        /// </summary>
         public ModuleListView()
         {
-            //Columns.Add("ImageBase");
-            //Columns.Add("Path");
-
             DoubleBuffered = true;
             Sorting = SortOrder.Ascending;
         }
 
+        /// <summary>
+        /// Loads the modules and adds them to the list.
+        /// </summary>
+        /// <returns>True if successful</returns>
         public bool LoadModules(int processId)
         {
             var modules = NemesisApi.GetModuleList(processId);
@@ -59,6 +64,11 @@ namespace Nemesis.Forms.Utils.Module
             return true;
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Sorts the list by the clicked column.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnColumnClick(ColumnClickEventArgs e)
         {
             //

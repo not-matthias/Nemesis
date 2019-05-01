@@ -8,12 +8,24 @@ namespace Nemesis.Forms.Utils.Memory
         private readonly int _columnIndex;
         private readonly SortOrder _sortOrder;
 
+        /// <summary>
+        /// Sets the specified data.
+        /// </summary>
+        /// <param name="columnIndex">The index of the column</param>
+        /// <param name="sortOrder">The sort order (Ascending or Descending)</param>
         public MemorySorter(int columnIndex, SortOrder sortOrder)
         {
             _columnIndex = columnIndex;
             _sortOrder = sortOrder;
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Compares two memory list items.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public int Compare(object x, object y)
         {
             //
