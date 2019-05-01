@@ -5,6 +5,9 @@ using System.Runtime.InteropServices;
 
 namespace Nemesis.Utils
 {
+    /// <summary>
+    /// Contains the list of memory sources.
+    /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     internal struct MemorySource
     {
@@ -12,6 +15,9 @@ namespace Nemesis.Utils
         public IntPtr[] MemorySources;
     }
 
+    /// <summary>
+    /// Contains data about a driver.
+    /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     internal struct Driver
     {
@@ -23,6 +29,9 @@ namespace Nemesis.Utils
         public string FullPathName;
     }
 
+    /// <summary>
+    /// Contains data about a process.
+    /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     internal struct Process
     {
@@ -45,6 +54,9 @@ namespace Nemesis.Utils
         public int PrivatePageCount;
     }
 
+    /// <summary>
+    /// Contains data about a module of a process.
+    /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     public struct Module
     {
@@ -54,6 +66,9 @@ namespace Nemesis.Utils
         public long base_address;
     }
 
+    /// <summary>
+    /// Contains data about a memory region.
+    /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     public struct Memory
     {
@@ -97,27 +112,56 @@ namespace Nemesis.Utils
 
     internal class NemesisApi : NemesisImports
     {
+        /// <summary>
+        /// Dumps and saves the specified process.
+        /// </summary>
+        /// <param name="processId">The id of the process</param>
+        /// <param name="fileName">The dump location</param>
+        /// <returns>True if successful</returns>
         public static bool DumpProcess(int processId, string fileName)
         {
             return DumpProcessExport(processId, fileName);
         }
 
+        /// <summary>
+        /// Dumps and saves the specified module.
+        /// </summary>
+        /// <param name="processId">The id of the process in which the module is</param>
+        /// <param name="baseAddress">The base address of the module</param>
+        /// <param name="fileName">The dump location</param>
+        /// <returns>True if successful</returns>
         public static bool DumpModule(int processId, IntPtr baseAddress, string fileName)
         {
             return DumpModuleExport(processId, baseAddress, fileName);
         }
 
+        /// <summary>
+        /// Dumps and saves the specified memory.
+        /// </summary>
+        /// <param name="processId">The id of the process in which the memory is</param>
+        /// <param name="startAddress">The starting address of the memory region</param>
+        /// <param name="size">The size of the memory region</param>
+        /// <param name="fileName">The dump location</param>
+        /// <returns>True if successful</returns>
         public static bool DumpMemory(int processId, IntPtr startAddress, uint size, string fileName)
         {
             return DumpMemoryExport(processId, startAddress, size, fileName);
         }
 
-
+        /// <summary>
+        /// Sets the memory source in Nemesis.
+        /// </summary>
+        /// <param name="memorySource">The new memory source name</param>
+        /// <returns>True if successful</returns>
         public static bool SetMemorySource(string memorySource)
         {
             return SetMemorySourceExport(memorySource);
         }
 
+        /// <summary>
+        /// Returns the available memory sources.
+        /// </summary>
+        /// <returns>List of memory source names</returns>
         public static List<string> GetMemorySources()
         {
             //
@@ -138,7 +182,10 @@ namespace Nemesis.Utils
                 select Marshal.PtrToStringAnsi(pointer)?.Split('|')[0]).ToList();
         }
 
-
+        /// <summary>
+        /// Returns the list of drivers.
+        /// </summary>
+        /// <returns>List of driver objects</returns>
         public static List<Driver> GetDriverList()
         {
             var list = new List<Driver>();
@@ -173,6 +220,10 @@ namespace Nemesis.Utils
             return list;
         }
 
+        /// <summary>
+        /// Returns the list of processes.
+        /// </summary>
+        /// <returns>List of process objects</returns>
         public static List<Process> GetProcessList()
         {
             var list = new List<Process>();
@@ -207,6 +258,11 @@ namespace Nemesis.Utils
             return list;
         }
 
+        /// <summary>
+        /// Returns the list of modules of a process.
+        /// </summary>
+        /// <param name="processId">The id of the process</param>
+        /// <returns>List of module objects</returns>
         public static List<Module> GetModuleList(int processId)
         {
             var list = new List<Module>();
@@ -241,6 +297,11 @@ namespace Nemesis.Utils
             return list;
         }
 
+        /// <summary>
+        /// Returns the list of memory regions of a process.
+        /// </summary>
+        /// <param name="processId">The id of the process</param>
+        /// <returns>List of memory objects</returns>
         public static List<Memory> GetMemoryList(int processId)
         {
             var list = new List<Memory>();
