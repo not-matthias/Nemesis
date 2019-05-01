@@ -4,9 +4,11 @@ namespace Nemesis.Utils
 {
     internal class Config
     {
-        //
-        // Sets the specified value in the config
-        //
+        /// <summary>
+        /// Sets the specified value in the config.
+        /// </summary>
+        /// <param name="key">The key of the value</param>
+        /// <param name="value">The actual value</param>
         public static void SetValue(string key, string value)
         {
             //
@@ -38,9 +40,11 @@ namespace Nemesis.Utils
             ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
         }
 
-        //
-        // Retrieves the specified value from the config
-        //
+        /// <summary>
+        /// Retrieves the specified value from the config.
+        /// </summary>
+        /// <param name="key">The key of the value</param>
+        /// <returns>The value as a string</returns>
         public static string GetValue(string key) => ConfigurationManager.AppSettings[key];
     }
 }
