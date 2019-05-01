@@ -12,6 +12,10 @@ namespace Nemesis.Forms
     {
         private readonly int _processId;
 
+        /// <summary>
+        /// Loads the data of the specified process.
+        /// </summary>
+        /// <param name="processId">The id of the process</param>
         public ProcessInformation(int processId)
         {
             InitializeComponent();
@@ -26,6 +30,9 @@ namespace Nemesis.Forms
             Cursor.Current = Cursors.Default;
         }
 
+        /// <summary>
+        /// Loads the modules and memory of the process.
+        /// </summary>
         private void LoadData()
         {
             //
@@ -57,6 +64,11 @@ namespace Nemesis.Forms
             }
         }
 
+        /// <summary>
+        /// Shows the context menu at the cursor position.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ModuleListView_MouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Right) return;
@@ -70,6 +82,11 @@ namespace Nemesis.Forms
             moduleContextMenu.Show(Cursor.Position);
         }
 
+        /// <summary>
+        /// Shows the context menu at the cursor position.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MemoryListView_MouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Right) return;
@@ -83,7 +100,11 @@ namespace Nemesis.Forms
             memoryContextMenu.Show(Cursor.Position);
         }
 
-
+        /// <summary>
+        /// Dumps the selected module when context menu item gets clicked.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DumpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (moduleListView.SelectedItems.Count == 0) return;
@@ -93,6 +114,11 @@ namespace Nemesis.Forms
             DumpModule(module);
         }
 
+        /// <summary>
+        /// Dumps the selected memory when context menu item gets clicked.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MemoryContextMenu_Click(object sender, EventArgs e)
         {
             if (memoryListView.SelectedItems.Count == 0) return;
@@ -102,7 +128,10 @@ namespace Nemesis.Forms
             DumpMemory(memory);
         }
 
-
+        /// <summary>
+        /// Dumps the specified module.
+        /// </summary>
+        /// <param name="module">The module of a process</param>
         private void DumpModule(ModuleListItem module)
         {
             //
@@ -140,6 +169,10 @@ namespace Nemesis.Forms
             }
         }
 
+        /// <summary>
+        /// Dumps the specified memory.
+        /// </summary>
+        /// <param name="memory">The memory of a process.</param>
         private void DumpMemory(MemoryListItem memory)
         {
             //

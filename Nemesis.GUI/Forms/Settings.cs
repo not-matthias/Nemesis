@@ -9,9 +9,9 @@ namespace Nemesis.Forms
 {
     public partial class Settings : MetroForm
     {
-        //
-        // Sets the values from the config
-        //
+        /// <summary>
+        /// Loads and sets the config data.
+        /// </summary>
         public Settings()
         {
             InitializeComponent();
@@ -62,9 +62,11 @@ namespace Nemesis.Forms
             memoryComboBox.SelectedIndex = GetItemIndex(memoryComboBox, Config.GetValue("memory_source"));
         }
 
-        //
-        // Saves the settings in the config
-        //
+        /// <summary>
+        /// Saves the settings to the config.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SaveButton_Click(object sender, EventArgs e)
         {
             Config.SetValue("dump_location", dumpLocation.Text);
@@ -83,9 +85,11 @@ namespace Nemesis.Forms
             Close();
         }
 
-        //
-        // Enables the custom dump location option
-        //
+        /// <summary>
+        /// Enables the "custom dump location" option.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CustomDumpLocationToggle_CheckedChanged(object sender, EventArgs e)
         {
             var toggle = (MetroToggle) sender;
@@ -105,9 +109,11 @@ namespace Nemesis.Forms
             }
         }
 
-        //
-        // Enables the process folder option
-        //
+        /// <summary>
+        /// Enables the "create process folder" option.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CreateFolderToggle_CheckedChanged(object sender, EventArgs e)
         {
             var toggle = (MetroToggle) sender;
@@ -121,9 +127,11 @@ namespace Nemesis.Forms
             }
         }
 
-        //
-        // Enables the timestamp folder option
-        //
+        /// <summary>
+        /// Enables the "create timestamp folder" option.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CreateTimestampFolderToggle_CheckedChanged(object sender, EventArgs e)
         {
             var toggle = (MetroToggle) sender;
@@ -137,9 +145,11 @@ namespace Nemesis.Forms
             }
         }
 
-        //
-        // Enables ask for location option
-        // 
+        /// <summary>
+        /// Enables "ask for location" option.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AskForLocationToggle_CheckedChanged(object sender, EventArgs e)
         {
             var toggle = (MetroToggle) sender;
@@ -160,6 +170,11 @@ namespace Nemesis.Forms
             }
         }
 
+        /// <summary>
+        /// Changes the theme of the application.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ThemeComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (StyleManager == null) return;
@@ -169,6 +184,11 @@ namespace Nemesis.Forms
             Refresh();
         }
 
+        /// <summary>
+        /// Changes the color of the application.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ColorComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (StyleManager == null) return;
@@ -178,6 +198,24 @@ namespace Nemesis.Forms
             Refresh();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MemoryComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!NemesisApi.SetMemorySource(memoryComboBox.Text))
+            {
+                MessageBox.Show("Failed to set new memory source.", "Error");
+            }
+        }
+
+        /// <summary>
+        /// Returns the metro theme enum value for the specified name.
+        /// </summary>
+        /// <param name="name">The name of the enum value</param>
+        /// <returns>Specified enum value or MetroThemeStyle.Default</returns>
         public static MetroThemeStyle GetMetroThemeStyle(string name)
         {
             try
@@ -192,6 +230,11 @@ namespace Nemesis.Forms
             }
         }
 
+        /// <summary>
+        /// Returns the metro color enum value for the specified name.
+        /// </summary>
+        /// <param name="name">The name of the enum value</param>
+        /// <returns>Specified enum value or MetroColorStyle.Default</returns>
         public static MetroColorStyle GetMetroColorStyle(string name)
         {
             try
@@ -206,14 +249,12 @@ namespace Nemesis.Forms
             }
         }
 
-        private void MemoryComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (!NemesisApi.SetMemorySource(memoryComboBox.Text))
-            {
-                MessageBox.Show("Failed to set new memory source.", "Error");
-            }
-        }
-
+        /// <summary>
+        /// Returns the index of the specified item in the specified combo box.
+        /// </summary>
+        /// <param name="comboBox">The target combo box</param>
+        /// <param name="value">The value of an item</param>
+        /// <returns>Index or -1</returns>
         private int GetItemIndex(ComboBox comboBox, string value)
         {
             foreach (var item in comboBox.Items)

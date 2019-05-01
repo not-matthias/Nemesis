@@ -11,11 +11,14 @@ namespace Nemesis.Forms
 {
     public partial class NemesisForm : MetroForm
     {
+        /// <summary>
+        /// List of process information, to reduce loading times.
+        /// </summary>
         private readonly Dictionary<int, ProcessInformation> _processInformationList = new Dictionary<int, ProcessInformation>();
 
-        // 
-        // Sets the process list and set styles
-        // 
+        /// <summary>
+        /// Sets the styles and loads list data.
+        /// </summary>
         public NemesisForm()
         {
             InitializeComponent();
@@ -34,14 +37,18 @@ namespace Nemesis.Forms
             driverListView.LoadDrivers();
         }
 
-        //
-        // Refreshes the process list
-        //
+        /// <summary>
+        /// Refreshes the process list.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RefreshButton_Click(object sender, EventArgs e) => processListView.LoadProcesses();
 
-        //
-        // Dumps the process
-        //
+        /// <summary>
+        /// Dumps the selected process.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DumpButton_Click(object sender, EventArgs e)
         {
             if (processListView.SelectedItems.Count <= 0 && driverListView.SelectedItems.Count <= 0) return;
@@ -195,9 +202,11 @@ namespace Nemesis.Forms
             }
         }
 
-        //
-        // Opens the about window
-        //
+        /// <summary>
+        /// Opens the about window.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AboutButton_Click(object sender, EventArgs e)
         {
             var about = new About
@@ -208,9 +217,11 @@ namespace Nemesis.Forms
             about.Dispose();
         }
 
-        //
-        // Opens the settings window
-        //
+        /// <summary>
+        /// Opens the settings window.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SettingsButton_Click(object sender, EventArgs e)
         {
             var settings = new Settings {StyleManager = styleManager};
@@ -218,9 +229,11 @@ namespace Nemesis.Forms
             settings.Dispose();
         }
 
-        //
-        // Opens the process information window
-        //
+        /// <summary>
+        /// Opens the process information window for the selected process.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ProcessListView_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             //
@@ -247,9 +260,13 @@ namespace Nemesis.Forms
             processInfo.ShowDialog();
         }
 
-        //
-        // Shortcuts
-        //
+        /// <inheritdoc />
+        /// <summary>
+        /// Handles shortcuts.
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="keyData"></param>
+        /// <returns></returns>
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             switch (keyData)
