@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
 namespace Nemesis.Forms.Utils.Memory
 {
@@ -32,7 +33,17 @@ namespace Nemesis.Forms.Utils.Memory
         {
             var listViewItem = new ListViewItem(BaseAddress.ToString("X8"));
             listViewItem.SubItems.Add(RegionSize.ToString("X8"));
+
+            var state = "";
+            state += (State & 0x1000) != 0 ? "MEM_COMMIT" : "";
+            state += (State & 0x10000) != 0 ? "MEM_FREE" : "";
+            state += (State & 0x2000) != 0 ? "MEM_RESERVE" : "";
             listViewItem.SubItems.Add(State.ToString());
+
+            var type = "";
+            type += (Type & 0x1000000) != 0 ? "MEM_IMAGE" : "";
+            type += (Type & 0x40000) != 0 ? "MEM_MAPPED" : "";
+            type += (Type & 0x20000) != 0 ? "MEM_PRIVATE" : "";
             listViewItem.SubItems.Add(Type.ToString());
             listViewItem.Tag = this;
 
