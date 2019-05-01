@@ -72,8 +72,8 @@ namespace Nemesis.Utils
     [StructLayout(LayoutKind.Sequential)]
     public struct Memory
     {
-        public long BaseAddress;
-        public int RegionSize;
+        public ulong BaseAddress;
+        public ulong RegionSize;
         public int State;
         public int Type;
     }
@@ -106,7 +106,7 @@ namespace Nemesis.Utils
         [DllImport("Nemesis.dll")]
         protected static extern bool GetModuleListElementExport([In] uint index, [In] int processId, [In] [Out] ref Module structure);
 
-        [DllImport("Nemesis.dll")]
+        [DllImport("D:\\3_Programming\\1_Github\\Nemesis\\x64\\Release\\Nemesis.dll")]
         protected static extern bool GetMemoryListElementExport([In] uint index, [In] int processId, [In] [Out] ref Memory structure);
     }
 
