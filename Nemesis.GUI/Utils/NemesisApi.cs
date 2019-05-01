@@ -61,9 +61,9 @@ namespace Nemesis.Utils
     public struct Module
     {
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
-        public string module_name;
+        public string ModuleName;
 
-        public long base_address;
+        public long BaseAddress;
     }
 
     /// <summary>

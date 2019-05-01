@@ -43,7 +43,7 @@ namespace Nemesis.Forms.Utils.Module
                 //
                 // Create a new ProcessListItem
                 //
-                var processListItem = new ModuleListItem(module.base_address, module.module_name);
+                var processListItem = new ModuleListItem(module.BaseAddress, module.ModuleName);
 
                 //
                 // Add it to the ListView
