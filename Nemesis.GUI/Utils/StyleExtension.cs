@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using MetroFramework;
 using MetroFramework.Components;
 using MetroFramework.Forms;
-using Nemesis.Forms;
 
 namespace Nemesis.Utils
 {
@@ -13,8 +11,8 @@ namespace Nemesis.Utils
     {
         private static readonly List<MetroStyleManager> StyleManagers = new List<MetroStyleManager>();
 
-        private static  MetroColorStyle _colorStyle = GetMetroColorStyle(Config.GetValue("style"));
-        private static  MetroThemeStyle _themeStyle = GetMetroThemeStyle(Config.GetValue("theme"));
+        private static MetroColorStyle _colorStyle = GetMetroColorStyle(Config.GetValue("style"));
+        private static MetroThemeStyle _themeStyle = GetMetroThemeStyle(Config.GetValue("theme"));
 
         /// <summary>
         /// Creates a new MetroStyleManager and sets the styles.
@@ -31,7 +29,7 @@ namespace Nemesis.Utils
             //
             // Create new MetroStyleManager and add it to the list
             //
-            StyleManagers.Add(new MetroStyleManager(container) { Owner = ownerForm });
+            StyleManagers.Add(new MetroStyleManager(container) {Owner = ownerForm});
 
             //
             // Update the styles
@@ -68,7 +66,7 @@ namespace Nemesis.Utils
         {
             foreach (var styleManager in StyleManagers)
             {
-                var metroForm = (MetroForm)styleManager.Owner;
+                var metroForm = (MetroForm) styleManager.Owner;
                 metroForm.Theme = _themeStyle;
                 metroForm.Style = _colorStyle;
 
@@ -114,6 +112,5 @@ namespace Nemesis.Utils
                 return MetroColorStyle.Default;
             }
         }
-
     }
 }
