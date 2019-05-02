@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
             this.metroLabel2 = new MetroFramework.Controls.MetroLabel();
             this.saveButton = new MetroFramework.Controls.MetroButton();
@@ -45,16 +46,18 @@
             this.metroLabel7 = new MetroFramework.Controls.MetroLabel();
             this.metroTabControl1 = new MetroFramework.Controls.MetroTabControl();
             this.metroTabPage1 = new MetroFramework.Controls.MetroTabPage();
+            this.metroTabPage3 = new MetroFramework.Controls.MetroTabPage();
+            this.memoryComboBox = new MetroFramework.Controls.MetroComboBox();
             this.metroTabPage2 = new MetroFramework.Controls.MetroTabPage();
             this.colorComboBox = new MetroFramework.Controls.MetroComboBox();
             this.themeComboBox = new MetroFramework.Controls.MetroComboBox();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
-            this.metroTabPage3 = new MetroFramework.Controls.MetroTabPage();
-            this.memoryComboBox = new MetroFramework.Controls.MetroComboBox();
+            this.settingStyleManager = new MetroFramework.Components.MetroStyleManager(this.components);
             this.metroTabControl1.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
-            this.metroTabPage2.SuspendLayout();
             this.metroTabPage3.SuspendLayout();
+            this.metroTabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.settingStyleManager)).BeginInit();
             this.SuspendLayout();
             // 
             // metroLabel1
@@ -286,6 +289,33 @@
             this.metroTabPage1.VerticalScrollbarHighlightOnWheel = false;
             this.metroTabPage1.VerticalScrollbarSize = 10;
             // 
+            // metroTabPage3
+            // 
+            this.metroTabPage3.Controls.Add(this.memoryComboBox);
+            this.metroTabPage3.HorizontalScrollbarBarColor = true;
+            this.metroTabPage3.HorizontalScrollbarHighlightOnWheel = false;
+            this.metroTabPage3.HorizontalScrollbarSize = 10;
+            this.metroTabPage3.Location = new System.Drawing.Point(4, 38);
+            this.metroTabPage3.Name = "metroTabPage3";
+            this.metroTabPage3.Size = new System.Drawing.Size(544, 211);
+            this.metroTabPage3.TabIndex = 2;
+            this.metroTabPage3.Text = "Memory";
+            this.metroTabPage3.VerticalScrollbarBarColor = true;
+            this.metroTabPage3.VerticalScrollbarHighlightOnWheel = false;
+            this.metroTabPage3.VerticalScrollbarSize = 10;
+            // 
+            // memoryComboBox
+            // 
+            this.memoryComboBox.FormattingEnabled = true;
+            this.memoryComboBox.ItemHeight = 23;
+            this.memoryComboBox.Location = new System.Drawing.Point(3, 18);
+            this.memoryComboBox.Name = "memoryComboBox";
+            this.memoryComboBox.PromptText = "Memory Source";
+            this.memoryComboBox.Size = new System.Drawing.Size(161, 29);
+            this.memoryComboBox.TabIndex = 2;
+            this.memoryComboBox.UseSelectable = true;
+            this.memoryComboBox.SelectedIndexChanged += new System.EventHandler(this.MemoryComboBox_SelectedIndexChanged);
+            // 
             // metroTabPage2
             // 
             this.metroTabPage2.Controls.Add(this.colorComboBox);
@@ -326,32 +356,9 @@
             this.themeComboBox.UseSelectable = true;
             this.themeComboBox.SelectedIndexChanged += new System.EventHandler(this.ThemeComboBox_SelectedIndexChanged);
             // 
-            // metroTabPage3
+            // settingStyleManager
             // 
-            this.metroTabPage3.Controls.Add(this.memoryComboBox);
-            this.metroTabPage3.HorizontalScrollbarBarColor = true;
-            this.metroTabPage3.HorizontalScrollbarHighlightOnWheel = false;
-            this.metroTabPage3.HorizontalScrollbarSize = 10;
-            this.metroTabPage3.Location = new System.Drawing.Point(4, 38);
-            this.metroTabPage3.Name = "metroTabPage3";
-            this.metroTabPage3.Size = new System.Drawing.Size(544, 211);
-            this.metroTabPage3.TabIndex = 2;
-            this.metroTabPage3.Text = "Memory";
-            this.metroTabPage3.VerticalScrollbarBarColor = true;
-            this.metroTabPage3.VerticalScrollbarHighlightOnWheel = false;
-            this.metroTabPage3.VerticalScrollbarSize = 10;
-            // 
-            // memoryComboBox
-            // 
-            this.memoryComboBox.FormattingEnabled = true;
-            this.memoryComboBox.ItemHeight = 23;
-            this.memoryComboBox.Location = new System.Drawing.Point(3, 18);
-            this.memoryComboBox.Name = "memoryComboBox";
-            this.memoryComboBox.PromptText = "Memory Source";
-            this.memoryComboBox.Size = new System.Drawing.Size(161, 29);
-            this.memoryComboBox.TabIndex = 2;
-            this.memoryComboBox.UseSelectable = true;
-            this.memoryComboBox.SelectedIndexChanged += new System.EventHandler(this.MemoryComboBox_SelectedIndexChanged);
+            this.settingStyleManager.Owner = null;
             // 
             // Settings
             // 
@@ -372,8 +379,9 @@
             this.metroTabControl1.ResumeLayout(false);
             this.metroTabPage1.ResumeLayout(false);
             this.metroTabPage1.PerformLayout();
-            this.metroTabPage2.ResumeLayout(false);
             this.metroTabPage3.ResumeLayout(false);
+            this.metroTabPage2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.settingStyleManager)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -403,5 +411,6 @@
         private MetroFramework.Controls.MetroComboBox colorComboBox;
         private MetroFramework.Controls.MetroTabPage metroTabPage3;
         private MetroFramework.Controls.MetroComboBox memoryComboBox;
+        private MetroFramework.Components.MetroStyleManager settingStyleManager;
     }
 }

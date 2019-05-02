@@ -23,6 +23,11 @@ namespace Nemesis.Forms
             _processId = processId;
 
             //
+            // Set styles
+            //
+            components.SetStyle(this);
+
+            //
             // Load modules and memory (can take some time)
             //
             Cursor.Current = Cursors.WaitCursor;

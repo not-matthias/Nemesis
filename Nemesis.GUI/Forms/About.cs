@@ -1,4 +1,5 @@
 ﻿using MetroFramework.Forms;
+using Nemesis.Utils;
 
 namespace Nemesis.Forms
 {
@@ -7,6 +8,7 @@ namespace Nemesis.Forms
         public About()
         {
             InitializeComponent();
+            components.SetStyle(this);
         }
     }
 }

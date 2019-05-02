@@ -143,6 +143,7 @@
     </Compile>
     <Compile Include="Forms\Utils\Module\ModuleSorter.cs" />
     <Compile Include="Utils\Config.cs" />
+    <Compile Include="Utils\StyleExtension.cs" />
     <Compile Include="Utils\NemesisApi.cs" />
     <Compile Include="Forms\Utils\Process\ProcessListItem.cs" />
     <Compile Include="Forms\Utils\Process\ProcessListView.cs">

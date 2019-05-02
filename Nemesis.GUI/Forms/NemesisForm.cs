@@ -26,9 +26,7 @@ namespace Nemesis.Forms
             //
             // Set the styles
             //
-            StyleManager = styleManager;
-            StyleManager.Theme = Settings.GetMetroThemeStyle(Config.GetValue("theme"));
-            StyleManager.Style = Settings.GetMetroColorStyle(Config.GetValue("style"));
+            components.SetStyle(this);
 
             //
             // Load data
@@ -209,10 +207,7 @@ namespace Nemesis.Forms
         /// <param name="e"></param>
         private void AboutButton_Click(object sender, EventArgs e)
         {
-            var about = new About
-            {
-                StyleManager = styleManager
-            };
+            var about = new About();
             about.ShowDialog();
             about.Dispose();
         }
@@ -224,7 +219,7 @@ namespace Nemesis.Forms
         /// <param name="e"></param>
         private void SettingsButton_Click(object sender, EventArgs e)
         {
-            var settings = new Settings {StyleManager = styleManager};
+            var settings = new Settings();
             settings.ShowDialog();
             settings.Dispose();
         }
@@ -252,7 +247,7 @@ namespace Nemesis.Forms
             var processId = int.Parse(item.Id);
             var processInfo = _processInformationList.ContainsKey(processId)
                 ? _processInformationList[processId]
-                : new ProcessInformation(processId) {StyleManager = styleManager};
+                : new ProcessInformation(processId);
 
             _processInformationList[processId] = processInfo;
 

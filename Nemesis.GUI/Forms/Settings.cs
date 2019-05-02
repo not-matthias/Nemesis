@@ -17,6 +17,11 @@ namespace Nemesis.Forms
             InitializeComponent();
 
             //
+            // Set the styles
+            //
+            components.SetStyle(this);
+
+            //
             // Set default values the first time
             //
             if (Config.GetValue("first_time_started") == null)
@@ -177,9 +182,7 @@ namespace Nemesis.Forms
         /// <param name="e"></param>
         private void ThemeComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (StyleManager == null) return;
-
-            StyleManager.Theme = GetMetroThemeStyle(themeComboBox.Text);
+            StyleExtension.SetThemeStyle(StyleExtension.GetMetroThemeStyle(themeComboBox.Text));
 
             Refresh();
         }
@@ -191,9 +194,7 @@ namespace Nemesis.Forms
         /// <param name="e"></param>
         private void ColorComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (StyleManager == null) return;
-
-            StyleManager.Style = GetMetroColorStyle(colorComboBox.Text);
+            StyleExtension.SetColorStyle(StyleExtension.GetMetroColorStyle(colorComboBox.Text));
 
             Refresh();
         }
@@ -208,44 +209,6 @@ namespace Nemesis.Forms
             if (!NemesisApi.SetMemorySource(memoryComboBox.Text))
             {
                 MessageBox.Show("Failed to set new memory source.", "Error");
-            }
-        }
-
-        /// <summary>
-        /// Returns the metro theme enum value for the specified name.
-        /// </summary>
-        /// <param name="name">The name of the enum value</param>
-        /// <returns>Specified enum value or MetroThemeStyle.Default</returns>
-        public static MetroThemeStyle GetMetroThemeStyle(string name)
-        {
-            try
-            {
-                Enum.TryParse(name, out MetroThemeStyle color);
-
-                return color;
-            }
-            catch (ArgumentException)
-            {
-                return MetroThemeStyle.Default;
-            }
-        }
-
-        /// <summary>
-        /// Returns the metro color enum value for the specified name.
-        /// </summary>
-        /// <param name="name">The name of the enum value</param>
-        /// <returns>Specified enum value or MetroColorStyle.Default</returns>
-        public static MetroColorStyle GetMetroColorStyle(string name)
-        {
-            try
-            {
-                Enum.TryParse(name, out MetroColorStyle color);
-
-                return color;
-            }
-            catch (ArgumentException)
-            {
-                return MetroColorStyle.Default;
             }
         }
 
