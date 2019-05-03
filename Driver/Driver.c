@@ -1,6 +1,7 @@
 #include <ntddk.h>
 #include "ntos.h"
 #include "Logger.h"
+#include <excpt.h>
 
 #define DEBUG
 
@@ -66,48 +67,38 @@ UNICODE_STRING device_name, symbolic_link_name;
 //
 NTSTATUS CopyVirtualMemory(const HANDLE process_id, const PVOID source_address, const PVOID destination_address, const SIZE_T size)
 {
+	NTSTATUS status = STATUS_SUCCESS;
 	PEPROCESS process = NULL;
-	PSIZE_T bytes_copied = NULL;
+	const PSIZE_T bytes_copied = NULL;
 
-	Log("Reading virtual memory.");
+	Log("Reading virtual memory.\n");
 
 	__try
 	{
-		//
-		// Open the process
-		//
-		if (NT_SUCCESS(PsLookupProcessByProcessId(process_id, &process)))
+		if (!NT_SUCCESS(status = PsLookupProcessByProcessId(process_id, &process)))
 		{
-			//
-			// Read virtual memory
-			//
-			if (NT_SUCCESS(MmCopyVirtualMemory(process, source_address, PsGetCurrentProcess(), destination_address, size, KernelMode, bytes_copied)))
-			{
-				Log("Successfully read virtual memory.");
+			Log("Failed to lookup process.\n");
+			return status;
+		}
 
-				ObDereferenceObject(process);
-				return STATUS_SUCCESS;
-			}
-			else
-			{
-				Log("Failed to read virtual memory.");
 
-				ObDereferenceObject(process);
-				return STATUS_UNSUCCESSFUL;
-			}
+		if (!NT_SUCCESS(status = MmCopyVirtualMemory(process, source_address, PsGetCurrentProcess(), destination_address, size, KernelMode, bytes_copied)))
+		{
+			Log("Successfully read virtual memory.\n");
 		}
 		else
 		{
-			Log("Failed to lookup process.");
-
-			return STATUS_UNSUCCESSFUL;
+			Log("Failed to read virtual memory.\n");
 		}
-	}
-	__except (EXCEPTION_EXECUTE_HANDLER)
-	{
-		Log("Something went wrong while reading virtual memory.");
 
-		return STATUS_UNSUCCESSFUL;
+
+		ObDereferenceObject(process);
+		return status;
+	}
+	__except (GetExceptionCode())
+	{
+		Log("Something went wrong while reading virtual memory. (%lu)", _exception_code());
+		return status;
 	}
 }
 
@@ -143,16 +134,16 @@ NTSTATUS DeviceControl(PDEVICE_OBJECT device_object, const PIRP irp)
 	case IOCTL_READ_REQUEST:
 		read_request = (PREAD_REQUEST)irp->AssociatedIrp.SystemBuffer;
 
+		Log("Received PREAD_REQUEST.\n");
+
 		//
 		// Check request data
 		//
 		if (read_request != NULL && read_request->target_address < 0x7FFFFFFFFFFF)
 		{
-			//
-			// Read virtual memory
-			//
 			status = CopyVirtualMemory((HANDLE)read_request->process_id, (PVOID)&read_request->target_address, (PVOID)read_request->buffer_address,
 			                           read_request->buffer_size);
+
 			bytes = sizeof(READ_REQUEST);
 		}
 		break;
@@ -161,37 +152,33 @@ NTSTATUS DeviceControl(PDEVICE_OBJECT device_object, const PIRP irp)
 	case IOCTL_BASE_ADDRESS_REQUEST:
 		base_address_request = (PBASE_ADDRESS_REQUEST)irp->AssociatedIrp.SystemBuffer;
 
+		Log("Received PBASE_ADDRESS_REQUEST.\n");
+
 		//
 		// Check request data
 		//
 		if (base_address_request != NULL)
 		{
-			PEPROCESS pProcess;
-
-			//
-			// Get the process
-			//
-			status = PsLookupProcessByProcessId((HANDLE)base_address_request->process_id, &pProcess);
+			PEPROCESS process;
 
 			// 
-			// Check if found (and return)
+			// Open process
 			// 
-			if (!NT_SUCCESS(status))
+			if (!NT_SUCCESS(status = PsLookupProcessByProcessId((HANDLE)base_address_request->process_id, &process)))
 			{
 				base_address_request->base_address = 0;
-
 				break;
 			}
 
 			// 
 			// Get the base address
 			// 
-			const PVOID base_address = PsGetProcessSectionBaseAddress(pProcess);
+			const PVOID base_address = PsGetProcessSectionBaseAddress(process);
 
 			//
 			// Cleanup
 			//
-			ObDereferenceObject(pProcess);
+			ObDereferenceObject(process);
 
 			//
 			// Return data
