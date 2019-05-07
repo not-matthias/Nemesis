@@ -25,7 +25,7 @@ typedef struct _READ_REQUEST
 	// In
 	//
 	ULONG process_id;
-	DWORD_PTR target_address;
+	PVOID target_address;
 
 	//
 	// Both
@@ -65,43 +65,48 @@ UNICODE_STRING device_name, symbolic_link_name;
 //
 // Helper function
 //
-NTSTATUS CopyVirtualMemory(const HANDLE process_id, const PVOID source_address, const PVOID destination_address, const SIZE_T size)
+NTSTATUS CopyVirtualMemory(const HANDLE process_id, const PVOID source_address, const PVOID target_address, const SIZE_T buffer_size)
 {
 	NTSTATUS status = STATUS_SUCCESS;
-	PEPROCESS process = NULL;
-	const PSIZE_T bytes_copied = NULL;
+	SIZE_T bytes_copied = 0;
+	PEPROCESS source_process = NULL;
+	const PEPROCESS target_process = PsGetCurrentProcess();
 
 	Log("Reading virtual memory.\n");
 
 	__try
 	{
-		if (!NT_SUCCESS(status = PsLookupProcessByProcessId(process_id, &process)))
+		if (!NT_SUCCESS(status = PsLookupProcessByProcessId(process_id, &source_process)))
 		{
 			Log("Failed to lookup process.\n");
 			return status;
 		}
-
-
-		if (!NT_SUCCESS(status = MmCopyVirtualMemory(process, source_address, PsGetCurrentProcess(), destination_address, size, KernelMode, bytes_copied)))
+		else
 		{
-			Log("Successfully read virtual memory.\n");
+			Log("Successfully looked up the process.\n");
+		}
+
+		
+		if (!NT_SUCCESS(status = MmCopyVirtualMemory(source_process, source_address, target_process, target_address, buffer_size, KernelMode, &bytes_copied)))
+		{
+			Log("Failed to read virtual memory.\n");
+			return status;
 		}
 		else
 		{
-			Log("Failed to read virtual memory.\n");
+			Log("Successfully read virtual memory.\n");
 		}
 
 
-		ObDereferenceObject(process);
+		ObDereferenceObject(source_process);
 		return status;
 	}
-	__except (GetExceptionCode())
+	__except (EXCEPTION_EXECUTE_HANDLER)
 	{
-		Log("Something went wrong while reading virtual memory. (%lu)", _exception_code());
+		DbgPrint("Something went wrong while reading virtual memory. (%llx)\n", GetExceptionCode());
 		return status;
 	}
 }
-
 
 //
 // Device Handler
@@ -139,11 +144,9 @@ NTSTATUS DeviceControl(PDEVICE_OBJECT device_object, const PIRP irp)
 		//
 		// Check request data
 		//
-		if (read_request != NULL && read_request->target_address < 0x7FFFFFFFFFFF)
+		if (read_request != NULL)
 		{
-			status = CopyVirtualMemory((HANDLE)read_request->process_id, (PVOID)&read_request->target_address, (PVOID)read_request->buffer_address,
-			                           read_request->buffer_size);
-
+			status = CopyVirtualMemory((HANDLE)read_request->process_id, read_request->target_address, read_request->buffer_address, read_request->buffer_size);
 			bytes = sizeof(READ_REQUEST);
 		}
 		break;

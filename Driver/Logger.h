@@ -27,10 +27,10 @@ VOID Log(const PCSTR format, ...)
 	//
 	// Print it
 	// 
-	DbgPrintEx(0, 0, format, args);
+	DbgPrint(format, args);
 
 	//
-	// Stop useing the variable list
+	// Stop using the variable list
 	//
 	va_end(args);
 }
