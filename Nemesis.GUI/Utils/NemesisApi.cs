@@ -89,6 +89,9 @@ namespace Nemesis.Utils
         [DllImport("Nemesis.dll")]
         protected static extern bool DumpMemoryExport([In] int processId, [In] IntPtr startAddress, [In] uint size, [In] string fileName);
 
+        [DllImport("Nemesis.dll")]
+        protected static extern bool DumpDriverExport([In] IntPtr baseAddress, [In] string fileName);
+
 
         [DllImport("Nemesis.dll")]
         protected static extern void GetMemorySourcesExport([In] [Out] ref MemorySource structure);
@@ -146,6 +149,17 @@ namespace Nemesis.Utils
         public static bool DumpMemory(int processId, IntPtr startAddress, uint size, string fileName)
         {
             return DumpMemoryExport(processId, startAddress, size, fileName);
+        }
+
+        /// <summary>
+        /// Dumps and saves the specified driver.
+        /// </summary>
+        /// <param name="baseAddress">The base address of the driver</param>
+        /// <param name="fileName">The dump location</param>
+        /// <returns></returns>
+        public static bool DumpDriver(IntPtr baseAddress, string fileName)
+        {
+            return NemesisImports.DumpDriverExport(baseAddress, fileName);
         }
 
         /// <summary>

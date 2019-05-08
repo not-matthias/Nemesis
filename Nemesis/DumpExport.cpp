@@ -114,3 +114,42 @@ auto DumpMemoryExport(const DWORD process_id, const DWORD_PTR start_address, con
 		return FALSE;
 	}
 }
+
+auto DumpDriverExport(DWORD_PTR base_address, LPCSTR file_name) -> BOOL
+{
+	//
+	// Create the Memory wrapper
+	//
+	ProcessMemory process_memory(4);
+	if (!process_memory.IsValid())
+	{
+		return FALSE;
+	}
+
+	//
+	// Create and initialize the pe file
+	//
+	Module module(&process_memory, base_address);
+	if (!module.Initialize())
+	{
+		return FALSE;
+	}
+
+	module.SetFileAlignment();
+	module.AlignSectionHeaders();
+	module.FixHeader();
+	module.RemoveIat();
+
+	//
+	// Write to file
+	//
+	FileWriter file_writer(file_name);
+	if (file_writer.WriteToFile(&module))
+	{
+		return TRUE;
+	}
+	else
+	{
+		return FALSE;
+	}
+}

@@ -28,3 +28,11 @@ auto DumpModuleExport(DWORD process_id, DWORD_PTR base_address, LPCSTR file_name
  * \return true if successful
  */
 auto DumpMemoryExport(DWORD process_id, DWORD_PTR start_address, DWORD size, LPCSTR file_name) -> BOOL;
+
+/**
+ * \brief Dumps a specific drier.
+ * \param base_address the base address of the driver
+ * \param file_name the dump file name
+ * \return true if successful
+ */
+auto DumpDriverExport(DWORD_PTR base_address, LPCSTR file_name)->BOOL;
