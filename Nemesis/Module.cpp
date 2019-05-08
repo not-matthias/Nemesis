@@ -102,10 +102,8 @@ auto Module::SetHeader(BYTE * header_memory, const DWORD header_size) -> VOID
 	//
 	if (dos_header->e_lfanew > 0 && dos_header->e_lfanew < static_cast<LONG>(header_size))
 	{
-		nt_header32 = reinterpret_cast<PIMAGE_NT_HEADERS32>(reinterpret_cast<DWORD_PTR>(dos_header) + dos_header->
-			e_lfanew);
-		nt_header64 = reinterpret_cast<PIMAGE_NT_HEADERS64>(reinterpret_cast<DWORD_PTR>(dos_header) + dos_header->
-			e_lfanew);
+		nt_header32 = reinterpret_cast<PIMAGE_NT_HEADERS32>(reinterpret_cast<DWORD_PTR>(dos_header) + dos_header->e_lfanew);
+		nt_header64 = reinterpret_cast<PIMAGE_NT_HEADERS64>(reinterpret_cast<DWORD_PTR>(dos_header) + dos_header->e_lfanew);
 
 		if (dos_header->e_lfanew <= static_cast<LONG>(sizeof(IMAGE_DOS_HEADER)))
 		{
@@ -306,7 +304,8 @@ auto Module::AlignSectionHeaders() -> VOID
 	//
 	// Sort by PointerToRawData (ascending)
 	//
-	std::sort(sections.begin(), sections.end(), [](const Section & a, const Section & b) -> bool{
+	std::sort(sections.begin(), sections.end(), [](const Section & a, const Section & b) -> bool
+	{
 		return a.section_header.PointerToRawData < b.section_header.PointerToRawData;
 	});
 
@@ -336,7 +335,8 @@ auto Module::AlignSectionHeaders() -> VOID
 	//
 	// Sort by VirtualAddress (ascending)
 	//
-	std::sort(sections.begin(), sections.end(), [](const Section & a, const Section & b) -> bool{
+	std::sort(sections.begin(), sections.end(), [](const Section & a, const Section & b) -> bool
+	{
 		return a.section_header.VirtualAddress < b.section_header.VirtualAddress;
 	});
 }
@@ -367,8 +367,8 @@ auto Module::FixHeader() -> VOID
 		nt_header32->OptionalHeader.SizeOfImage = GetImageSize();
 		nt_header32->OptionalHeader.ImageBase = static_cast<DWORD>(base_address);
 		nt_header32->OptionalHeader.SizeOfHeaders = AlignValue(size + nt_header32->FileHeader.SizeOfOptionalHeader +
-			(GetSectionCount() * sizeof(IMAGE_SECTION_HEADER)),
-			nt_header32->OptionalHeader.FileAlignment);
+		                                                       (GetSectionCount() * sizeof(IMAGE_SECTION_HEADER)),
+		                                                       nt_header32->OptionalHeader.FileAlignment);
 	}
 	else
 	{
@@ -392,8 +392,8 @@ auto Module::FixHeader() -> VOID
 		nt_header64->OptionalHeader.SizeOfImage = GetImageSize();
 		nt_header64->OptionalHeader.ImageBase = static_cast<DWORD>(base_address);
 		nt_header64->OptionalHeader.SizeOfHeaders = AlignValue(size + nt_header64->FileHeader.SizeOfOptionalHeader +
-			(GetSectionCount() * sizeof(IMAGE_SECTION_HEADER)),
-			nt_header64->OptionalHeader.FileAlignment);
+		                                                       (GetSectionCount() * sizeof(IMAGE_SECTION_HEADER)),
+		                                                       nt_header64->OptionalHeader.FileAlignment);
 	}
 }
 
