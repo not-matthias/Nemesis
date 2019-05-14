@@ -64,6 +64,11 @@ namespace Nemesis.Forms
             themeComboBox.SelectedIndex = GetItemIndex(themeComboBox, Config.GetValue("theme"));
             colorComboBox.SelectedIndex = GetItemIndex(colorComboBox, Config.GetValue("style"));
             memoryComboBox.SelectedIndex = GetItemIndex(memoryComboBox, Config.GetValue("memory_source"));
+
+            //
+            // Set the memory source
+            //
+            NemesisApi.SetMemorySource(Config.GetValue("memory_source"));
         }
 
         /// <summary>
@@ -73,6 +78,9 @@ namespace Nemesis.Forms
         /// <param name="e"></param>
         private void SaveButton_Click(object sender, EventArgs e)
         {
+            //
+            // Save the settings
+            //
             Config.SetValue("dump_location", dumpLocation.Text);
             Config.SetValue("file_name", fileName.Text);
 
@@ -85,6 +93,14 @@ namespace Nemesis.Forms
             Config.SetValue("style", colorComboBox.Text);
 
             Config.SetValue("memory_source", memoryComboBox.Text);
+
+            //
+            // Change the settings
+            //
+            if (!NemesisApi.SetMemorySource(Config.GetValue("memory_source")))
+            {
+                MessageBox.Show("Failed to set new memory source.");
+            }
 
             Close();
         }

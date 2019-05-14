@@ -109,7 +109,7 @@ namespace Nemesis.Utils
         [DllImport("Nemesis.dll")]
         protected static extern bool GetModuleListElementExport([In] uint index, [In] int processId, [In] [Out] ref Module structure);
 
-        [DllImport("D:\\3_Programming\\1_Github\\Nemesis\\x64\\Release\\Nemesis.dll")]
+        [DllImport("Nemesis.dll")]
         protected static extern bool GetMemoryListElementExport([In] uint index, [In] int processId, [In] [Out] ref Memory structure);
     }
 

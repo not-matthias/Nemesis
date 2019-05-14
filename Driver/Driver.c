@@ -2,6 +2,7 @@
 #include "ntos.h"
 #include "Logger.h"
 #include <excpt.h>
+#include <ntstatus.h>
 
 #define DEBUG
 
@@ -65,32 +66,47 @@ UNICODE_STRING device_name, symbolic_link_name;
 //
 // Helper function
 //
+
+_IRQL_requires_max_(APC_LEVEL)
 NTSTATUS CopyVirtualMemory(const HANDLE process_id, const PVOID source_address, const PVOID target_address, const SIZE_T buffer_size)
 {
-	NTSTATUS status = STATUS_SUCCESS;
+	NTSTATUS status = STATUS_UNSUCCESSFUL;
 	SIZE_T bytes_copied = 0;
 	PEPROCESS source_process = NULL;
 	const PEPROCESS target_process = PsGetCurrentProcess();
 
+	KIRQL old_irql;
+
 	Log("Reading virtual memory.\n");
 
+	KeRaiseIrql(APC_LEVEL, &old_irql);
+	
 	__try
 	{
+
+		if(!MmIsAddressValid(source_address))
+		{
+			Log("Address is not valid.\n");
+			goto EXIT;
+		}
+
+
 		if (!NT_SUCCESS(status = PsLookupProcessByProcessId(process_id, &source_process)))
 		{
 			Log("Failed to lookup process.\n");
-			return status;
+			goto EXIT;
 		}
 		else
 		{
 			Log("Successfully looked up the process.\n");
 		}
 
+		ProbeForRead(target_address, buffer_size, 1);
 		
 		if (!NT_SUCCESS(status = MmCopyVirtualMemory(source_process, source_address, target_process, target_address, buffer_size, KernelMode, &bytes_copied)))
 		{
 			Log("Failed to read virtual memory.\n");
-			return status;
+			goto EXIT;
 		}
 		else
 		{
@@ -99,13 +115,15 @@ NTSTATUS CopyVirtualMemory(const HANDLE process_id, const PVOID source_address, 
 
 
 		ObDereferenceObject(source_process);
-		return status;
 	}
 	__except (EXCEPTION_EXECUTE_HANDLER)
 	{
 		DbgPrint("Something went wrong while reading virtual memory. (%llx)\n", GetExceptionCode());
-		return status;
 	}
+
+EXIT:
+	KeLowerIrql(old_irql);
+	return status;
 }
 
 //

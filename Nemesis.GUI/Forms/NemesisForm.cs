@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using Nemesis.Forms.Utils.Driver;
 using Nemesis.Forms.Utils.Module;
 using Nemesis.Forms.Utils.Process;
 using Nemesis.Utils;
@@ -143,7 +144,7 @@ namespace Nemesis.Forms
                 {
                     Directory.CreateDirectory(path);
 
-                    path = Path.Combine(path, $@"{name}{Config.GetValue("file_name")}");
+                    path = Path.Combine(path, $@"{name}{Config.GetValue("file_name")}{extension}");
                 }
                 catch (Exception exception)
                 {
@@ -174,10 +175,9 @@ namespace Nemesis.Forms
                     //
                     // Driver
                     //
-                    if (driverListView.SelectedItems[0].Tag is ModuleListItem module)
+                    if (driverListView.SelectedItems[0].Tag is DriverListItem driver)
                     {
-                        var baseAddress = module.BaseAddress;
-                        status = NemesisApi.DumpModule(4, (IntPtr) baseAddress, path);
+                        status = NemesisApi.DumpDriver((IntPtr)driver.ImageBase, path);
                     }
                 }
 

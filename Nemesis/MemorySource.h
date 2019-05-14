@@ -16,6 +16,7 @@ class MemorySource
 	/**
 	 * \brief The current memory source.
 	 */
+public:
 	static std::string current_memory_source;
 
 public:
