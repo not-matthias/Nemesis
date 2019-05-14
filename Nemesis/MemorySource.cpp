@@ -19,7 +19,7 @@ auto MemorySource::GetMemorySource(const DWORD process_id) -> IMemorySource *
 	// 
 	// Kernel Memory
 	// 
-	if (current_memory_source.compare("kernel_mode"))
+	if (current_memory_source.find("kernel_mode") != std::string::npos)
 	{
 		// TODO: Leaking memory here
 		return new KernelMemory(process_id);

@@ -34,6 +34,11 @@ namespace Nemesis.Forms
             //
             processListView.LoadProcesses();
             driverListView.LoadDrivers();
+
+            //
+            // Initialize the settings
+            //
+            Settings.Initialize();
         }
 
         /// <summary>

@@ -159,7 +159,7 @@ namespace Nemesis.Utils
         /// <returns></returns>
         public static bool DumpDriver(IntPtr baseAddress, string fileName)
         {
-            return NemesisImports.DumpDriverExport(baseAddress, fileName);
+            return DumpDriverExport(baseAddress, fileName);
         }
 
         /// <summary>

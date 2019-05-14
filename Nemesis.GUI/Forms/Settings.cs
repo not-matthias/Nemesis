@@ -64,12 +64,17 @@ namespace Nemesis.Forms
             themeComboBox.SelectedIndex = GetItemIndex(themeComboBox, Config.GetValue("theme"));
             colorComboBox.SelectedIndex = GetItemIndex(colorComboBox, Config.GetValue("style"));
             memoryComboBox.SelectedIndex = GetItemIndex(memoryComboBox, Config.GetValue("memory_source"));
+        }
 
-            //
-            // Set the memory source
-            //
+
+        /// <summary>
+        /// Sets the config in the Nemesis dll.
+        /// </summary>
+        public static void Initialize()
+        {
             NemesisApi.SetMemorySource(Config.GetValue("memory_source"));
         }
+
 
         /// <summary>
         /// Saves the settings to the config.
