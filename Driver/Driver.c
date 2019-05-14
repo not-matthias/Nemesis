@@ -75,11 +75,7 @@ NTSTATUS CopyVirtualMemory(const HANDLE process_id, const PVOID source_address, 
 	PEPROCESS source_process = NULL;
 	const PEPROCESS target_process = PsGetCurrentProcess();
 
-	KIRQL old_irql;
-
 	Log("Reading virtual memory.\n");
-
-	KeRaiseIrql(APC_LEVEL, &old_irql);
 	
 	__try
 	{
@@ -101,7 +97,7 @@ NTSTATUS CopyVirtualMemory(const HANDLE process_id, const PVOID source_address, 
 			Log("Successfully looked up the process.\n");
 		}
 
-		ProbeForRead(target_address, buffer_size, 1);
+		//ProbeForRead(target_address, buffer_size, 1);
 		
 		if (!NT_SUCCESS(status = MmCopyVirtualMemory(source_process, source_address, target_process, target_address, buffer_size, KernelMode, &bytes_copied)))
 		{
@@ -122,7 +118,6 @@ NTSTATUS CopyVirtualMemory(const HANDLE process_id, const PVOID source_address, 
 	}
 
 EXIT:
-	KeLowerIrql(old_irql);
 	return status;
 }
 
