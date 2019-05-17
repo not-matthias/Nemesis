@@ -46,6 +46,11 @@
             this.metroLabel7 = new MetroFramework.Controls.MetroLabel();
             this.metroTabControl1 = new MetroFramework.Controls.MetroTabControl();
             this.metroTabPage1 = new MetroFramework.Controls.MetroTabPage();
+            this.metroTabPage4 = new MetroFramework.Controls.MetroTabPage();
+            this.dumpNtoskrnlToggle = new MetroFramework.Controls.MetroToggle();
+            this.metroLabel9 = new MetroFramework.Controls.MetroLabel();
+            this.metroLabel8 = new MetroFramework.Controls.MetroLabel();
+            this.saveOffsetsToggle = new MetroFramework.Controls.MetroToggle();
             this.metroTabPage3 = new MetroFramework.Controls.MetroTabPage();
             this.memoryComboBox = new MetroFramework.Controls.MetroComboBox();
             this.metroTabPage2 = new MetroFramework.Controls.MetroTabPage();
@@ -55,6 +60,7 @@
             this.settingStyleManager = new MetroFramework.Components.MetroStyleManager(this.components);
             this.metroTabControl1.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
+            this.metroTabPage4.SuspendLayout();
             this.metroTabPage3.SuspendLayout();
             this.metroTabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.settingStyleManager)).BeginInit();
@@ -253,8 +259,9 @@
             // metroTabControl1
             // 
             this.metroTabControl1.Controls.Add(this.metroTabPage1);
-            this.metroTabControl1.Controls.Add(this.metroTabPage3);
             this.metroTabControl1.Controls.Add(this.metroTabPage2);
+            this.metroTabControl1.Controls.Add(this.metroTabPage4);
+            this.metroTabControl1.Controls.Add(this.metroTabPage3);
             this.metroTabControl1.Location = new System.Drawing.Point(23, 63);
             this.metroTabControl1.Name = "metroTabControl1";
             this.metroTabControl1.SelectedIndex = 1;
@@ -288,6 +295,62 @@
             this.metroTabPage1.VerticalScrollbarBarColor = true;
             this.metroTabPage1.VerticalScrollbarHighlightOnWheel = false;
             this.metroTabPage1.VerticalScrollbarSize = 10;
+            // 
+            // metroTabPage4
+            // 
+            this.metroTabPage4.Controls.Add(this.dumpNtoskrnlToggle);
+            this.metroTabPage4.Controls.Add(this.metroLabel9);
+            this.metroTabPage4.Controls.Add(this.metroLabel8);
+            this.metroTabPage4.Controls.Add(this.saveOffsetsToggle);
+            this.metroTabPage4.HorizontalScrollbarBarColor = true;
+            this.metroTabPage4.HorizontalScrollbarHighlightOnWheel = false;
+            this.metroTabPage4.HorizontalScrollbarSize = 10;
+            this.metroTabPage4.Location = new System.Drawing.Point(4, 38);
+            this.metroTabPage4.Name = "metroTabPage4";
+            this.metroTabPage4.Size = new System.Drawing.Size(544, 211);
+            this.metroTabPage4.TabIndex = 3;
+            this.metroTabPage4.Text = "Driver";
+            this.metroTabPage4.VerticalScrollbarBarColor = true;
+            this.metroTabPage4.VerticalScrollbarHighlightOnWheel = false;
+            this.metroTabPage4.VerticalScrollbarSize = 10;
+            // 
+            // dumpNtoskrnlToggle
+            // 
+            this.dumpNtoskrnlToggle.AutoSize = true;
+            this.dumpNtoskrnlToggle.Location = new System.Drawing.Point(163, 46);
+            this.dumpNtoskrnlToggle.Name = "dumpNtoskrnlToggle";
+            this.dumpNtoskrnlToggle.Size = new System.Drawing.Size(80, 17);
+            this.dumpNtoskrnlToggle.TabIndex = 5;
+            this.dumpNtoskrnlToggle.Text = "Off";
+            this.dumpNtoskrnlToggle.UseSelectable = true;
+            // 
+            // metroLabel9
+            // 
+            this.metroLabel9.AutoSize = true;
+            this.metroLabel9.Location = new System.Drawing.Point(2, 44);
+            this.metroLabel9.Name = "metroLabel9";
+            this.metroLabel9.Size = new System.Drawing.Size(124, 19);
+            this.metroLabel9.TabIndex = 4;
+            this.metroLabel9.Text = "Dump ntoskrnl.exe: ";
+            // 
+            // metroLabel8
+            // 
+            this.metroLabel8.AutoSize = true;
+            this.metroLabel8.Location = new System.Drawing.Point(2, 18);
+            this.metroLabel8.Name = "metroLabel8";
+            this.metroLabel8.Size = new System.Drawing.Size(118, 19);
+            this.metroLabel8.TabIndex = 3;
+            this.metroLabel8.Text = "Save driver offsets:";
+            // 
+            // saveOffsetsToggle
+            // 
+            this.saveOffsetsToggle.AutoSize = true;
+            this.saveOffsetsToggle.Location = new System.Drawing.Point(163, 20);
+            this.saveOffsetsToggle.Name = "saveOffsetsToggle";
+            this.saveOffsetsToggle.Size = new System.Drawing.Size(80, 17);
+            this.saveOffsetsToggle.TabIndex = 2;
+            this.saveOffsetsToggle.Text = "Off";
+            this.saveOffsetsToggle.UseSelectable = true;
             // 
             // metroTabPage3
             // 
@@ -379,6 +442,8 @@
             this.metroTabControl1.ResumeLayout(false);
             this.metroTabPage1.ResumeLayout(false);
             this.metroTabPage1.PerformLayout();
+            this.metroTabPage4.ResumeLayout(false);
+            this.metroTabPage4.PerformLayout();
             this.metroTabPage3.ResumeLayout(false);
             this.metroTabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.settingStyleManager)).EndInit();
@@ -412,5 +477,10 @@
         private MetroFramework.Controls.MetroTabPage metroTabPage3;
         private MetroFramework.Controls.MetroComboBox memoryComboBox;
         private MetroFramework.Components.MetroStyleManager settingStyleManager;
+        private MetroFramework.Controls.MetroTabPage metroTabPage4;
+        private MetroFramework.Controls.MetroToggle saveOffsetsToggle;
+        private MetroFramework.Controls.MetroLabel metroLabel8;
+        private MetroFramework.Controls.MetroLabel metroLabel9;
+        private MetroFramework.Controls.MetroToggle dumpNtoskrnlToggle;
     }
 }

@@ -32,6 +32,9 @@ namespace Nemesis.Forms
                 Config.SetValue("theme", "Default");
                 Config.SetValue("style", "Default");
                 Config.SetValue("memory_source", "user_mode");
+
+                Config.SetValue("save_offsets", "Off");
+                Config.SetValue("dump_ntoskrnl", "Off");
             }
 
             //
@@ -48,7 +51,9 @@ namespace Nemesis.Forms
             createTimestampFolderToggle.Checked = Config.GetValue("create_timestamp_folder") == "On";
             askForLocationToggle.Checked = Config.GetValue("ask_for_location") == "On";
 
-            // Theme and Style: Located in NemesisForm (because StyleManager does not exist here yet)
+            // TODO: Maybe rename to dumpBaseAddressesToggle
+            saveOffsetsToggle.Checked = Config.GetValue("save_offsets") == "On";
+            dumpNtoskrnlToggle.Checked = Config.GetValue("dump_ntoskrnl") == "On";
 
             //
             // Fill the combo boxes
@@ -98,6 +103,9 @@ namespace Nemesis.Forms
             Config.SetValue("style", colorComboBox.Text);
 
             Config.SetValue("memory_source", memoryComboBox.Text);
+
+            Config.SetValue("save_offsets", saveOffsetsToggle.Text);
+            Config.SetValue("dump_ntoskrnl", dumpNtoskrnlToggle.Text);
 
             //
             // Change the settings
