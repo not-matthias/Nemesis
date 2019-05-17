@@ -1,8 +1,7 @@
 #include <ntddk.h>
+
 #include "ntos.h"
 #include "Logger.h"
-#include <excpt.h>
-#include <ntstatus.h>
 
 #define DEBUG
 
@@ -67,7 +66,6 @@ UNICODE_STRING device_name, symbolic_link_name;
 // Helper function
 //
 
-_IRQL_requires_max_(APC_LEVEL)
 NTSTATUS CopyVirtualMemory(const HANDLE process_id, const PVOID source_address, const PVOID target_address, const SIZE_T buffer_size)
 {
 	NTSTATUS status = STATUS_UNSUCCESSFUL;
@@ -76,11 +74,11 @@ NTSTATUS CopyVirtualMemory(const HANDLE process_id, const PVOID source_address, 
 	const PEPROCESS target_process = PsGetCurrentProcess();
 
 	Log("Reading virtual memory.\n");
-	
+
 	__try
 	{
-
-		if(!MmIsAddressValid(source_address))
+		// Don't check if it's a UM address
+		if((DWORD64)source_address > 0x7FFFFFFFFFFF && !MmIsAddressValid(source_address))
 		{
 			Log("Address is not valid.\n");
 			goto EXIT;
