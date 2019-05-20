@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using Nemesis.Utils;
 
 namespace Nemesis
 {
@@ -12,8 +11,6 @@ namespace Nemesis
         [STAThread]
         private static void Main()
         {
-            NemesisApi.SaveDriverInformation("D:/output.txt");
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Forms.NemesisForm());

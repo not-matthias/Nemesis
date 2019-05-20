@@ -102,6 +102,7 @@ namespace Nemesis.Forms
                 }
             }
 
+
             //
             // Use custom dump location
             //
@@ -157,6 +158,7 @@ namespace Nemesis.Forms
                 }
             }
 
+
             try
             {
                 //
@@ -183,16 +185,14 @@ namespace Nemesis.Forms
                     {
                         status = NemesisApi.DumpDriver((IntPtr)driver.ImageBase, path);
                     }
-                }
 
-
-                //
-                // Save base addresses
-                //
-                if (Config.GetValue("save_base_addresses") == "On")
-                {
-                    // Path.GetDirectoryName(path) + 
-                    NemesisApi.SaveDriverInformation("D:/output.txt");
+                    //
+                    // Save base addresses
+                    //
+                    if (Config.GetValue("save_base_addresses") == "On")
+                    {
+                        NemesisApi.SaveDriverInformation(Path.Combine(Path.GetDirectoryName(path) ?? throw new InvalidOperationException(), "driver_list.txt"));
+                    }
                 }
 
 
