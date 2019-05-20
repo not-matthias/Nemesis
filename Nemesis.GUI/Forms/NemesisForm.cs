@@ -183,7 +183,7 @@ namespace Nemesis.Forms
                     //
                     if (driverListView.SelectedItems[0].Tag is DriverListItem driver)
                     {
-                        status = NemesisApi.DumpDriver((IntPtr)driver.ImageBase, path);
+                        status = NemesisApi.DumpDriver((IntPtr) driver.ImageBase, path);
                     }
 
                     //
