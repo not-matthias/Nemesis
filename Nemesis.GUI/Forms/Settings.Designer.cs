@@ -46,23 +46,21 @@
             this.metroLabel7 = new MetroFramework.Controls.MetroLabel();
             this.metroTabControl1 = new MetroFramework.Controls.MetroTabControl();
             this.metroTabPage1 = new MetroFramework.Controls.MetroTabPage();
+            this.metroTabPage2 = new MetroFramework.Controls.MetroTabPage();
+            this.colorComboBox = new MetroFramework.Controls.MetroComboBox();
+            this.themeComboBox = new MetroFramework.Controls.MetroComboBox();
             this.metroTabPage4 = new MetroFramework.Controls.MetroTabPage();
-            this.dumpNtoskrnlToggle = new MetroFramework.Controls.MetroToggle();
-            this.metroLabel9 = new MetroFramework.Controls.MetroLabel();
             this.metroLabel8 = new MetroFramework.Controls.MetroLabel();
             this.saveOffsetsToggle = new MetroFramework.Controls.MetroToggle();
             this.metroTabPage3 = new MetroFramework.Controls.MetroTabPage();
             this.memoryComboBox = new MetroFramework.Controls.MetroComboBox();
-            this.metroTabPage2 = new MetroFramework.Controls.MetroTabPage();
-            this.colorComboBox = new MetroFramework.Controls.MetroComboBox();
-            this.themeComboBox = new MetroFramework.Controls.MetroComboBox();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
             this.settingStyleManager = new MetroFramework.Components.MetroStyleManager(this.components);
             this.metroTabControl1.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
+            this.metroTabPage2.SuspendLayout();
             this.metroTabPage4.SuspendLayout();
             this.metroTabPage3.SuspendLayout();
-            this.metroTabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.settingStyleManager)).BeginInit();
             this.SuspendLayout();
             // 
@@ -264,7 +262,7 @@
             this.metroTabControl1.Controls.Add(this.metroTabPage3);
             this.metroTabControl1.Location = new System.Drawing.Point(23, 63);
             this.metroTabControl1.Name = "metroTabControl1";
-            this.metroTabControl1.SelectedIndex = 1;
+            this.metroTabControl1.SelectedIndex = 2;
             this.metroTabControl1.Size = new System.Drawing.Size(552, 253);
             this.metroTabControl1.TabIndex = 18;
             this.metroTabControl1.UseSelectable = true;
@@ -296,10 +294,48 @@
             this.metroTabPage1.VerticalScrollbarHighlightOnWheel = false;
             this.metroTabPage1.VerticalScrollbarSize = 10;
             // 
+            // metroTabPage2
+            // 
+            this.metroTabPage2.Controls.Add(this.colorComboBox);
+            this.metroTabPage2.Controls.Add(this.themeComboBox);
+            this.metroTabPage2.HorizontalScrollbarBarColor = true;
+            this.metroTabPage2.HorizontalScrollbarHighlightOnWheel = false;
+            this.metroTabPage2.HorizontalScrollbarSize = 10;
+            this.metroTabPage2.Location = new System.Drawing.Point(4, 38);
+            this.metroTabPage2.Name = "metroTabPage2";
+            this.metroTabPage2.Size = new System.Drawing.Size(544, 211);
+            this.metroTabPage2.TabIndex = 1;
+            this.metroTabPage2.Text = "Styles";
+            this.metroTabPage2.VerticalScrollbarBarColor = true;
+            this.metroTabPage2.VerticalScrollbarHighlightOnWheel = false;
+            this.metroTabPage2.VerticalScrollbarSize = 10;
+            // 
+            // colorComboBox
+            // 
+            this.colorComboBox.FormattingEnabled = true;
+            this.colorComboBox.ItemHeight = 23;
+            this.colorComboBox.Location = new System.Drawing.Point(3, 54);
+            this.colorComboBox.Name = "colorComboBox";
+            this.colorComboBox.PromptText = "Color";
+            this.colorComboBox.Size = new System.Drawing.Size(161, 29);
+            this.colorComboBox.TabIndex = 6;
+            this.colorComboBox.UseSelectable = true;
+            this.colorComboBox.SelectedIndexChanged += new System.EventHandler(this.ColorComboBox_SelectedIndexChanged);
+            // 
+            // themeComboBox
+            // 
+            this.themeComboBox.FormattingEnabled = true;
+            this.themeComboBox.ItemHeight = 23;
+            this.themeComboBox.Location = new System.Drawing.Point(3, 18);
+            this.themeComboBox.Name = "themeComboBox";
+            this.themeComboBox.PromptText = "Theme";
+            this.themeComboBox.Size = new System.Drawing.Size(161, 29);
+            this.themeComboBox.TabIndex = 5;
+            this.themeComboBox.UseSelectable = true;
+            this.themeComboBox.SelectedIndexChanged += new System.EventHandler(this.ThemeComboBox_SelectedIndexChanged);
+            // 
             // metroTabPage4
             // 
-            this.metroTabPage4.Controls.Add(this.dumpNtoskrnlToggle);
-            this.metroTabPage4.Controls.Add(this.metroLabel9);
             this.metroTabPage4.Controls.Add(this.metroLabel8);
             this.metroTabPage4.Controls.Add(this.saveOffsetsToggle);
             this.metroTabPage4.HorizontalScrollbarBarColor = true;
@@ -313,25 +349,6 @@
             this.metroTabPage4.VerticalScrollbarBarColor = true;
             this.metroTabPage4.VerticalScrollbarHighlightOnWheel = false;
             this.metroTabPage4.VerticalScrollbarSize = 10;
-            // 
-            // dumpNtoskrnlToggle
-            // 
-            this.dumpNtoskrnlToggle.AutoSize = true;
-            this.dumpNtoskrnlToggle.Location = new System.Drawing.Point(163, 46);
-            this.dumpNtoskrnlToggle.Name = "dumpNtoskrnlToggle";
-            this.dumpNtoskrnlToggle.Size = new System.Drawing.Size(80, 17);
-            this.dumpNtoskrnlToggle.TabIndex = 5;
-            this.dumpNtoskrnlToggle.Text = "Off";
-            this.dumpNtoskrnlToggle.UseSelectable = true;
-            // 
-            // metroLabel9
-            // 
-            this.metroLabel9.AutoSize = true;
-            this.metroLabel9.Location = new System.Drawing.Point(2, 44);
-            this.metroLabel9.Name = "metroLabel9";
-            this.metroLabel9.Size = new System.Drawing.Size(124, 19);
-            this.metroLabel9.TabIndex = 4;
-            this.metroLabel9.Text = "Dump ntoskrnl.exe: ";
             // 
             // metroLabel8
             // 
@@ -379,46 +396,6 @@
             this.memoryComboBox.UseSelectable = true;
             this.memoryComboBox.SelectedIndexChanged += new System.EventHandler(this.MemoryComboBox_SelectedIndexChanged);
             // 
-            // metroTabPage2
-            // 
-            this.metroTabPage2.Controls.Add(this.colorComboBox);
-            this.metroTabPage2.Controls.Add(this.themeComboBox);
-            this.metroTabPage2.HorizontalScrollbarBarColor = true;
-            this.metroTabPage2.HorizontalScrollbarHighlightOnWheel = false;
-            this.metroTabPage2.HorizontalScrollbarSize = 10;
-            this.metroTabPage2.Location = new System.Drawing.Point(4, 38);
-            this.metroTabPage2.Name = "metroTabPage2";
-            this.metroTabPage2.Size = new System.Drawing.Size(544, 211);
-            this.metroTabPage2.TabIndex = 1;
-            this.metroTabPage2.Text = "Styles";
-            this.metroTabPage2.VerticalScrollbarBarColor = true;
-            this.metroTabPage2.VerticalScrollbarHighlightOnWheel = false;
-            this.metroTabPage2.VerticalScrollbarSize = 10;
-            // 
-            // colorComboBox
-            // 
-            this.colorComboBox.FormattingEnabled = true;
-            this.colorComboBox.ItemHeight = 23;
-            this.colorComboBox.Location = new System.Drawing.Point(3, 54);
-            this.colorComboBox.Name = "colorComboBox";
-            this.colorComboBox.PromptText = "Color";
-            this.colorComboBox.Size = new System.Drawing.Size(161, 29);
-            this.colorComboBox.TabIndex = 6;
-            this.colorComboBox.UseSelectable = true;
-            this.colorComboBox.SelectedIndexChanged += new System.EventHandler(this.ColorComboBox_SelectedIndexChanged);
-            // 
-            // themeComboBox
-            // 
-            this.themeComboBox.FormattingEnabled = true;
-            this.themeComboBox.ItemHeight = 23;
-            this.themeComboBox.Location = new System.Drawing.Point(3, 18);
-            this.themeComboBox.Name = "themeComboBox";
-            this.themeComboBox.PromptText = "Theme";
-            this.themeComboBox.Size = new System.Drawing.Size(161, 29);
-            this.themeComboBox.TabIndex = 5;
-            this.themeComboBox.UseSelectable = true;
-            this.themeComboBox.SelectedIndexChanged += new System.EventHandler(this.ThemeComboBox_SelectedIndexChanged);
-            // 
             // settingStyleManager
             // 
             this.settingStyleManager.Owner = null;
@@ -442,10 +419,10 @@
             this.metroTabControl1.ResumeLayout(false);
             this.metroTabPage1.ResumeLayout(false);
             this.metroTabPage1.PerformLayout();
+            this.metroTabPage2.ResumeLayout(false);
             this.metroTabPage4.ResumeLayout(false);
             this.metroTabPage4.PerformLayout();
             this.metroTabPage3.ResumeLayout(false);
-            this.metroTabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.settingStyleManager)).EndInit();
             this.ResumeLayout(false);
 
@@ -480,7 +457,5 @@
         private MetroFramework.Controls.MetroTabPage metroTabPage4;
         private MetroFramework.Controls.MetroToggle saveOffsetsToggle;
         private MetroFramework.Controls.MetroLabel metroLabel8;
-        private MetroFramework.Controls.MetroLabel metroLabel9;
-        private MetroFramework.Controls.MetroToggle dumpNtoskrnlToggle;
     }
 }

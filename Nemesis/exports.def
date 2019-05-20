@@ -11,3 +11,5 @@ EXPORTS
 	GetProcessListElementExport @8
 	GetModuleListElementExport @9
 	GetMemoryListElementExport @10
+
+	SaveDriverInformationExport @11

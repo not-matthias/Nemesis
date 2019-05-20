@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using Nemesis.Forms.Utils.Driver;
-using Nemesis.Forms.Utils.Module;
 using Nemesis.Forms.Utils.Process;
 using Nemesis.Utils;
 
@@ -185,6 +184,17 @@ namespace Nemesis.Forms
                         status = NemesisApi.DumpDriver((IntPtr)driver.ImageBase, path);
                     }
                 }
+
+
+                //
+                // Save base addresses
+                //
+                if (Config.GetValue("save_base_addresses") == "On")
+                {
+                    // Path.GetDirectoryName(path) + 
+                    NemesisApi.SaveDriverInformation("D:/output.txt");
+                }
+
 
                 //
                 // Check status

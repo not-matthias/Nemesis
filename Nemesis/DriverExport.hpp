@@ -28,4 +28,12 @@ struct DriverList
  * \param driver the driver at the index
  * \return true if successful
  */
-auto GetDriverListElementExport(IN UINT index, OUT Driver *driver) -> BOOL;
+auto GetDriverListElementExport(IN UINT index, OUT Driver * driver) -> BOOL;
+
+
+/**
+ * \brief Saves the information about the loaded drivers.
+ * \param file_name the file name of the list
+ * \return true if successful
+ */
+auto SaveDriverInformationExport(IN LPCSTR file_name) -> BOOL;

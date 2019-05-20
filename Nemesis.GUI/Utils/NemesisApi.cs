@@ -111,6 +111,10 @@ namespace Nemesis.Utils
 
         [DllImport("Nemesis.dll")]
         protected static extern bool GetMemoryListElementExport([In] uint index, [In] int processId, [In] [Out] ref Memory structure);
+
+
+        [DllImport("Nemesis.dll")]
+        protected static extern bool SaveDriverInformationExport([In] string fileName);
     }
 
     internal class NemesisApi : NemesisImports
@@ -348,6 +352,16 @@ namespace Nemesis.Utils
             // Return the list
             //
             return list;
+        }
+
+        /// <summary>
+        /// Saves the information about the loaded drivers.
+        /// </summary>
+        /// <param name="fileName">The file name of the list</param>
+        /// <returns></returns>
+        public static bool SaveDriverInformation(string fileName)
+        {
+            return SaveDriverInformationExport(fileName);
         }
     }
 }
