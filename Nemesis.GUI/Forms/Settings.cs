@@ -33,8 +33,7 @@ namespace Nemesis.Forms
                 Config.SetValue("style", "Default");
                 Config.SetValue("memory_source", "user_mode");
 
-                Config.SetValue("save_offsets", "Off");
-                Config.SetValue("dump_ntoskrnl", "Off");
+                Config.SetValue("save_base_addresses", "Off");
             }
 
             //
@@ -51,9 +50,7 @@ namespace Nemesis.Forms
             createTimestampFolderToggle.Checked = Config.GetValue("create_timestamp_folder") == "On";
             askForLocationToggle.Checked = Config.GetValue("ask_for_location") == "On";
 
-            // TODO: Maybe rename to dumpBaseAddressesToggle
-            saveOffsetsToggle.Checked = Config.GetValue("save_offsets") == "On";
-            dumpNtoskrnlToggle.Checked = Config.GetValue("dump_ntoskrnl") == "On";
+            saveOffsetsToggle.Checked = Config.GetValue("save_base_addresses") == "On";
 
             //
             // Fill the combo boxes
@@ -77,7 +74,11 @@ namespace Nemesis.Forms
         /// </summary>
         public static void Initialize()
         {
-            NemesisApi.SetMemorySource(Config.GetValue("memory_source"));
+            var memorySourceName = Config.GetValue("memory_source");
+            if (memorySourceName != null)
+            {
+                NemesisApi.SetMemorySource(memorySourceName);
+            }
         }
 
 
@@ -104,8 +105,7 @@ namespace Nemesis.Forms
 
             Config.SetValue("memory_source", memoryComboBox.Text);
 
-            Config.SetValue("save_offsets", saveOffsetsToggle.Text);
-            Config.SetValue("dump_ntoskrnl", dumpNtoskrnlToggle.Text);
+            Config.SetValue("save_base_addresses", saveOffsetsToggle.Text);
 
             //
             // Change the settings
