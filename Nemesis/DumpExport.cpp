@@ -1,7 +1,7 @@
 #include "DumpExport.hpp"
 
-#include "Module.hpp"
 #include "FileWriter.hpp"
+#include "Module.hpp"
 
 auto DumpProcessExport(const DWORD process_id, const LPCSTR file_name) -> BOOL
 {
@@ -115,7 +115,7 @@ auto DumpMemoryExport(const DWORD process_id, const DWORD_PTR start_address, con
 	}
 }
 
-auto DumpDriverExport(DWORD_PTR base_address, LPCSTR file_name) -> BOOL
+auto DumpDriverExport(const DWORD_PTR base_address, const LPCSTR file_name) -> BOOL
 {
 	//
 	// Create the Memory wrapper

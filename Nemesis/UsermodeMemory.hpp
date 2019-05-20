@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IMemorySource.hpp"
+
 #include <Windows.h>
 
 class UsermodeMemory final : public IMemorySource

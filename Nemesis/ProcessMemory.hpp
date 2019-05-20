@@ -17,6 +17,8 @@ class ProcessMemory
 	 */
 	DWORD process_id;
 
+
+
 public:
 
 	//

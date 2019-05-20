@@ -1,7 +1,8 @@
 #pragma once
 
-#include <vector>
+#include <memory>
 #include <string>
+#include <vector>
 
 #include "IMemorySource.hpp"
 
@@ -16,7 +17,6 @@ class MemorySource
 	/**
 	 * \brief The current memory source.
 	 */
-public:
 	static std::string current_memory_source;
 
 public:
@@ -44,7 +44,7 @@ public:
 	 * \param process_id the id of the process
 	 * \return the memory source the memory source
 	 */
-	static auto GetMemorySource(DWORD process_id) -> IMemorySource*;
+	static auto GetMemorySource(DWORD process_id) -> std::shared_ptr<IMemorySource>;
 
 	/**
 	 * \brief Returns all memory sources.

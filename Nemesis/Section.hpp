@@ -2,16 +2,8 @@
 
 #include <Windows.h>
 
-// TODO: Use struct instead
-class Section
+struct Section
 {
-public:
-	//
-	//
-	// Variables
-	//
-	//
-
 	/**
 	 * \brief The section header struct.
 	 */

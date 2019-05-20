@@ -35,4 +35,4 @@ auto DumpMemoryExport(DWORD process_id, DWORD_PTR start_address, DWORD size, LPC
  * \param file_name the dump file name
  * \return true if successful
  */
-auto DumpDriverExport(DWORD_PTR base_address, LPCSTR file_name)->BOOL;
+auto DumpDriverExport(DWORD_PTR base_address, LPCSTR file_name) -> BOOL;

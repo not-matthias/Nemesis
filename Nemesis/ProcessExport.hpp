@@ -2,13 +2,6 @@
 
 #include <Windows.h>
 
-// TODO: Add sections (from the pe header)
-/**
- * \brief A section of a process.
- */
-struct Section
-{
-};
 
 /**
  * \brief A memory region of a process.

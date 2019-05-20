@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Module.hpp"
-#include "Memory.hpp"
 #include <string>
+
+#include "Memory.hpp"
+#include "Module.hpp"
 
 class FileWriter
 {

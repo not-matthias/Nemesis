@@ -8,8 +8,8 @@ Module::Module(ProcessMemory * process_memory)
 {
 	this->process_memory = process_memory;
 	this->base_address = process_memory->GetBaseAddress();
-	this->dos_stub = nullptr;
 	this->dos_stub_size = 0;
+	this->dos_stub = nullptr;
 	this->dos_header = nullptr;
 	this->nt_header32 = nullptr;
 	this->nt_header64 = nullptr;

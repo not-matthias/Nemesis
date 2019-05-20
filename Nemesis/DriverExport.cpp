@@ -7,6 +7,7 @@
 
 auto GetDriverListElementExport(const UINT index, Driver * driver) -> BOOL
 {
+	// TODO: Cache the driver list
 	const auto driver_list = DriverUtils::GetDriverList();
 
 	//

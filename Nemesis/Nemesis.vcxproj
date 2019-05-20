@@ -50,7 +50,6 @@
     <ClCompile Include="MemorySourceExport.cpp" />
     <ClCompile Include="ProcessExport.cpp" />
     <ClCompile Include="ProcessUtils.cpp" />
-    <ClCompile Include="Section.cpp" />
     <ClCompile Include="ProcessMemory.cpp" />
     <ClCompile Include="UsermodeMemory.cpp" />
     <ClCompile Include="Module.cpp" />

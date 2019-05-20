@@ -4,7 +4,6 @@
 
 std::string Logger::prefix = "[Nemesis] ";
 
-
 auto Logger::Log(std::wstring format, ...) -> VOID
 {
 	if (format.empty())

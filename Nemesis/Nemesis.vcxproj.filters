@@ -119,9 +119,6 @@
     <ClCompile Include="Module.cpp">
       <Filter>Source Files\PortableExecutable</Filter>
     </ClCompile>
-    <ClCompile Include="Section.cpp">
-      <Filter>Source Files\PortableExecutable</Filter>
-    </ClCompile>
     <ClCompile Include="Memory.cpp">
       <Filter>Source Files\PortableExecutable</Filter>
     </ClCompile>

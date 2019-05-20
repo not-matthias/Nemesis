@@ -8,6 +8,7 @@
 UsermodeMemory::UsermodeMemory(const DWORD process_id) : IMemorySource(process_id)
 {
 	process_handle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, process_id);
+
 	if (process_handle == INVALID_HANDLE_VALUE)
 	{
 		Logger::Log("Failed to open process.");
@@ -36,14 +37,14 @@ auto UsermodeMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size
 	// 
 	if (!ReadProcessMemory(process_handle, reinterpret_cast<LPCVOID>(start_address), buffer, size, &bytes_read))
 	{
-		std::cout << "[1] Failed to read process memory." << std::endl;
+		Logger::Log("Failed to read process memory.");
 
 		//
 		// RPM Failed - Disable page protection
 		//
 		if (!VirtualProtectEx(process_handle, reinterpret_cast<LPVOID>(start_address), size, PAGE_READWRITE, &old_protect))
 		{
-			std::cout << "[2] Failed to VirtualProtectEx" << std::endl;
+			Logger::Log("Failed to change page protection.");
 			return nullptr;
 		}
 
@@ -52,7 +53,7 @@ auto UsermodeMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size
 		// 
 		if (!ReadProcessMemory(process_handle, reinterpret_cast<LPCVOID>(start_address), buffer, size, &bytes_read))
 		{
-			std::cout << "[3] Failed to read process memory." << std::endl;
+			Logger::Log("Failed to read process memory.");
 		}
 
 		VirtualProtectEx(process_handle, reinterpret_cast<LPVOID>(start_address), size, old_protect, &old_protect);
@@ -103,13 +104,10 @@ auto UsermodeMemory::GetBaseAddress() -> DWORD_PTR
 		{
 			std::string std_file_name(file_name);
 
-			if (GetModuleBaseName(process_handle, module_handle[i], module_name, sizeof(module_name)))
+			if (GetModuleBaseName(process_handle, module_handle[i], module_name, sizeof module_name) && std_file_name == module_name)
 			{
-				if (std_file_name == module_name)
-				{
-					base_address = reinterpret_cast<DWORD_PTR>(module_handle[i]);
-					break;
-				}
+				base_address = reinterpret_cast<DWORD_PTR>(module_handle[i]);
+				break;
 			}
 		}
 	}
