@@ -110,15 +110,16 @@ namespace Nemesis.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void DumpToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ModuleContextMenu_Click(object sender, EventArgs e)
         {
-            if (moduleListView.SelectedItems.Count == 0) return;
             if (moduleListView.SelectedItems.Count == 0) return;
             if (!(moduleListView.SelectedItems[0].Tag is ModuleListItem module)) return;
 
+            moduleContextMenu.Close();
+
             DumpModule(module);
         }
-
+        
         /// <summary>
         /// Dumps the selected memory when context menu item gets clicked.
         /// </summary>
@@ -127,8 +128,9 @@ namespace Nemesis.Forms
         private void MemoryContextMenu_Click(object sender, EventArgs e)
         {
             if (memoryListView.SelectedItems.Count == 0) return;
-            if (memoryListView.SelectedItems.Count == 0) return;
             if (!(memoryListView.SelectedItems[0].Tag is MemoryListItem memory)) return;
+
+            memoryContextMenu.Close();
 
             DumpMemory(memory);
         }

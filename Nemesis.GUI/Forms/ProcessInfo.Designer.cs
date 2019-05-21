@@ -171,7 +171,7 @@ namespace Nemesis.Forms
             this.dumpToolStripMenuItem.Name = "dumpToolStripMenuItem";
             this.dumpToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.dumpToolStripMenuItem.Text = "Dump";
-            this.dumpToolStripMenuItem.Click += new System.EventHandler(this.DumpToolStripMenuItem_Click);
+            this.dumpToolStripMenuItem.Click += new System.EventHandler(this.ModuleContextMenu_Click);
             // 
             // memoryContextMenu
             // 
