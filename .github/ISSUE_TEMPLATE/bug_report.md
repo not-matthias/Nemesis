@@ -11,13 +11,10 @@ assignees: not-matthias
 
 **Steps to reproduce the behavior**
 
-
 **Expected behavior**
 
 **Screenshots**
 
-**Desktop (please complete the following information):**
- - OS:
- - Windows Version:
+**Windows Version**
 
 **Additional context**
