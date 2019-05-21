@@ -27,37 +27,49 @@ A customizable process dumper library.
 
 - Keyboard shortcuts
 
+- Customizable GUI
+
 - Dark mode
+
+## Memory Sources
+
+### Problem
+
+First of all, there's not really a public driver dumper, so you either had to rely on other people dumping them for you or write a dumper yourself. However, to be able to dump drivers, you need to have a kernel mode driver. It can be really annnoying if you just want to dump a simple process, if you have to load your driver beforehand. 
+
+Of course there's tools which only dump processes with/without a kernel driver, but you'd need to install like 3 different programs just to be prepared for all situations.
+
+### Solution
+
+With Nemesis, you can simply switch memory sources with a single mouse click and use whatever you need. This does not only save you some time, but also a lot of disk space.
+
+If you want to dump it with physical memory or via a hypervisor? Simply add a new memory source and you are good to go.
 
 ## Exports
 
-- GetMemorySourcesExport
+Nemesis is also available as a dump library. If you want to implement a dumper, but don't want to mess with low level stuff, simply load the dll and use the following imports:
 
-- SetMemorySourceExport
-  
-  
+- [GetMemorySourcesExport](https://github.com/not-matthias/Nemesis/blob/master/Nemesis/MemorySourceExport.h#L20)
 
-- DumpProcessExport
+- [SetMemorySourceExport](https://github.com/not-matthias/Nemesis/blob/master/Nemesis/MemorySourceExport.h#L27)
 
-- DumpModuleExport
+- [DumpProcessExport](https://github.com/not-matthias/Nemesis/blob/master/Nemesis/DumpExport.hpp#L11)
 
-- DumpMemoryExport
+- [DumpModuleExport](https://github.com/not-matthias/Nemesis/blob/master/Nemesis/DumpExport.hpp#L20)
 
-- DumpDriverExport
+- [DumpMemoryExport](https://github.com/not-matthias/Nemesis/blob/master/Nemesis/DumpExport.hpp#L30)
 
+- [DumpDriverExport](https://github.com/not-matthias/Nemesis/blob/master/Nemesis/DumpExport.hpp#L38)
 
+- [GetDriverListElementExport](https://github.com/not-matthias/Nemesis/blob/master/Nemesis/DriverExport.hpp#L31)
 
-- GetDriverListElementExport
+- [GetProcessListElementExport](https://github.com/not-matthias/Nemesis/blob/master/Nemesis/ProcessExport.hpp#L63)
 
-- GetProcessListElementExport
+- [GetModuleListElementExport](https://github.com/not-matthias/Nemesis/blob/master/Nemesis/ProcessExport.hpp#L72)
 
-- GetModuleListElementExport
+- [GetMemoryListElementExport](https://github.com/not-matthias/Nemesis/blob/master/Nemesis/ProcessExport.hpp#L81)
 
-- GetMemoryListElementExport
-
-
-
-- SaveDriverInformationExport
+- [SaveDriverInformationExport](https://github.com/not-matthias/Nemesis/blob/master/Nemesis/DriverExport.hpp#L39)
 
 ### Keyboard Shortcuts
 
@@ -75,6 +87,6 @@ Use at your own risk. It might destroy the Earth.
 
 - https://github.com/NtQuery/Scylla/
 - https://github.com/EquiFox/KsDumper
-- https://github.com/Zer0Mem0ry/KernelBhop
 - https://www.unknowncheats.me/
 - https://stackoverflow.com
+- https://msdn.com
