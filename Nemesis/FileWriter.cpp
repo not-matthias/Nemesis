@@ -220,7 +220,7 @@ auto FileWriter::WriteToFile(Memory * memory) -> BOOL
 	//
 	// Write the memory_buffer to the file
 	//
-	if (WriteMemoryToFile(0, memory->memory_size, memory->memory_buffer))
+	if (!WriteMemoryToFile(0, memory->memory_size, memory->memory_buffer))
 	{
 		CloseHandle(file_handle);
 		return FALSE;
