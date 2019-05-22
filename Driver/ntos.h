@@ -38,3 +38,8 @@ NTKERNELAPI NTSTATUS NTAPI MmCopyVirtualMemory(
 	KPROCESSOR_MODE PreviousMode,
 	PSIZE_T ReturnSize
 );
+
+NTKERNELAPI NTSTATUS IoCreateDriver(
+	IN PUNICODE_STRING DriverName, OPTIONAL
+	IN PDRIVER_INITIALIZE InitializationFunction
+);

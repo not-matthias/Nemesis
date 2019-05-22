@@ -1,7 +1,7 @@
 #include <ntddk.h>
 
 #include "ntos.h"
-#include "Logger.h"
+#include <ntdef.h>
 
 #define DEBUG
 
@@ -59,7 +59,7 @@ typedef struct _BASE_ADDRESS_REQUEST
 // Variables
 //
 PDEVICE_OBJECT g_device_object;
-UNICODE_STRING device_name, symbolic_link_name;
+UNICODE_STRING driver_name, device_name, symbolic_link_name;
 
 
 //
@@ -73,38 +73,38 @@ NTSTATUS CopyVirtualMemory(const HANDLE process_id, const PVOID source_address, 
 	PEPROCESS source_process = NULL;
 	const PEPROCESS target_process = PsGetCurrentProcess();
 
-	Log("Reading virtual memory.\n");
+	DbgPrint("Reading virtual memory.\n");
 
 	__try
 	{
 		// Don't check if it's a UM address
-		if((DWORD64)source_address > 0x7FFFFFFFFFFF && !MmIsAddressValid(source_address))
+		if ((DWORD64)source_address > 0x7FFFFFFFFFFF && !MmIsAddressValid(source_address))
 		{
-			Log("Address is not valid.\n");
+			DbgPrint("Address is not valid.\n");
 			goto EXIT;
 		}
 
 
 		if (!NT_SUCCESS(status = PsLookupProcessByProcessId(process_id, &source_process)))
 		{
-			Log("Failed to lookup process.\n");
+			DbgPrint("Failed to lookup process.\n");
 			goto EXIT;
 		}
 		else
 		{
-			Log("Successfully looked up the process.\n");
+			DbgPrint("Successfully looked up the process.\n");
 		}
 
 		//ProbeForRead(target_address, buffer_size, 1);
-		
+
 		if (!NT_SUCCESS(status = MmCopyVirtualMemory(source_process, source_address, target_process, target_address, buffer_size, KernelMode, &bytes_copied)))
 		{
-			Log("Failed to read virtual memory.\n");
+			DbgPrint("Failed to read virtual memory.\n");
 			goto EXIT;
 		}
 		else
 		{
-			Log("Successfully read virtual memory.\n");
+			DbgPrint("Successfully read virtual memory.\n");
 		}
 
 
@@ -150,7 +150,7 @@ NTSTATUS DeviceControl(PDEVICE_OBJECT device_object, const PIRP irp)
 	case IOCTL_READ_REQUEST:
 		read_request = (PREAD_REQUEST)irp->AssociatedIrp.SystemBuffer;
 
-		Log("Received PREAD_REQUEST.\n");
+		DbgPrint("Received PREAD_REQUEST.\n");
 
 		//
 		// Check request data
@@ -166,7 +166,7 @@ NTSTATUS DeviceControl(PDEVICE_OBJECT device_object, const PIRP irp)
 	case IOCTL_BASE_ADDRESS_REQUEST:
 		base_address_request = (PBASE_ADDRESS_REQUEST)irp->AssociatedIrp.SystemBuffer;
 
-		Log("Received PBASE_ADDRESS_REQUEST.\n");
+		DbgPrint("Received PBASE_ADDRESS_REQUEST.\n");
 
 		//
 		// Check request data
@@ -232,7 +232,7 @@ VOID DriverUnload(const PDRIVER_OBJECT driver_object)
 	//
 	IoDeleteDevice(driver_object->DeviceObject);
 
-	Log("Driver unloaded.\n");
+	DbgPrint("Driver unloaded.\n");
 }
 
 
@@ -262,9 +262,9 @@ NTSTATUS CloseDispatch(PDEVICE_OBJECT device_object, const PIRP irp)
 }
 
 //
-// Entry Point
+// Creates a new driver
 //
-NTSTATUS DriverEntry(PDRIVER_OBJECT driver_object, PUNICODE_STRING registry_path)
+NTSTATUS DriverInitialize(PDRIVER_OBJECT driver_object, PUNICODE_STRING registry_path)
 {
 	UNREFERENCED_PARAMETER(registry_path);
 
@@ -279,7 +279,7 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT driver_object, PUNICODE_STRING registry_path
 	//
 	if (!NT_SUCCESS(IoCreateDevice(driver_object, 0, &device_name, FILE_DEVICE_UNKNOWN, FILE_DEVICE_SECURE_OPEN, FALSE, &g_device_object)))
 	{
-		Log("Failed to create device object.\n");
+		DbgPrint("Failed to create device object.\n");
 		return STATUS_UNSUCCESSFUL;
 	}
 
@@ -288,7 +288,7 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT driver_object, PUNICODE_STRING registry_path
 	//
 	if (!NT_SUCCESS(IoCreateSymbolicLink(&symbolic_link_name, &device_name)))
 	{
-		Log("Failed to create symbolic link.\n");
+		DbgPrint("Failed to create symbolic link.\n");
 		IoDeleteDevice(g_device_object);
 
 		return STATUS_UNSUCCESSFUL;
@@ -311,7 +311,26 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT driver_object, PUNICODE_STRING registry_path
 	driver_object->Flags |= DO_BUFFERED_IO;
 	driver_object->Flags &= ~DO_DEVICE_INITIALIZING;
 
-	Log("Driver loaded.\n");
+	DbgPrint("Driver loaded.\n");
 
 	return STATUS_SUCCESS;
+}
+
+//
+// Entry Point
+//
+NTSTATUS DriverEntry(PDRIVER_OBJECT driver_object, PUNICODE_STRING registry_path)
+{
+	UNREFERENCED_PARAMETER(driver_object);
+	UNREFERENCED_PARAMETER(registry_path);
+
+	//
+	// Initialize driver name
+	//
+	RtlInitUnicodeString(&driver_name, L"\\Driver\\Nemesis");
+
+	//
+	// Create driver
+	//
+	return IoCreateDriver(&driver_name, &DriverInitialize);
 }
