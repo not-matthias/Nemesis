@@ -76,7 +76,7 @@ class KernelMemory final : public IMemorySource
 	/**
 	 * \brief The symbolic link for the driver.
 	 */
-	LPCWSTR registry_path = L"\\\\.\\KernelMemory";
+	LPCWSTR registry_path = L"\\\\?\\globalroot\\Device\\KernelMemory\\"; // \\\\.\\KernelMemory is not working
 
 	/**
 	 * \brief The driver handle.

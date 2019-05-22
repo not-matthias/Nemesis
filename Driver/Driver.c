@@ -58,8 +58,7 @@ typedef struct _BASE_ADDRESS_REQUEST
 //
 // Variables
 //
-PDEVICE_OBJECT g_device_object;
-UNICODE_STRING driver_name, device_name, symbolic_link_name;
+UNICODE_STRING symbolic_link_name;
 
 
 //
@@ -268,6 +267,9 @@ NTSTATUS DriverInitialize(PDRIVER_OBJECT driver_object, PUNICODE_STRING registry
 {
 	UNREFERENCED_PARAMETER(registry_path);
 
+	PDEVICE_OBJECT device_object;
+	UNICODE_STRING device_name;
+
 	//
 	// Initialize the variables
 	//
@@ -277,7 +279,7 @@ NTSTATUS DriverInitialize(PDRIVER_OBJECT driver_object, PUNICODE_STRING registry
 	//
 	// Create the device object
 	//
-	if (!NT_SUCCESS(IoCreateDevice(driver_object, 0, &device_name, FILE_DEVICE_UNKNOWN, FILE_DEVICE_SECURE_OPEN, FALSE, &g_device_object)))
+	if (!NT_SUCCESS(IoCreateDevice(driver_object, 0, &device_name, FILE_DEVICE_UNKNOWN, FILE_DEVICE_SECURE_OPEN, FALSE, &device_object)))
 	{
 		DbgPrint("Failed to create device object.\n");
 		return STATUS_UNSUCCESSFUL;
@@ -289,10 +291,15 @@ NTSTATUS DriverInitialize(PDRIVER_OBJECT driver_object, PUNICODE_STRING registry
 	if (!NT_SUCCESS(IoCreateSymbolicLink(&symbolic_link_name, &device_name)))
 	{
 		DbgPrint("Failed to create symbolic link.\n");
-		IoDeleteDevice(g_device_object);
+		IoDeleteDevice(device_object);
 
 		return STATUS_UNSUCCESSFUL;
 	}
+
+	//
+	// Set flag
+	//
+	device_object->Flags |= DO_BUFFERED_IO;
 
 	//
 	// Set major functions
@@ -306,10 +313,9 @@ NTSTATUS DriverInitialize(PDRIVER_OBJECT driver_object, PUNICODE_STRING registry
 	driver_object->DriverUnload = DriverUnload;
 
 	//
-	// Set flags
+	// Set flag
 	//
-	driver_object->Flags |= DO_BUFFERED_IO;
-	driver_object->Flags &= ~DO_DEVICE_INITIALIZING;
+	device_object->Flags &= ~DO_DEVICE_INITIALIZING;
 
 	DbgPrint("Driver loaded.\n");
 
@@ -325,12 +331,7 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT driver_object, PUNICODE_STRING registry_path
 	UNREFERENCED_PARAMETER(registry_path);
 
 	//
-	// Initialize driver name
-	//
-	RtlInitUnicodeString(&driver_name, L"\\Driver\\Nemesis");
-
-	//
 	// Create driver
 	//
-	return IoCreateDriver(&driver_name, &DriverInitialize);
+	return IoCreateDriver(NULL, &DriverInitialize);
 }
