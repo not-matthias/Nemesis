@@ -98,7 +98,7 @@ namespace Nemesis.Utils
 
         [DllImport("Nemesis.dll")]
         protected static extern bool SetMemorySourceExport([In] string memorySource);
-        
+
 
         [DllImport("Nemesis.dll")]
         protected static extern bool GetDriverListElementExport([In] uint index, [In] [Out] ref Driver structure);
@@ -115,6 +115,13 @@ namespace Nemesis.Utils
 
         [DllImport("Nemesis.dll")]
         protected static extern bool SaveDriverInformationExport([In] string fileName);
+
+
+        [DllImport("Nemesis.dll")]
+        protected static extern bool SetConfigValueExport([In] string key, [In] string value);
+
+        [DllImport("Nemesis.dll")]
+        protected static extern string GetConfigValueExport([In] string key);
     }
 
     internal class NemesisApi : NemesisImports
@@ -358,10 +365,42 @@ namespace Nemesis.Utils
         /// Saves the information about the loaded drivers.
         /// </summary>
         /// <param name="fileName">The file name of the list</param>
-        /// <returns></returns>
+        /// <returns>True if successful</returns>
         public static bool SaveDriverInformation(string fileName)
         {
             return SaveDriverInformationExport(fileName);
+        }
+
+        /// <summary>
+        /// Sets the key and value in the config.
+        /// </summary>
+        /// <param name="key">The specified key</param>
+        /// <param name="value">The specified value for the key</param>
+        /// <returns>True if successful</returns>
+        public static bool SetConfigValue<T>(string key, T value)
+        {
+            return SetConfigValueExport(key, value.ToString());
+        }
+
+        /// <summary>
+        /// Gets the value of the key from the config.
+        /// </summary>
+        /// <param name="key">The key of the value</param>
+        /// <returns>The value</returns>
+        public static T GetConfigValue<T>(string key)
+        {
+            if (string.IsNullOrEmpty(key)) return default;
+
+            try
+            {
+                return (T) Convert.ChangeType(GetConfigValueExport(key), typeof(T));
+            }
+            catch (Exception)
+            {
+                // TODO: Print error message
+            }
+
+            return default;
         }
     }
 }
