@@ -32,7 +32,7 @@ public:
 	//
 
 	/**
-	 * \brief Stores the parameters.
+	 * \brief Stores the parameter.
 	 * \param file_name the name of the dump file
 	 */
 	explicit FileWriter(std::string file_name);
@@ -71,7 +71,7 @@ public:
 	//
 
 	/**
-	 * \brief Writes the specified to the file.
+	 * \brief Writes the specified buffer to the file.
 	 * \param offset the file offset
 	 * \param size the buffer size
 	 * \param buffer 

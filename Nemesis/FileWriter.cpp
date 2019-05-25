@@ -12,7 +12,7 @@ FileWriter::~FileWriter() = default;
 
 auto FileWriter::WriteToFile(Module * module) -> BOOL
 {
-	Logger::Log("Writing to the file %s.", file_name.data());
+	Logger::Log("Writing to the file '%s'.", file_name.data());
 
 	//
 	// Some checks
