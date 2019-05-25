@@ -257,8 +257,8 @@
             // metroTabControl1
             // 
             this.metroTabControl1.Controls.Add(this.metroTabPage1);
-            this.metroTabControl1.Controls.Add(this.metroTabPage2);
             this.metroTabControl1.Controls.Add(this.metroTabPage4);
+            this.metroTabControl1.Controls.Add(this.metroTabPage2);
             this.metroTabControl1.Controls.Add(this.metroTabPage3);
             this.metroTabControl1.Location = new System.Drawing.Point(23, 63);
             this.metroTabControl1.Name = "metroTabControl1";
@@ -355,14 +355,14 @@
             this.metroLabel8.AutoSize = true;
             this.metroLabel8.Location = new System.Drawing.Point(2, 18);
             this.metroLabel8.Name = "metroLabel8";
-            this.metroLabel8.Size = new System.Drawing.Size(118, 19);
+            this.metroLabel8.Size = new System.Drawing.Size(169, 19);
             this.metroLabel8.TabIndex = 3;
-            this.metroLabel8.Text = "Save driver offsets:";
+            this.metroLabel8.Text = "Save driver base addresses:";
             // 
             // saveOffsetsToggle
             // 
             this.saveOffsetsToggle.AutoSize = true;
-            this.saveOffsetsToggle.Location = new System.Drawing.Point(163, 20);
+            this.saveOffsetsToggle.Location = new System.Drawing.Point(177, 20);
             this.saveOffsetsToggle.Name = "saveOffsetsToggle";
             this.saveOffsetsToggle.Size = new System.Drawing.Size(80, 17);
             this.saveOffsetsToggle.TabIndex = 2;
