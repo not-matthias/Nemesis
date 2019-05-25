@@ -33,7 +33,7 @@ public:
 	 * \brief Sets the key and value in the config.
 	 * \param key the specified key
 	 * \param value the specified value for the key
-	 * \return nonzero if successful
+	 * \return true if successful
 	 */
 	auto Set(std::string_view key, std::string_view value) const -> BOOL;
 
