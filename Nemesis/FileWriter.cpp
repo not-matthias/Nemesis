@@ -206,7 +206,7 @@ auto FileWriter::WriteToFile(Module * module) -> BOOL
 	return TRUE;
 }
 
-auto FileWriter::WriteToFile(Memory * memory) -> BOOL
+auto FileWriter::WriteToFile(MemoryElement * memory) -> BOOL
 {
 	//
 	// Create the file

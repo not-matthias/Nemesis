@@ -2,7 +2,7 @@
 
 #include "ProcessMemory.hpp"
 
-class Memory
+class MemoryElement
 {
 	//
 	//
@@ -45,12 +45,12 @@ public:
 	 * \param start_address the memory start address
 	 * \param size the memory size
 	 */
-	Memory(ProcessMemory * process_memory, DWORD_PTR start_address, DWORD size);
+	MemoryElement(ProcessMemory * process_memory, DWORD_PTR start_address, DWORD size);
 
 	/**
 	 * \brief Deletes the memory buffer.
 	 */
-	~Memory();
+	~MemoryElement();
 
 
 	//

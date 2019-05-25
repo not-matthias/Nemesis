@@ -2,7 +2,7 @@
 
 #include "Logger.hpp"
 
-Memory::Memory(ProcessMemory * process_memory, const DWORD_PTR start_address, const DWORD size)
+MemoryElement::MemoryElement(ProcessMemory * process_memory, const DWORD_PTR start_address, const DWORD size)
 {
 	this->memory_buffer = nullptr;
 	this->process_memory = process_memory;
@@ -10,12 +10,12 @@ Memory::Memory(ProcessMemory * process_memory, const DWORD_PTR start_address, co
 	this->memory_size = size;
 }
 
-Memory::~Memory()
+MemoryElement::~MemoryElement()
 {
 	delete memory_buffer;
 }
 
-auto Memory::Initialize() -> BOOL
+auto MemoryElement::Initialize() -> BOOL
 {
 	Logger::Log("Initializing the memory.");
 

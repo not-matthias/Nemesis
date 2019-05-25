@@ -7,9 +7,9 @@
 
 #include "Logger.hpp"
 
-auto ProcessUtils::GetProcessList() -> std::vector<Process>
+auto ProcessUtils::GetProcessList() -> std::vector<ProcessElement>
 {
-	std::vector<Process> processes;
+	std::vector<ProcessElement> processes;
 
 	//
 	// Allocate memory for the buffer
@@ -17,7 +17,7 @@ auto ProcessUtils::GetProcessList() -> std::vector<Process>
 	LPVOID buffer;
 	if (!(buffer = VirtualAlloc(nullptr, 1024 * 1024, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE)))
 	{
-		return std::vector<Process>();
+		return std::vector<ProcessElement>();
 	}
 
 	//
@@ -31,7 +31,7 @@ auto ProcessUtils::GetProcessList() -> std::vector<Process>
 	if (!NT_SUCCESS(NtQuerySystemInformation(SystemProcessInformation, system_process_info, 1024 * 1024, NULL)))
 	{
 		VirtualFree(buffer, 0, MEM_RELEASE);
-		return std::vector<Process>();
+		return std::vector<ProcessElement>();
 	}
 
 	//
@@ -46,7 +46,7 @@ auto ProcessUtils::GetProcessList() -> std::vector<Process>
 			system_process_info->ImageName.Buffer, static_cast<UINT64>(system_process_info->ImageName.Length / 2)
 		};
 		std::string string(image_name.begin(), image_name.end());
-		Process process{};
+		ProcessElement process{};
 
 		std::copy(string.begin(), string.end(), reinterpret_cast<char*>(process.image_name));
 		process.unique_process_id = system_process_info->UniqueProcessId;
@@ -86,9 +86,9 @@ auto ProcessUtils::GetProcessList() -> std::vector<Process>
 	return processes;
 }
 
-auto ProcessUtils::GetModuleList(const DWORD process_id) -> std::vector<Module>
+auto ProcessUtils::GetModuleList(const DWORD process_id) -> std::vector<ModuleElement>
 {
-	std::vector<Module> modules;
+	std::vector<ModuleElement> modules;
 
 	HMODULE module_handles[1024];
 	DWORD cb_needed;
@@ -99,7 +99,7 @@ auto ProcessUtils::GetModuleList(const DWORD process_id) -> std::vector<Module>
 	const auto process_handle = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, process_id);
 	if (process_handle == INVALID_HANDLE_VALUE)
 	{
-		return std::vector<Module>();
+		return std::vector<ModuleElement>();
 	}
 
 	//
@@ -119,7 +119,7 @@ auto ProcessUtils::GetModuleList(const DWORD process_id) -> std::vector<Module>
 				//
 				// Create a new module
 				//
-				Module module{};
+				ModuleElement module{};
 
 				std::string module_name_string(module_name);
 				std::copy(module_name_string.begin(), module_name_string.end(),
@@ -142,9 +142,9 @@ auto ProcessUtils::GetModuleList(const DWORD process_id) -> std::vector<Module>
 	return modules;
 }
 
-auto ProcessUtils::GetMemoryList(const DWORD process_id) -> std::vector<Memory>
+auto ProcessUtils::GetMemoryList(const DWORD process_id) -> std::vector<MemoryElement>
 {
-	std::vector<Memory> memory_list;
+	std::vector<MemoryElement> memory_list;
 
 	//
 	// Open the process
@@ -152,7 +152,7 @@ auto ProcessUtils::GetMemoryList(const DWORD process_id) -> std::vector<Memory>
 	const auto process_handle = OpenProcess(PROCESS_ALL_ACCESS, false, process_id);
 	if (process_handle == INVALID_HANDLE_VALUE)
 	{
-		return std::vector<Memory>();
+		return std::vector<MemoryElement>();
 	}
 
 	MEMORY_BASIC_INFORMATION memory_basic_information;
@@ -167,7 +167,7 @@ auto ProcessUtils::GetMemoryList(const DWORD process_id) -> std::vector<Memory>
 		//
 		// Creates a new memory source
 		//
-		Memory memory{};
+		MemoryElement memory{};
 		memory.base_address = memory_basic_information.BaseAddress;
 		memory.region_size = memory_basic_information.RegionSize;
 		memory.state = memory_basic_information.State; // (MEM_COMMIT | MEM_FREE | MEM_RESERVE)

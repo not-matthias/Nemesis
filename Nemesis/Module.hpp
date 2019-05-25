@@ -70,6 +70,12 @@ private:
 	auto ReadHeader() -> BOOL;
 
 	/**
+	 * \brief Reads the header from the file.
+	 * \return true if successful
+	 */
+	auto ReadHeaderFromFile() -> BOOL;
+
+	/**
 	 * \brief Sets the headers.
 	 * \param header_memory the header memory
 	 * \param header_size the header memory size

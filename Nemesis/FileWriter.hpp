@@ -61,7 +61,7 @@ public:
 	 * \param memory the memory to dump
 	 * \return true if successful
 	 */
-	auto WriteToFile(Memory * memory) -> BOOL;
+	auto WriteToFile(MemoryElement * memory) -> BOOL;
 
 
 	//

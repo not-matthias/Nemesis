@@ -2,7 +2,7 @@
 
 #include "ProcessUtils.hpp"
 
-auto GetProcessListElementExport(const UINT index, Process * process) -> BOOL
+auto GetProcessListElementExport(const UINT index, ProcessElement * process) -> BOOL
 {
 	const auto process_list = ProcessUtils::GetProcessList();
 
@@ -27,7 +27,7 @@ auto GetProcessListElementExport(const UINT index, Process * process) -> BOOL
 	return TRUE;
 }
 
-auto GetModuleListElementExport(const UINT index, const DWORD process_id, Module * module) -> BOOL
+auto GetModuleListElementExport(const UINT index, const DWORD process_id, ModuleElement * module) -> BOOL
 {
 	const auto module_list = ProcessUtils::GetModuleList(process_id);
 
@@ -52,7 +52,7 @@ auto GetModuleListElementExport(const UINT index, const DWORD process_id, Module
 	return TRUE;
 }
 
-auto GetMemoryListElementExport(const UINT index, const DWORD process_id, Memory * memory) -> BOOL
+auto GetMemoryListElementExport(const UINT index, const DWORD process_id, MemoryElement * memory) -> BOOL
 {
 	const auto memory_list = ProcessUtils::GetMemoryList(process_id);
 

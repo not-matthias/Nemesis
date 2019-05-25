@@ -22,6 +22,7 @@
     <ClInclude Include="DriverExport.hpp" />
     <ClInclude Include="DriverUtils.hpp" />
     <ClInclude Include="DumpExport.hpp" />
+    <ClInclude Include="FileReader.hpp" />
     <ClInclude Include="FileWriter.hpp" />
     <ClInclude Include="IMemorySource.hpp" />
     <ClInclude Include="KernelMemory.hpp" />
@@ -41,6 +42,7 @@
     <ClCompile Include="DriverExport.cpp" />
     <ClCompile Include="DriverUtils.cpp" />
     <ClCompile Include="DumpExport.cpp" />
+    <ClCompile Include="FileReader.cpp" />
     <ClCompile Include="FileWriter.cpp" />
     <ClCompile Include="IMemorySource.cpp" />
     <ClCompile Include="KernelMemory.cpp" />

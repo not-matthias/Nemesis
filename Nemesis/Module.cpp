@@ -2,7 +2,10 @@
 
 #include <iostream>
 #include <algorithm>
+
+#include "FileReader.hpp"
 #include "Logger.hpp"
+#include "ProcessUtils.hpp"
 
 Module::Module(ProcessMemory * process_memory)
 {
@@ -57,6 +60,14 @@ auto Module::Initialize() -> BOOL
 	}
 
 	//
+	// Read the header from the file
+	//
+	if (!ReadHeaderFromFile())
+	{
+		return FALSE;
+	}
+
+	//
 	// Set the sections from the Memory
 	//
 	SetSections();
@@ -90,6 +101,45 @@ auto Module::ReadHeader() -> BOOL
 
 	return TRUE;
 }
+
+
+auto Module::ReadHeaderFromFile() -> BOOL
+{
+	Logger::Log("Reading the headers from file.");
+
+	const auto header_size = GetHeaderSize();
+
+	//
+	// Get the filename
+	//
+	const auto path = ProcessUtils::GetFilePath(process_memory->GetProcessId());
+	if (path.empty())
+	{
+		return FALSE;
+	}
+
+	//
+	// Get the pe header
+	//
+	FileReader file_reader(path);
+	const auto header_memory = file_reader.Read<BYTE*>(base_address, header_size);
+
+	//
+	// Check if valid
+	//
+	if (header_memory == nullptr)
+	{
+		return FALSE;
+	}
+
+	//
+	// Set the pe header
+	//
+	SetHeader(header_memory, header_size);
+
+	return TRUE;
+}
+
 
 auto Module::SetHeader(BYTE * header_memory, const DWORD header_size) -> VOID
 {

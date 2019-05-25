@@ -6,7 +6,7 @@
 /**
  * \brief A memory region of a process.
  */
-struct Memory
+struct MemoryElement
 {
 	PVOID base_address;
 	SIZE_T region_size;
@@ -17,7 +17,7 @@ struct Memory
 /**
  * \brief A module of a process.
  */
-struct Module
+struct ModuleElement
 {
 	CHAR module_name[MAX_PATH];
 	INT64 base_address;
@@ -26,7 +26,7 @@ struct Module
 /**
  * \brief Contains all the information about a process.
  */
-struct Process
+struct ProcessElement
 {
 	CHAR image_name[256];
 	HANDLE unique_process_id;
@@ -50,7 +50,7 @@ struct Process
  */
 struct ProcessList
 {
-	Process * processes;
+	ProcessElement * processes;
 };
 
 
@@ -60,7 +60,7 @@ struct ProcessList
  * \param process the process at the specified index
  * \return true if successful
  */
-auto GetProcessListElementExport(IN UINT index, OUT Process * process) -> BOOL;
+auto GetProcessListElementExport(IN UINT index, OUT ProcessElement * process) -> BOOL;
 
 /**
  * \brief Returns the module at the specified index.
@@ -69,7 +69,7 @@ auto GetProcessListElementExport(IN UINT index, OUT Process * process) -> BOOL;
  * \param module the module at the specified index
  * \return true if successful
  */
-auto GetModuleListElementExport(IN UINT index, IN DWORD process_id, OUT Module * module) -> BOOL;
+auto GetModuleListElementExport(IN UINT index, IN DWORD process_id, OUT ModuleElement * module) -> BOOL;
 
 /**
  * \brief Returns the memory at the specified index.
@@ -78,4 +78,4 @@ auto GetModuleListElementExport(IN UINT index, IN DWORD process_id, OUT Module *
  * \param memory the memory at the specified index
  * \return true if successful
  */
-auto GetMemoryListElementExport(IN UINT index, IN DWORD process_id, OUT Memory * memory) -> BOOL;
+auto GetMemoryListElementExport(IN UINT index, IN DWORD process_id, OUT MemoryElement * memory) -> BOOL;

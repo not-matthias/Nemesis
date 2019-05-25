@@ -24,3 +24,8 @@ auto ProcessMemory::GetBaseAddress() const -> DWORD_PTR
 {
 	return MemorySource::GetMemorySource(process_id)->GetBaseAddress();
 }
+
+auto ProcessMemory::GetProcessId() const -> DWORD
+{
+	return process_id;
+}

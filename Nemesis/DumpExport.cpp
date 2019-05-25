@@ -95,7 +95,7 @@ auto DumpMemoryExport(const DWORD process_id, const DWORD_PTR start_address, con
 	//
 	// Create and initialize the Memory
 	//
-	Memory memory(&process_memory, start_address, size);
+	MemoryElement memory(&process_memory, start_address, size);
 	if (!memory.Initialize())
 	{
 		return FALSE;

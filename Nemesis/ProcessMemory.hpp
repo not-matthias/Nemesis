@@ -18,7 +18,6 @@ class ProcessMemory
 	DWORD process_id;
 
 
-
 public:
 
 	//
@@ -103,4 +102,10 @@ public:
 	 * \return the base address of the process
 	 */
 	auto GetBaseAddress() const -> DWORD_PTR;
+
+	/**
+	 * \brief Returns the process id.
+	 * \return the id of the process
+	 */
+	auto GetProcessId() const -> DWORD;
 };
