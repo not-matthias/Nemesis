@@ -3,7 +3,6 @@
 #include <string>
 #include <Windows.h>
 
-
 class Config
 {
 	/**

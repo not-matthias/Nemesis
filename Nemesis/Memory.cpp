@@ -1,6 +1,7 @@
-#include "Memory.hpp"
+#include "stdafx.h"
 
 #include "Logger.hpp"
+#include "Memory.hpp"
 
 MemoryElement::MemoryElement(ProcessMemory * process_memory, const DWORD_PTR start_address, const DWORD size)
 {

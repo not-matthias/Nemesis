@@ -1,6 +1,6 @@
-#include "DriverUtils.hpp"
+#include "stdafx.h"
 
-#include <string>
+#include "DriverUtils.hpp"
 
 auto DriverUtils::GetDriverList() -> std::vector<Driver>
 {

@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "ConfigExport.hpp"
 
 auto SetConfigValueExport(const std::string_view key, const std::string_view value) -> BOOL

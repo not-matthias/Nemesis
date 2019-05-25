@@ -1,9 +1,8 @@
-#include "MemorySource.h"
+#include "stdafx.h"
 
-#include <ostream>
-
-#include "UsermodeMemory.hpp"
 #include "KernelMemory.hpp"
+#include "MemorySource.h"
+#include "UsermodeMemory.hpp"
 
 std::string MemorySource::current_memory_source;
 std::vector<std::string> MemorySource::memory_sources = {"kernel_mode", "user_mode"};

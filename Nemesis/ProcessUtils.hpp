@@ -1,11 +1,9 @@
 #pragma once
 
-#include "ProcessExport.hpp"
-
 #include <string>
 #include <vector>
 
-#pragma comment(lib,"ntdll.lib")
+#include "ProcessExport.hpp"
 
 class ProcessUtils
 {

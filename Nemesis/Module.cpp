@@ -1,10 +1,8 @@
-#include "Module.hpp"
-
-#include <iostream>
-#include <algorithm>
+#include "stdafx.h"
 
 #include "FileReader.hpp"
 #include "Logger.hpp"
+#include "Module.hpp"
 #include "ProcessUtils.hpp"
 
 Module::Module(ProcessMemory * process_memory)

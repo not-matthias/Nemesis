@@ -1,7 +1,6 @@
+#include "stdafx.h"
+
 #include "MemorySourceExport.hpp"
-
-#include <algorithm>
-
 #include "ProcessMemory.hpp"
 
 auto GetMemorySourcesExport(MemorySources * memory_sources) -> VOID

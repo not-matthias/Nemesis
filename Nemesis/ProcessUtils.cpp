@@ -1,11 +1,7 @@
-#include "ProcessUtils.hpp"
-
-#include <iostream>
-#include <Psapi.h>
-#include <vector>
-#include <winternl.h>
+#include "stdafx.h"
 
 #include "Logger.hpp"
+#include "ProcessUtils.hpp"
 
 auto ProcessUtils::GetProcessList() -> std::vector<ProcessElement>
 {

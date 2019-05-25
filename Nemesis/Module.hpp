@@ -1,10 +1,10 @@
 #pragma once
 
-#include "ProcessMemory.hpp"
-#include "Section.hpp"
-
 #include <vector>
 #include <Windows.h>
+
+#include "ProcessMemory.hpp"
+#include "Section.hpp"
 
 class Module
 {

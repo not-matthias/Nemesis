@@ -1,7 +1,6 @@
+#include "stdafx.h"
+
 #include "FileWriter.hpp"
-
-#include <utility>
-
 #include "Logger.hpp"
 
 FileWriter::FileWriter(std::string file_name) : file_name(std::move(file_name))

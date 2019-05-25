@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "Config.hpp"
 
 Config::Config(const std::string_view app_name, const std::string_view file_name)

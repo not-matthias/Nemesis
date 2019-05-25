@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "KernelMemory.hpp"
 
 KernelMemory::KernelMemory(const DWORD process_id) : IMemorySource(process_id)

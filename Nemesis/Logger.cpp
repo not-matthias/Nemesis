@@ -1,6 +1,6 @@
-#include "Logger.hpp"
+#include "stdafx.h"
 
-#include <cstdio>
+#include "Logger.hpp"
 
 std::string Logger::prefix = "[Nemesis] ";
 

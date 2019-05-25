@@ -2,6 +2,7 @@
 
 #include <string>
 #include <Windows.h>
+
 #include "Config.hpp"
 
 inline Config config("Nemesis", "Nemesis.ini");

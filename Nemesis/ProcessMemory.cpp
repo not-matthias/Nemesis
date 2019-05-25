@@ -1,7 +1,8 @@
-#include "ProcessMemory.hpp"
+#include "stdafx.h"
 
-#include "UsermodeMemory.hpp"
 #include "MemorySource.h"
+#include "ProcessMemory.hpp"
+#include "UsermodeMemory.hpp"
 
 ProcessMemory::ProcessMemory(const DWORD process_id)
 {

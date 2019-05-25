@@ -1,5 +1,6 @@
-#include "ProcessExport.hpp"
+#include "stdafx.h"
 
+#include "ProcessExport.hpp"
 #include "ProcessUtils.hpp"
 
 auto GetProcessListElementExport(const UINT index, ProcessElement * process) -> BOOL

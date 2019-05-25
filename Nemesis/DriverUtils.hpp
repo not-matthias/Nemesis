@@ -2,7 +2,6 @@
 
 #include <vector>
 #include <Windows.h>
-#include <winternl.h>
 
 #include "DriverExport.hpp"
 

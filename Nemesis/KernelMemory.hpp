@@ -1,7 +1,8 @@
 #pragma once
 
-#include "IMemorySource.hpp"
 #include <Windows.h>
+
+#include "IMemorySource.hpp"
 
 //
 //

@@ -1,5 +1,6 @@
-#include "FileReader.hpp"
+#include "stdafx.h"
 
+#include "FileReader.hpp"
 #include "Logger.hpp"
 
 FileReader::FileReader(std::string path) : path(std::move(path))

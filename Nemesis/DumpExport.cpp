@@ -1,5 +1,6 @@
-#include "DumpExport.hpp"
+#include "stdafx.h"
 
+#include "DumpExport.hpp"
 #include "FileWriter.hpp"
 #include "Module.hpp"
 

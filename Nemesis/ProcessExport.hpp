@@ -2,7 +2,6 @@
 
 #include <Windows.h>
 
-
 /**
  * \brief A memory region of a process.
  */

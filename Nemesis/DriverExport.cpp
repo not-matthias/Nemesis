@@ -1,7 +1,6 @@
+#include "stdafx.h"
+
 #include "DriverExport.hpp"
-
-#include <fstream>
-
 #include "DriverUtils.hpp"
 #include "Logger.hpp"
 
