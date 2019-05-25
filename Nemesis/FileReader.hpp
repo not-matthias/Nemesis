@@ -31,9 +31,9 @@ public:
 
 	/**
 	 * \brief Stores the parameter.
-	 * \param file_name the name of the dump file
+	 * \param path the path of the file
 	 */
-	FileReader(std::string path);
+	explicit FileReader(std::string path);
 
 	/**
 	 * \brief The default destructor.
@@ -53,7 +53,14 @@ public:
 	 * \param size the buffer size
 	 * \return the buffer
 	 */
-	auto ReadFromFile(LONG offset, DWORD size) -> PVOID;
+	template <typename T>
+	auto Read(LONG offset, DWORD size) -> T;
 
+	/**
+	 * \brief Reads from a file.
+	 * \param offset the file offset
+	 * \param size the buffer size
+	 * \return the buffer
+	 */
+	auto Read(LONG offset, DWORD size) -> PVOID;
 };
-
