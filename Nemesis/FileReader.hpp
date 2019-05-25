@@ -54,7 +54,10 @@ public:
 	 * \return the buffer
 	 */
 	template <typename T>
-	auto Read(LONG offset, DWORD size) -> T;
+	auto Read(const LONG offset, const DWORD size) -> T
+	{
+		return reinterpret_cast<T>(Read(offset, size));
+	}
 
 	/**
 	 * \brief Reads from a file.

@@ -9,12 +9,6 @@ FileReader::FileReader(std::string path) : path(std::move(path))
 FileReader::~FileReader() = default;
 
 
-template <typename T>
-auto FileReader::Read(const LONG offset, const DWORD size) -> T
-{
-	return reinterpret_cast<T>(Read(offset, size));
-}
-
 auto FileReader::Read(const LONG offset, const DWORD size) -> PVOID
 {
 	Logger::Log("Reading from the file '%s'.", path.data());

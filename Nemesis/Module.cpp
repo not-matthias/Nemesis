@@ -54,10 +54,10 @@ auto Module::Initialize() -> BOOL
 	//
 	// Read the header from the Memory
 	//
-	if (!ReadHeader())
-	{
-		return FALSE;
-	}
+	//if (!ReadHeader())
+	//{
+	//	return FALSE;
+	//}
 
 	//
 	// Read the header from the file
@@ -102,7 +102,6 @@ auto Module::ReadHeader() -> BOOL
 	return TRUE;
 }
 
-
 auto Module::ReadHeaderFromFile() -> BOOL
 {
 	Logger::Log("Reading the headers from file.");
@@ -122,7 +121,7 @@ auto Module::ReadHeaderFromFile() -> BOOL
 	// Get the pe header
 	//
 	FileReader file_reader(path);
-	const auto header_memory = file_reader.Read<BYTE*>(base_address, header_size);
+	const auto header_memory = file_reader.Read<BYTE *>(0x0, header_size);
 
 	//
 	// Check if valid
