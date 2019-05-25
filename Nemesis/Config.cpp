@@ -33,4 +33,3 @@ auto Config::Get(std::string_view key) const -> std::string
 
 	return buffer;
 }
-

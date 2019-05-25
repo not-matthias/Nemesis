@@ -75,9 +75,6 @@
     <ClInclude Include="DumpExport.hpp">
       <Filter>Header Files\Exports</Filter>
     </ClInclude>
-    <ClInclude Include="MemorySourceExport.h">
-      <Filter>Header Files\Exports</Filter>
-    </ClInclude>
     <ClInclude Include="MemorySource.h">
       <Filter>Header Files\Memory</Filter>
     </ClInclude>
@@ -95,6 +92,15 @@
     </ClInclude>
     <ClInclude Include="FileReader.hpp">
       <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.hpp">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySourceExport.hpp">
+      <Filter>Header Files\Exports</Filter>
+    </ClInclude>
+    <ClInclude Include="ConfigExport.hpp">
+      <Filter>Header Files\Exports</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +154,12 @@
     </ClCompile>
     <ClCompile Include="FileReader.cpp">
       <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Config.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ConfigExport.cpp">
+      <Filter>Source Files\Exports</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Config.hpp" />
+    <ClInclude Include="ConfigExport.hpp" />
     <ClInclude Include="DriverExport.hpp" />
     <ClInclude Include="DriverUtils.hpp" />
     <ClInclude Include="DumpExport.hpp" />
@@ -29,7 +31,7 @@
     <ClInclude Include="Logger.hpp" />
     <ClInclude Include="Memory.hpp" />
     <ClInclude Include="MemorySource.h" />
-    <ClInclude Include="MemorySourceExport.h" />
+    <ClInclude Include="MemorySourceExport.hpp" />
     <ClInclude Include="ProcessExport.hpp" />
     <ClInclude Include="ProcessUtils.hpp" />
     <ClInclude Include="Section.hpp" />
@@ -38,6 +40,8 @@
     <ClInclude Include="Module.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Config.cpp" />
+    <ClCompile Include="ConfigExport.cpp" />
     <ClCompile Include="DllMain.cpp" />
     <ClCompile Include="DriverExport.cpp" />
     <ClCompile Include="DriverUtils.cpp" />
@@ -118,6 +122,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -126,6 +131,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <MapExports>false</MapExports>
@@ -140,6 +146,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -154,6 +161,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

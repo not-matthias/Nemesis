@@ -13,3 +13,6 @@ EXPORTS
 	GetMemoryListElementExport @10
 
 	SaveDriverInformationExport @11
+
+	SetConfigValueExport @12
+	GetConfigValueExport @13
