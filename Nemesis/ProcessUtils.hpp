@@ -2,6 +2,7 @@
 
 #include "ProcessExport.hpp"
 
+#include <string>
 #include <vector>
 
 #pragma comment(lib,"ntdll.lib")
@@ -28,4 +29,11 @@ public:
 	 * \return the memory array
 	 */
 	static auto GetMemoryList(DWORD process_id) -> std::vector<Memory>;
+
+	/**
+	 * \brief Returns the path of the process' main module.
+	 * \param process_id the target process id
+	 * \return the path to the main module
+	 */
+	static auto GetFilePath(DWORD process_id) -> std::string;
 };

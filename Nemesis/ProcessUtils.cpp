@@ -5,6 +5,8 @@
 #include <vector>
 #include <winternl.h>
 
+#include "Logger.hpp"
+
 auto ProcessUtils::GetProcessList() -> std::vector<Process>
 {
 	std::vector<Process> processes;
@@ -184,4 +186,35 @@ auto ProcessUtils::GetMemoryList(const DWORD process_id) -> std::vector<Memory>
 	CloseHandle(process_handle);
 
 	return memory_list;
+}
+
+auto ProcessUtils::GetFilePath(const DWORD process_id) -> std::string
+{
+	std::string path(MAX_PATH, '\0');
+	DWORD length = 0;
+
+	//
+	// Get the path
+	//
+	const auto process_handle = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, process_id);
+	if (process_handle != nullptr)
+	{
+		if (!(length = GetModuleFileNameEx(process_handle, nullptr, const_cast<LPSTR>(path.data()), path.size())))
+		{
+			Logger::Log("Failed to get module file name.");
+		}
+
+		CloseHandle(process_handle);
+	}
+	else
+	{
+		Logger::Log("Failed to open file.");
+	}
+
+	//
+	// Adjust size
+	//
+	path.resize(length);
+
+	return path;
 }
