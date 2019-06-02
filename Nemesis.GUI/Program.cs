@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using System.Security.Principal;
 using System.Windows.Forms;
@@ -26,8 +27,17 @@ namespace Nemesis
                 }))
                 {
                     process?.WaitForExit();
-                    Process.GetCurrentProcess().Kill();
+                    return;
                 }
+            }
+
+            //
+            // Check if Nemesis.dll exists
+            //
+            if (!File.Exists("Nemesis.dll"))
+            {
+                MessageBox.Show("Nemesis.dll not found.");
+                return;
             }
 
             //
