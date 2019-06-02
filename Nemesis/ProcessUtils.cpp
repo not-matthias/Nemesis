@@ -2,6 +2,7 @@
 
 #include "Logger.hpp"
 #include "ProcessUtils.hpp"
+#include "MemorySource.h"
 
 auto ProcessUtils::GetProcessList() -> std::vector<ProcessElement>
 {
@@ -69,9 +70,8 @@ auto ProcessUtils::GetProcessList() -> std::vector<ProcessElement>
 		//
 		// Calculate the next offset
 		//
-		system_process_info = reinterpret_cast<PSYSTEM_PROCESS_INFORMATION>(reinterpret_cast<LPBYTE>(system_process_info
-			) +
-			system_process_info->NextEntryOffset);
+		system_process_info = reinterpret_cast<PSYSTEM_PROCESS_INFORMATION>(reinterpret_cast<LPBYTE>(system_process_info) + system_process_info->NextEntryOffset
+		);
 	}
 
 	// 
@@ -95,6 +95,7 @@ auto ProcessUtils::GetModuleList(const DWORD process_id) -> std::vector<ModuleEl
 	const auto process_handle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, process_id);
 	if (process_handle == INVALID_HANDLE_VALUE)
 	{
+		Logger::Log("Failed to get process handle.");
 		return std::vector<ModuleElement>();
 	}
 
@@ -105,28 +106,47 @@ auto ProcessUtils::GetModuleList(const DWORD process_id) -> std::vector<ModuleEl
 	{
 		for (unsigned long i = 0; i < (cb_needed / sizeof(HMODULE)); i++)
 		{
-			CHAR module_name[MAX_PATH];
+			CHAR file_path[MAX_PATH];
+
 
 			//
 			// Get the full path
 			//
-			if (GetModuleFileNameEx(process_handle, module_handles[i], module_name, sizeof(module_name) / sizeof(CHAR)))
+			if (!GetModuleFileNameEx(process_handle, module_handles[i], file_path, sizeof(file_path) / sizeof(CHAR)))
 			{
-				//
-				// Create a new module
-				//
-				ModuleElement module{};
-
-				std::string module_name_string(module_name);
-				std::copy(module_name_string.begin(), module_name_string.end(),
-				          reinterpret_cast<char *>(module.module_name));
-				module.base_address = reinterpret_cast<INT64>(module_handles[i]);
-
-				//
-				// Add it to the list
-				//
-				modules.push_back(module);
+				Logger::Log("Failed to get file path.");
+				continue;
 			}
+
+			//
+			// Get module information
+			//
+			MODULEINFO module_info = {0};
+			if (!GetModuleInformation(process_handle, module_handles[i], &module_info, sizeof(module_info)))
+			{
+				Logger::Log("Failed to get module information.");
+				continue;
+			}
+
+			//
+			// Create a new module
+			//
+			ModuleElement module{};
+
+			module.base_address = module_info.lpBaseOfDll;
+			module.module_size = module_info.SizeOfImage;
+
+			std::string module_file_path(file_path);
+			std::copy(module_file_path.begin(), module_file_path.end(), reinterpret_cast<char*>(module.module_path));
+
+			const auto module_file_name = module_file_path.substr(module_file_path.find_last_of("/\\") + 1);
+			std::copy(module_file_name.begin(), module_file_name.end(), reinterpret_cast<char*>(module.module_name));
+
+
+			//
+			// Add it to the list
+			//
+			modules.push_back(module);
 		}
 	}
 
@@ -134,6 +154,114 @@ auto ProcessUtils::GetModuleList(const DWORD process_id) -> std::vector<ModuleEl
 	// Close the handle
 	//
 	CloseHandle(process_handle);
+
+	return modules;
+}
+
+auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<ModuleElement>
+{
+	std::vector<ModuleElement> modules;
+	const auto memory_source = MemorySource::GetMemorySource(process_id);
+
+	Logger::Log("Creating module list manually.");
+
+	//
+	// Get process handle
+	//
+	const auto process_handle = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, process_id);
+	if (process_handle == INVALID_HANDLE_VALUE)
+	{
+		Logger::Log("Failed to get process handle.");
+		return std::vector<ModuleElement>();
+	}
+
+	//
+	// PROCESS_BASIC_INFORMATION
+	//
+	structs::PROCESS_BASIC_INFORMATION pbi = {0};
+	ULONG return_length = 0;
+	if (!NT_SUCCESS(NtQueryInformationProcess(process_handle, ProcessBasicInformation, &pbi, sizeof(pbi), &return_length)))
+	{
+		Logger::Log("Could not get process information.");
+		return std::vector<ModuleElement>();
+	}
+
+	//
+	// PEB
+	//
+	const auto peb = static_cast<structs::PEB*>(memory_source->ReadMemory(reinterpret_cast<DWORD_PTR>(pbi.PebBaseAddress), sizeof(structs::PEB)));
+	if (peb == nullptr)
+	{
+		Logger::Log("Failed to read PEB from process.");
+		return std::vector<ModuleElement>();
+	}
+
+	//
+	// PEB_LDR_DATA
+	//
+	const auto peb_ldr_data = static_cast<structs::PPEB_LDR_DATA>(memory_source->ReadMemory(reinterpret_cast<DWORD_PTR>(peb->Ldr),
+	                                                                                        sizeof(structs::PEB_LDR_DATA)));
+	if (peb_ldr_data == nullptr)
+	{
+		Logger::Log("Failed to read module list from process.");
+		return std::vector<ModuleElement>();
+	}
+
+	//
+	// LIST_ENTRY
+	//
+	const auto ldr_list_head = static_cast<LIST_ENTRY*>(peb_ldr_data->InLoadOrderModuleList.Flink);
+	auto ldr_current_node = peb_ldr_data->InLoadOrderModuleList.Flink;
+
+	do
+	{
+		//
+		// LDR_DATA_TABLE_ENTRY
+		//
+		const auto list_entry = static_cast<structs::PLDR_DATA_TABLE_ENTRY>(memory_source->ReadMemory(
+			reinterpret_cast<DWORD_PTR>(ldr_current_node), sizeof(structs::LDR_DATA_TABLE_ENTRY)));
+		if (list_entry == nullptr)
+		{
+			Logger::Log("Could not read list entry from LDR list.");
+			return std::vector<ModuleElement>();
+		}
+
+		//
+		// Add the module to the list
+		//
+		if (list_entry->DllBase != nullptr && list_entry->SizeOfImage != 0)
+		{
+			ModuleElement module{};
+			module.base_address = list_entry->DllBase;
+			module.module_size = list_entry->SizeOfImage;
+
+			if (list_entry->BaseDllName.Length > 0)
+			{
+				const auto buffer = memory_source->ReadMemory(reinterpret_cast<DWORD_PTR>(list_entry->BaseDllName.Buffer), list_entry->BaseDllName.Length);
+				if (buffer != nullptr)
+				{
+					std::wstring base_dll_name(static_cast<PWCHAR>(buffer));
+					std::copy(base_dll_name.begin(), base_dll_name.end(), reinterpret_cast<char*>(module.module_name));
+				}
+			}
+
+			if (list_entry->FullDllName.Length > 0)
+			{
+				const auto buffer = memory_source->ReadMemory(reinterpret_cast<DWORD_PTR>(list_entry->FullDllName.Buffer), list_entry->FullDllName.Length);
+				if (buffer != nullptr)
+				{
+					std::wstring full_dll_name(static_cast<PWCHAR>(buffer));
+					std::copy(full_dll_name.begin(), full_dll_name.end(), reinterpret_cast<char*>(module.module_path));
+				}
+			}
+
+
+			modules.push_back(module);
+		}
+
+		ldr_current_node = list_entry->InLoadOrderLinks.Flink;
+	}
+	while (ldr_list_head != ldr_current_node);
 
 	return modules;
 }

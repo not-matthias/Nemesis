@@ -18,8 +18,10 @@ struct MemoryElement
  */
 struct ModuleElement
 {
+	PVOID base_address;
+	SIZE_T module_size;
 	CHAR module_name[MAX_PATH];
-	INT64 base_address;
+	CHAR module_path[MAX_PATH];
 };
 
 /**
