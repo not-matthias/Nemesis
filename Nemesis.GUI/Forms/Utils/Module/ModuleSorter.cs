@@ -57,7 +57,7 @@ namespace Nemesis.Forms.Utils.Module
                 }
 
                 case 1:
-                    result = string.Compare(p1.ModuleName, p2.ModuleName, StringComparison.Ordinal);
+                    result = string.Compare(p1.ModuleName, p2.ModuleName, StringComparison.OrdinalIgnoreCase);
                     break;
             }
 

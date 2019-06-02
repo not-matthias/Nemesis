@@ -60,7 +60,7 @@ namespace Nemesis.Forms.Utils.Process
                 }
 
                 case 1:
-                    result = string.Compare(p1.ProcessName, p2.ProcessName, StringComparison.Ordinal);
+                    result = string.Compare(p1.ProcessName, p2.ProcessName, StringComparison.OrdinalIgnoreCase);
                     break;
             }
 

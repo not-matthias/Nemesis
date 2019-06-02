@@ -50,7 +50,7 @@ namespace Nemesis.Forms.Utils.Driver
                 case 0:
                 {
                     result = string.Compare(p1.FullPathName.Substring(p1.OffsetToFileName), p2.FullPathName.Substring(p2.OffsetToFileName),
-                        StringComparison.Ordinal);
+                        StringComparison.OrdinalIgnoreCase);
                     break;
                 }
 
@@ -74,7 +74,7 @@ namespace Nemesis.Forms.Utils.Driver
 
                 // FullPathName
                 case 3:
-                    result = string.Compare(p1.FullPathName, p2.FullPathName, StringComparison.Ordinal);
+                    result = string.Compare(p1.FullPathName, p2.FullPathName, StringComparison.OrdinalIgnoreCase);
                     break;
             }
 
