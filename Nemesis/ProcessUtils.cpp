@@ -92,7 +92,7 @@ auto ProcessUtils::GetModuleList(const DWORD process_id) -> std::vector<ModuleEl
 	//
 	// Open the process
 	//
-	const auto process_handle = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, process_id);
+	const auto process_handle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, process_id);
 	if (process_handle == INVALID_HANDLE_VALUE)
 	{
 		return std::vector<ModuleElement>();
