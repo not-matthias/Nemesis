@@ -12,7 +12,7 @@ struct Section
 	/**
 	 * \brief The memory of the section.
 	 */
-	BYTE * buffer = nullptr;
+	std::shared_ptr<BYTE *> buffer = nullptr;
 
 	/**
 	 * \brief The size of the section.

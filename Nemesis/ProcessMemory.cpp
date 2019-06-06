@@ -11,7 +11,7 @@ ProcessMemory::ProcessMemory(const DWORD process_id)
 
 ProcessMemory::~ProcessMemory() = default;
 
-auto ProcessMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size) const -> PVOID
+auto ProcessMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size) const -> std::shared_ptr<BYTE *>
 {
 	return MemorySource::GetMemorySource(process_id)->ReadMemory(start_address, size);
 }

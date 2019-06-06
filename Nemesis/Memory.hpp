@@ -30,7 +30,7 @@ public:
 	/**
 	 * \brief The memory buffer.
 	 */
-	BYTE * memory_buffer;
+	std::shared_ptr<BYTE *> memory_buffer;
 
 
 	//

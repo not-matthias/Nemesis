@@ -189,28 +189,29 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 	//
 	// PEB
 	//
-	const auto peb = static_cast<structs::PEB*>(memory_source->ReadMemory(reinterpret_cast<DWORD_PTR>(pbi.PebBaseAddress), sizeof(structs::PEB)));
-	if (peb == nullptr)
+	const auto peb_pointer = memory_source->ReadMemory(reinterpret_cast<DWORD_PTR>(pbi.PebBaseAddress), sizeof(structs::PEB)).get();
+	if (peb_pointer == nullptr)
 	{
 		Logger::Log("Failed to read PEB from process.");
 		return std::vector<ModuleElement>();
 	}
+	const auto peb = reinterpret_cast<structs::PEB *>(peb_pointer);
 
 	//
 	// PEB_LDR_DATA
 	//
-	const auto peb_ldr_data = static_cast<structs::PPEB_LDR_DATA>(memory_source->ReadMemory(reinterpret_cast<DWORD_PTR>(peb->Ldr),
-	                                                                                        sizeof(structs::PEB_LDR_DATA)));
-	if (peb_ldr_data == nullptr)
+	const auto peb_ldr_data_pointer = memory_source->ReadMemory(reinterpret_cast<DWORD_PTR>(peb->Ldr), sizeof(structs::PEB_LDR_DATA)).get();
+	if (peb_ldr_data_pointer == nullptr)
 	{
 		Logger::Log("Failed to read module list from process.");
 		return std::vector<ModuleElement>();
 	}
+	const auto peb_ldr_data = reinterpret_cast<structs::PEB_LDR_DATA *>(peb_ldr_data_pointer);
 
 	//
 	// LIST_ENTRY
 	//
-	const auto ldr_list_head = static_cast<LIST_ENTRY*>(peb_ldr_data->InLoadOrderModuleList.Flink);
+	const auto ldr_list_head = static_cast<LIST_ENTRY *>(peb_ldr_data->InLoadOrderModuleList.Flink);
 	auto ldr_current_node = peb_ldr_data->InLoadOrderModuleList.Flink;
 
 	do
@@ -218,13 +219,13 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 		//
 		// LDR_DATA_TABLE_ENTRY
 		//
-		const auto list_entry = static_cast<structs::PLDR_DATA_TABLE_ENTRY>(memory_source->ReadMemory(
-			reinterpret_cast<DWORD_PTR>(ldr_current_node), sizeof(structs::LDR_DATA_TABLE_ENTRY)));
-		if (list_entry == nullptr)
+		const auto list_entry_pointer = memory_source->ReadMemory(reinterpret_cast<DWORD_PTR>(ldr_current_node), sizeof(structs::LDR_DATA_TABLE_ENTRY)).get();
+		if (list_entry_pointer == nullptr)
 		{
 			Logger::Log("Could not read list entry from LDR list.");
 			return std::vector<ModuleElement>();
 		}
+		const auto list_entry = reinterpret_cast<structs::LDR_DATA_TABLE_ENTRY *>(list_entry_pointer);
 
 		//
 		// Add the module to the list
@@ -240,7 +241,7 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 				const auto buffer = memory_source->ReadMemory(reinterpret_cast<DWORD_PTR>(list_entry->BaseDllName.Buffer), list_entry->BaseDllName.Length);
 				if (buffer != nullptr)
 				{
-					std::wstring base_dll_name(static_cast<PWCHAR>(buffer));
+					std::wstring base_dll_name(reinterpret_cast<PWCHAR>(buffer.get()));
 					std::copy(base_dll_name.begin(), base_dll_name.end(), reinterpret_cast<char*>(module.module_name));
 				}
 			}
@@ -250,7 +251,7 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 				const auto buffer = memory_source->ReadMemory(reinterpret_cast<DWORD_PTR>(list_entry->FullDllName.Buffer), list_entry->FullDllName.Length);
 				if (buffer != nullptr)
 				{
-					std::wstring full_dll_name(static_cast<PWCHAR>(buffer));
+					std::wstring full_dll_name(reinterpret_cast<PWCHAR>(buffer.get()));
 					std::copy(full_dll_name.begin(), full_dll_name.end(), reinterpret_cast<char*>(module.module_path));
 				}
 			}
@@ -266,12 +267,13 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 
 CLEAN_UP:
 	// Close process
-	if(process_handle)
+	if (process_handle)
 	{
 		CloseHandle(process_handle);
 	}
 
-
+	delete peb;
+	delete peb_ldr_data;
 
 
 	return modules;

@@ -32,15 +32,6 @@ Module::~Module()
 	delete dos_stub;
 	delete dos_header; // Note: nt headers get set from the dos header (so you delete them too, once you delete the dos header)
 
-
-	//
-	// Delete the section data
-	//
-	for (auto & section : sections)
-	{
-		delete[] section.buffer;
-	}
-
 	sections.clear();
 }
 
@@ -82,7 +73,7 @@ auto Module::ReadHeader() -> BOOL
 	//
 	// Get the pe header
 	//
-	const auto header_memory = process_memory->ReadMemory<BYTE *>(base_address, header_size);
+	const auto header_memory = process_memory->ReadMemory(base_address, header_size);
 
 	//
 	// Check if valid
@@ -95,7 +86,7 @@ auto Module::ReadHeader() -> BOOL
 	//
 	// Set the pe header
 	//
-	SetHeader(header_memory, header_size);
+	SetHeader(reinterpret_cast<BYTE *>(header_memory.get()), header_size);
 
 	return TRUE;
 }
@@ -119,7 +110,7 @@ auto Module::ReadHeaderFromFile() -> BOOL
 	// Get the pe header
 	//
 	FileReader file_reader(path);
-	const auto header_memory = file_reader.Read<BYTE *>(0x0, header_size);
+	const auto header_memory = file_reader.Read(0x0, header_size);
 
 	//
 	// Check if valid
@@ -132,7 +123,7 @@ auto Module::ReadHeaderFromFile() -> BOOL
 	//
 	// Set the pe header
 	//
-	SetHeader(header_memory, header_size);
+	SetHeader(reinterpret_cast<BYTE *>(header_memory.get()), header_size);
 
 	return TRUE;
 }
@@ -232,8 +223,8 @@ auto Module::SetSectionSize(Section & section, const DWORD_PTR section_pointer) 
 	auto current_offset = section_pointer + read_size - current_read_size;
 	while (current_offset >= section_pointer)
 	{
-		const auto buffer = process_memory->ReadMemory<BYTE *>(current_offset, current_read_size);
-		const auto code_byte_count = GetInstructionByteCount(buffer, current_read_size);
+		const auto buffer = process_memory->ReadMemory(current_offset, current_read_size);
+		const auto code_byte_count = GetInstructionByteCount(reinterpret_cast<BYTE *>(buffer.get()), current_read_size);
 
 		if (code_byte_count != 0)
 		{
@@ -277,7 +268,7 @@ auto Module::ReadSection(Section & section, const DWORD_PTR section_pointer) con
 	if (read_size <= max_read_size)
 	{
 		section.buffer_size = read_size;
-		section.buffer = process_memory->ReadMemory<BYTE*>(static_cast<DWORD_PTR>(section_pointer), read_size);
+		section.buffer = process_memory->ReadMemory(static_cast<DWORD_PTR>(section_pointer), read_size);
 		return TRUE;
 	}
 	//
@@ -290,7 +281,7 @@ auto Module::ReadSection(Section & section, const DWORD_PTR section_pointer) con
 	//
 	if (section.buffer_size != 0)
 	{
-		section.buffer = process_memory->ReadMemory<BYTE*>(static_cast<DWORD_PTR>(section_pointer), section.buffer_size);
+		section.buffer = process_memory->ReadMemory(static_cast<DWORD_PTR>(section_pointer), section.buffer_size);
 		return TRUE;
 	}
 

@@ -47,7 +47,7 @@ auto KernelMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size) 
 	}
 	else
 	{
-		return std::shared_ptr<BYTE *>();
+		return nullptr;
 	}
 }
 

@@ -10,7 +10,7 @@ FileReader::FileReader(std::string path) : path(std::move(path))
 FileReader::~FileReader() = default;
 
 
-auto FileReader::Read(const LONG offset, const DWORD size) -> PVOID
+auto FileReader::Read(const LONG offset, const DWORD size) -> std::shared_ptr<BYTE *>
 {
 	Logger::Log("Reading from the file '%s'.", path.data());
 
@@ -35,10 +35,9 @@ auto FileReader::Read(const LONG offset, const DWORD size) -> PVOID
 	// Read from file
 	//
 	DWORD number_of_bytes_read = 0;
-	const auto buffer = new BYTE[size];
-	if (!ReadFile(file_handle, buffer, size, &number_of_bytes_read, nullptr))
+	const auto buffer = std::make_shared<BYTE *>(new BYTE[size]);
+	if (!ReadFile(file_handle, buffer.get(), size, &number_of_bytes_read, nullptr))
 	{
-		delete[] buffer;
 		return nullptr;
 	}
 

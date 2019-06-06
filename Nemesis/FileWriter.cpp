@@ -141,7 +141,7 @@ auto FileWriter::WriteToFile(Module * module) -> BOOL
 		//
 		write_size = module->sections[i].buffer_size;
 
-		if (!WriteMemoryToFile(module->sections[i].section_header.PointerToRawData, write_size, module->sections[i].buffer))
+		if (!WriteMemoryToFile(module->sections[i].section_header.PointerToRawData, write_size, module->sections[i].buffer.get()))
 		{
 			CloseHandle(file_handle);
 			return FALSE;
@@ -219,7 +219,7 @@ auto FileWriter::WriteToFile(MemoryElement * memory) -> BOOL
 	//
 	// Write the memory_buffer to the file
 	//
-	if (!WriteMemoryToFile(0, memory->memory_size, memory->memory_buffer))
+	if (!WriteMemoryToFile(0, memory->memory_size, memory->memory_buffer.get()))
 	{
 		CloseHandle(file_handle);
 		return FALSE;

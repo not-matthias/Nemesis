@@ -53,17 +53,5 @@ public:
 	 * \param size the buffer size
 	 * \return the buffer
 	 */
-	template <typename T>
-	auto Read(const LONG offset, const DWORD size) -> T
-	{
-		return reinterpret_cast<T>(Read(offset, size));
-	}
-
-	/**
-	 * \brief Reads from a file.
-	 * \param offset the file offset
-	 * \param size the buffer size
-	 * \return the buffer
-	 */
-	auto Read(LONG offset, DWORD size) -> PVOID;
+	auto Read(LONG offset, DWORD size) -> std::shared_ptr<BYTE *>;
 };

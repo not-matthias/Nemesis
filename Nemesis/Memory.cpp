@@ -5,16 +5,13 @@
 
 MemoryElement::MemoryElement(ProcessMemory * process_memory, const DWORD_PTR start_address, const DWORD size)
 {
-	this->memory_buffer = nullptr;
 	this->process_memory = process_memory;
 	this->start_address = start_address;
 	this->memory_size = size;
 }
 
-MemoryElement::~MemoryElement()
-{
-	delete memory_buffer;
-}
+MemoryElement::~MemoryElement() = default;
+
 
 auto MemoryElement::Initialize() -> BOOL
 {
@@ -23,7 +20,7 @@ auto MemoryElement::Initialize() -> BOOL
 	//
 	// Get the Memory
 	//
-	memory_buffer = process_memory->ReadMemory<BYTE*>(start_address, memory_size);
+	memory_buffer = process_memory->ReadMemory(start_address, memory_size);
 
 	//
 	// Check if valid

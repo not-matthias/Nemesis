@@ -43,7 +43,7 @@ auto UsermodeMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size
 		if (!VirtualProtectEx(process_handle, reinterpret_cast<LPVOID>(start_address), size, PAGE_READWRITE, &old_protect))
 		{
 			Logger::Log("Failed to change page protection.");
-			return std::shared_ptr<BYTE *>();
+			return nullptr;
 		}
 
 		// 

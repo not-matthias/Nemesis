@@ -1,6 +1,8 @@
 #pragma once
 
+#include <ntdef.h>
 #include <stdarg.h>
+#include <ntddk.h>
 
 #define DEBUG
 
