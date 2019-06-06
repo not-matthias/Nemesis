@@ -35,7 +35,7 @@ typedef struct _READ_REQUEST
 	// 
 	// Out
 	// 
-	PVOID buffer_address;
+	BYTE *buffer_address;
 } READ_REQUEST, *PREAD_REQUEST;
 
 /**

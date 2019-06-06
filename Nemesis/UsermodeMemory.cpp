@@ -21,7 +21,7 @@ UsermodeMemory::~UsermodeMemory()
 	}
 }
 
-auto UsermodeMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size) -> PVOID
+auto UsermodeMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size) -> std::shared_ptr<BYTE*>
 {
 	if (process_handle == INVALID_HANDLE_VALUE)
 		return nullptr;
@@ -43,7 +43,7 @@ auto UsermodeMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size
 		if (!VirtualProtectEx(process_handle, reinterpret_cast<LPVOID>(start_address), size, PAGE_READWRITE, &old_protect))
 		{
 			Logger::Log("Failed to change page protection.");
-			return nullptr;
+			return std::shared_ptr<BYTE *>();
 		}
 
 		// 
@@ -57,7 +57,7 @@ auto UsermodeMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size
 		VirtualProtectEx(process_handle, reinterpret_cast<LPVOID>(start_address), size, old_protect, &old_protect);
 	}
 
-	return buffer;
+	return std::make_shared<BYTE *>(buffer);
 }
 
 auto UsermodeMemory::IsValid() -> BOOL

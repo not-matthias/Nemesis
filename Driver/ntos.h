@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include <ntddk.h>
 
+typedef unsigned char BYTE;
+
 typedef struct _KAPC_STATE
 {
 	LIST_ENTRY ApcListHead[MaximumMode];

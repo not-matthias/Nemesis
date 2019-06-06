@@ -46,7 +46,7 @@ typedef struct _READ_REQUEST
 	// 
 	// Out
 	// 
-	PVOID buffer_address;
+	BYTE *buffer_address;
 } READ_REQUEST, *PREAD_REQUEST;
 
 /**
@@ -116,7 +116,7 @@ public:
 	 * \param size the buffer size
 	 * \return the memory buffer
 	 */
-	auto ReadMemory(DWORD_PTR start_address, SIZE_T size) -> PVOID override;
+	auto ReadMemory(DWORD_PTR start_address, SIZE_T size) -> std::shared_ptr<BYTE*> override;
 
 
 	//

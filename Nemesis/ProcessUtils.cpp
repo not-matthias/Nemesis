@@ -263,6 +263,17 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 	}
 	while (ldr_list_head != ldr_current_node);
 
+
+CLEAN_UP:
+	// Close process
+	if(process_handle)
+	{
+		CloseHandle(process_handle);
+	}
+
+
+
+
 	return modules;
 }
 

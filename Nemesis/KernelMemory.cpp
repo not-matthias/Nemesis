@@ -19,7 +19,7 @@ KernelMemory::~KernelMemory()
 	}
 }
 
-auto KernelMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size) -> PVOID
+auto KernelMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size) -> std::shared_ptr<BYTE *>
 {
 	//
 	// Checks
@@ -43,11 +43,11 @@ auto KernelMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size) 
 	//
 	if (DeviceIoControl(driver_handle, IOCTL_READ_REQUEST, &read_request, sizeof(read_request), &read_request, sizeof(read_request), nullptr, nullptr))
 	{
-		return read_request.buffer_address;
+		return std::make_shared<BYTE *>(read_request.buffer_address);
 	}
 	else
 	{
-		return nullptr;
+		return std::shared_ptr<BYTE *>();
 	}
 }
 
@@ -77,16 +77,16 @@ auto KernelMemory::GetBaseAddress() -> DWORD_PTR
 	//
 	// Create the struct
 	//
-	BASE_ADDRESS_REQUEST BaseAddressRequest;
-	BaseAddressRequest.process_id = process_id;
+	BASE_ADDRESS_REQUEST base_address_request;
+	base_address_request.process_id = process_id;
 
 	//
 	// Send the struct
 	//
-	if (DeviceIoControl(driver_handle, IOCTL_BASE_ADDRESS_REQUEST, &BaseAddressRequest, sizeof(BaseAddressRequest), &BaseAddressRequest,
-	                    sizeof(BaseAddressRequest), nullptr, nullptr))
+	if (DeviceIoControl(driver_handle, IOCTL_BASE_ADDRESS_REQUEST, &base_address_request, sizeof(base_address_request), &base_address_request,
+	                    sizeof(base_address_request), nullptr, nullptr))
 	{
-		return reinterpret_cast<DWORD_PTR>(BaseAddressRequest.base_address);
+		return reinterpret_cast<DWORD_PTR>(base_address_request.base_address);
 	}
 	else
 	{
