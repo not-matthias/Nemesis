@@ -12,6 +12,7 @@ Config::~Config() = default;
 
 auto Config::Set(std::string_view key, std::string_view value) const -> BOOL
 {
+
 	if(WritePrivateProfileString(app_name.data(), key.data(), value.data(), file_name.data()) > 0)
 	{
 		return TRUE;

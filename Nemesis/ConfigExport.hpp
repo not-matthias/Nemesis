@@ -1,12 +1,11 @@
 #pragma once
 
-#include <string>
 #include <Windows.h>
 
 #include "Config.hpp"
 
-inline Config config("Nemesis", "Nemesis.ini");
+inline Config config("Nemesis", "./Nemesis.ini");
 
-auto SetConfigValueExport(std::string_view key, std::string_view value) -> BOOL;
+auto SetConfigValueExport(LPCSTR key, LPCSTR value) -> BOOL;
 
-auto GetConfigValueExport(std::string_view key) -> std::string;
+auto GetConfigValueExport(LPCSTR key) -> LPCSTR;

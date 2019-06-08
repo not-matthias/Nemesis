@@ -8,7 +8,7 @@
  * \param value the specified value for the key
  * \return true if successful
  */
-auto SetConfigValueExport(const std::string_view key, const std::string_view value) -> BOOL
+auto SetConfigValueExport(const LPCSTR key, const LPCSTR value) -> BOOL
 {
 	return config.Set(key, value);
 }
@@ -18,7 +18,7 @@ auto SetConfigValueExport(const std::string_view key, const std::string_view val
  * \param key the key of the value
  * \return the value
  */
-auto GetConfigValueExport(const std::string_view key) -> std::string
+auto GetConfigValueExport(const LPCSTR key) -> LPCSTR
 {
-	return config.Get(key);
+	return config.Get(key).c_str();
 }
