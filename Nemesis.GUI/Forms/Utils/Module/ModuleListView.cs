@@ -44,7 +44,7 @@ namespace Nemesis.Forms.Utils.Module
                 //
                 // Create a new ProcessListItem
                 //
-                var processListItem = new ModuleListItem(module.BaseAddress, module.ModuleName);
+                var processListItem = new ModuleListItem(module.ImageBase,  module.ImageSize, module.ModuleName, module.ModulePath);
 
                 //
                 // Add it to the ListView

@@ -42,6 +42,8 @@ namespace Nemesis.Forms
             this.tabControl = new MetroFramework.Controls.MetroTabControl();
             this.refreshButton = new MetroFramework.Controls.MetroButton();
             this.dumpButton = new MetroFramework.Controls.MetroButton();
+            this.columnSize = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnPath = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.metroTabPage2.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -115,8 +117,10 @@ namespace Nemesis.Forms
             // moduleListView
             // 
             this.moduleListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnName,
             this.columnBase,
-            this.columnName});
+            this.columnSize,
+            this.columnPath});
             this.moduleListView.FullRowSelect = true;
             this.moduleListView.HideSelection = false;
             this.moduleListView.Location = new System.Drawing.Point(3, 12);
@@ -132,12 +136,12 @@ namespace Nemesis.Forms
             // columnBase
             // 
             this.columnBase.Text = "ImageBase";
-            this.columnBase.Width = 125;
+            this.columnBase.Width = 90;
             // 
             // columnName
             // 
             this.columnName.Text = "Name";
-            this.columnName.Width = 420;
+            this.columnName.Width = 125;
             // 
             // tabControl
             // 
@@ -171,6 +175,16 @@ namespace Nemesis.Forms
             this.dumpButton.Text = "Dump";
             this.dumpButton.UseSelectable = true;
             this.dumpButton.Click += new System.EventHandler(this.DumpButton_Click);
+            // 
+            // columnSize
+            // 
+            this.columnSize.Text = "ImageSize";
+            this.columnSize.Width = 80;
+            // 
+            // columnPath
+            // 
+            this.columnPath.Text = "Path";
+            this.columnPath.Width = 225;
             // 
             // ProcessInformation
             // 
@@ -208,5 +222,7 @@ namespace Nemesis.Forms
         private System.Windows.Forms.ColumnHeader columnName;
         private MetroFramework.Controls.MetroButton refreshButton;
         private MetroFramework.Controls.MetroButton dumpButton;
+        private System.Windows.Forms.ColumnHeader columnSize;
+        private System.Windows.Forms.ColumnHeader columnPath;
     }
 }

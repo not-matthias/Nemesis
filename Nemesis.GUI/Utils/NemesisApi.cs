@@ -60,8 +60,8 @@ namespace Nemesis.Utils
     [StructLayout(LayoutKind.Sequential)]
     public struct Module
     {
-        public long BaseAddress;
-        public long Size;
+        public long ImageBase;
+        public long ImageSize;
 
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
         public string ModuleName;

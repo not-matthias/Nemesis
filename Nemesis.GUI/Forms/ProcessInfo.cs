@@ -140,7 +140,7 @@ namespace Nemesis.Forms
             //
             // Dump module
             //
-            if (!NemesisApi.DumpModule(_processId, (IntPtr)module.BaseAddress, path))
+            if (!NemesisApi.DumpModule(_processId, (IntPtr)module.ImageBase, path))
             {
                 MessageBox.Show("Failed to dump module.");
             }
@@ -191,5 +191,14 @@ namespace Nemesis.Forms
             }
         }
 
+        private void ModuleListView_MouseUp(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void MemoryListView_MouseUp(object sender, MouseEventArgs e)
+        {
+
+        }
     }
 }

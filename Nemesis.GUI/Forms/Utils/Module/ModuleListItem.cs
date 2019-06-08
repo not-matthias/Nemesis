@@ -4,18 +4,24 @@ namespace Nemesis.Forms.Utils.Module
 {
     internal class ModuleListItem
     {
-        public long BaseAddress { get; }
+        public long ImageBase { get; }
+        public long ImageSize { get; }
         public string ModuleName { get; }
+        public string ModulePath { get; }
 
         /// <summary>
         /// Sets the specified data.
         /// </summary>
-        /// <param name="baseAddress">The base address of the module</param>
+        /// <param name="imageBase">The base address of the module</param>
+        /// <param name="imageSize">The size of the image</param>
         /// <param name="moduleName">The name of the module</param>
-        public ModuleListItem(long baseAddress, string moduleName)
+        /// <param name="modulePath">The path to the image</param>
+        public ModuleListItem(long imageBase, long imageSize, string moduleName, string modulePath)
         {
-            BaseAddress = baseAddress;
+            ImageBase = imageBase;
+            ImageSize = imageSize;
             ModuleName = moduleName;
+            ModulePath = modulePath;
         }
 
         /// <summary>
@@ -24,8 +30,10 @@ namespace Nemesis.Forms.Utils.Module
         /// <returns>ListViewItem</returns>
         public ListViewItem GetListViewItem()
         {
-            var listViewItem = new ListViewItem(BaseAddress.ToString("X8"));
-            listViewItem.SubItems.Add(ModuleName);
+            var listViewItem = new ListViewItem(ModuleName);
+            listViewItem.SubItems.Add(ImageBase.ToString("X8"));
+            listViewItem.SubItems.Add(ImageSize.ToString("X8"));
+            listViewItem.SubItems.Add(ModulePath);
             listViewItem.Tag = this;
 
             return listViewItem;

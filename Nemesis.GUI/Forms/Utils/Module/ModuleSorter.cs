@@ -47,17 +47,27 @@ namespace Nemesis.Forms.Utils.Module
             switch (_columnIndex)
             {
                 case 0:
-                {
-                    if (p1.BaseAddress > p2.BaseAddress)
-                        result = 1;
-
-                    if (p1.BaseAddress < p2.BaseAddress)
-                        result = -1;
+                    result = string.Compare(p1.ModuleName, p2.ModuleName, StringComparison.OrdinalIgnoreCase);
                     break;
-                }
 
                 case 1:
-                    result = string.Compare(p1.ModuleName, p2.ModuleName, StringComparison.OrdinalIgnoreCase);
+                    if (p1.ImageBase > p2.ImageBase)
+                        result = 1;
+
+                    if (p1.ImageBase < p2.ImageBase)
+                        result = -1;
+                    break;
+
+                case 2:
+                    if (p1.ImageSize > p2.ImageSize)
+                        result = 1;
+
+                    if (p1.ImageSize < p2.ImageSize)
+                        result = -1;
+                    break;
+
+                case 3:
+                    result = string.Compare(p1.ModulePath, p2.ModulePath, StringComparison.OrdinalIgnoreCase);
                     break;
             }
 
