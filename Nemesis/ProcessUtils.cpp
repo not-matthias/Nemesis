@@ -160,8 +160,8 @@ auto ProcessUtils::GetModuleList(const DWORD process_id) -> std::vector<ModuleEl
 
 auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<ModuleElement>
 {
-	std::vector<ModuleElement> modules;
 	const auto memory_source = MemorySource::GetMemorySource(process_id);
+	std::vector<ModuleElement> modules;
 
 	Logger::Log("Creating module list manually.");
 
@@ -179,11 +179,13 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 	// PROCESS_BASIC_INFORMATION
 	//
 	structs::PROCESS_BASIC_INFORMATION pbi = {0};
-	ULONG return_length = 0;
-	if (!NT_SUCCESS(NtQueryInformationProcess(process_handle, ProcessBasicInformation, &pbi, sizeof(pbi), &return_length)))
+	if (!NT_SUCCESS(NtQueryInformationProcess(process_handle, ProcessBasicInformation, &pbi, sizeof(pbi), nullptr)))
 	{
-		Logger::Log("Could not get process information.");
+		CloseHandle(process_handle);
+
+		Logger::Log("Could not get process information.");		
 		return std::vector<ModuleElement>();
+
 	}
 
 	//
@@ -191,9 +193,11 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 	//
 	const auto peb_memory = memory_source->ReadMemory(reinterpret_cast<DWORD_PTR>(pbi.PebBaseAddress), sizeof(structs::PEB));
 	const auto peb = std::reinterpret_pointer_cast<structs::PEB>(peb_memory);
-	
+
 	if (peb_memory == nullptr || peb == nullptr)
 	{
+		CloseHandle(process_handle);
+
 		Logger::Log("Failed to read PEB from process.");
 		return std::vector<ModuleElement>();
 	}
@@ -206,6 +210,8 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 
 	if (peb_ldr_data_memory == nullptr || peb_ldr_data == nullptr)
 	{
+		CloseHandle(process_handle);
+
 		Logger::Log("Failed to read module list from process.");
 		return std::vector<ModuleElement>();
 	}
@@ -226,6 +232,8 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 
 		if (list_entry_memory == nullptr || list_entry == nullptr)
 		{
+			CloseHandle(process_handle);
+			
 			Logger::Log("Could not read list entry from LDR list.");
 			return std::vector<ModuleElement>();
 		}
@@ -259,7 +267,6 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 				}
 			}
 
-
 			modules.push_back(module);
 		}
 
@@ -267,12 +274,14 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 	}
 	while (ldr_list_head != ldr_current_node);
 
-	// Close process
-	if (process_handle)
+
+	//
+	// Clean up
+	//
+	if(process_handle)
 	{
 		CloseHandle(process_handle);
 	}
-
 
 	return modules;
 }
