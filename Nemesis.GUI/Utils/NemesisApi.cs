@@ -60,10 +60,15 @@ namespace Nemesis.Utils
     [StructLayout(LayoutKind.Sequential)]
     public struct Module
     {
+        public long BaseAddress;
+        public long Size;
+
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
         public string ModuleName;
 
-        public long BaseAddress;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+        public string ModulePath;
+
     }
 
     /// <summary>
@@ -108,6 +113,9 @@ namespace Nemesis.Utils
 
         [DllImport("Nemesis.dll")]
         protected static extern bool GetModuleListElementExport([In] uint index, [In] int processId, [In] [Out] ref Module structure);
+
+        [DllImport("Nemesis.dll")]
+        protected static extern bool GetManualModuleListElementExport([In] uint index, [In] int processId, [In] [Out] ref Module structure);
 
         [DllImport("Nemesis.dll")]
         protected static extern bool GetMemoryListElementExport([In] uint index, [In] int processId, [In] [Out] ref Memory structure);
@@ -306,6 +314,45 @@ namespace Nemesis.Utils
                 // Get the driver at the specified index
                 //
                 if (!GetModuleListElementExport(index, processId, ref structure))
+                {
+                    break;
+                }
+
+                //
+                // Add the item to the list
+                //
+                list.Add(structure);
+            }
+
+            //
+            // Return the list
+            //
+            return list;
+        }
+
+        /// <summary>
+        /// Returns the list of modules of a process.
+        /// </summary>
+        /// <param name="processId">The id of the process</param>
+        /// <returns>List of module objects</returns>
+        public static List<Module> GetManualModuleList(int processId)
+        {
+            var list = new List<Module>();
+
+            //
+            // Get the memory sources
+            //
+            for (uint index = 0; index < 256; index++)
+            {
+                //
+                // Create the driver object
+                //
+                var structure = new Module();
+
+                //
+                // Get the driver at the specified index
+                //
+                if (!GetManualModuleListElementExport(index, processId, ref structure))
                 {
                     break;
                 }

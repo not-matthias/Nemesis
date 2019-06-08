@@ -39,9 +39,7 @@ auto ProcessUtils::GetProcessList() -> std::vector<ProcessElement>
 		//
 		// Create the process struct
 		//
-		std::wstring image_name{
-			system_process_info->ImageName.Buffer, static_cast<UINT64>(system_process_info->ImageName.Length / 2)
-		};
+		std::wstring image_name(system_process_info->ImageName.Buffer, static_cast<UINT64>(system_process_info->ImageName.Length / 2));
 		std::string string(image_name.begin(), image_name.end());
 		ProcessElement process{};
 
@@ -183,9 +181,8 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 	{
 		CloseHandle(process_handle);
 
-		Logger::Log("Could not get process information.");		
+		Logger::Log("Could not get process information.");
 		return std::vector<ModuleElement>();
-
 	}
 
 	//
@@ -233,7 +230,7 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 		if (list_entry_memory == nullptr || list_entry == nullptr)
 		{
 			CloseHandle(process_handle);
-			
+
 			Logger::Log("Could not read list entry from LDR list.");
 			return std::vector<ModuleElement>();
 		}
@@ -252,7 +249,7 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 				const auto buffer = memory_source->ReadMemory(reinterpret_cast<DWORD_PTR>(list_entry->BaseDllName.Buffer), list_entry->BaseDllName.Length);
 				if (buffer != nullptr)
 				{
-					std::wstring base_dll_name(reinterpret_cast<PWCHAR>(buffer.get()));
+					std::wstring base_dll_name(reinterpret_cast<PWCHAR>(buffer.get()), list_entry->BaseDllName.Length / 2);
 					std::copy(base_dll_name.begin(), base_dll_name.end(), reinterpret_cast<char*>(module.module_name));
 				}
 			}
@@ -262,7 +259,7 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 				const auto buffer = memory_source->ReadMemory(reinterpret_cast<DWORD_PTR>(list_entry->FullDllName.Buffer), list_entry->FullDllName.Length);
 				if (buffer != nullptr)
 				{
-					std::wstring full_dll_name(reinterpret_cast<PWCHAR>(buffer.get()));
+					std::wstring full_dll_name(reinterpret_cast<PWCHAR>(buffer.get()), list_entry->FullDllName.Length / 2);
 					std::copy(full_dll_name.begin(), full_dll_name.end(), reinterpret_cast<char*>(module.module_path));
 				}
 			}
@@ -278,7 +275,7 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 	//
 	// Clean up
 	//
-	if(process_handle)
+	if (process_handle)
 	{
 		CloseHandle(process_handle);
 	}

@@ -25,15 +25,15 @@ public:
 
 	/**
 	 * \brief Prints the specified wide string.
-	 * \param format the format string
-	 * \param ... the additional parameters
+	 * \param format The format string
+	 * \param ... The additional parameters
 	 */
 	static auto Log(std::wstring format, ...) -> VOID;
 
 	/**
 	 * \brief Prints the specified string.
-	 * \param format the format string
-	 * \param ... the additional parameters
+	 * \param format The format string
+	 * \param ... The additional parameters
 	 */
 	static auto Log(std::string format, ...) -> VOID;
 };

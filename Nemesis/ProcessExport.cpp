@@ -1,28 +1,28 @@
 #include "stdafx.h"
 
+#include "Logger.hpp"
 #include "ProcessExport.hpp"
 #include "ProcessUtils.hpp"
 
-std::vector<ProcessElement> process_list;
-std::vector<ModuleElement> module_list;
-std::vector<MemoryElement> memory_list;
 
 auto GetProcessListElementExport(const UINT index, ProcessElement * process) -> BOOL
 {
+	static std::vector<ProcessElement> process_list;
+
+	//
+	// Check if first request (load process list)
+	//
+	if (index == 0)
+	{
+		process_list = ProcessUtils::GetProcessList();
+	}
+
 	//
 	// Check if in bounds
 	//
 	if (index < 0 || index >= process_list.size())
 	{
 		return FALSE;
-	}
-
-	//
-	// Check if first request (load process list)
-	//
-	if(index == 0)
-	{
-		process_list = ProcessUtils::GetProcessList();
 	}
 
 	//
@@ -40,20 +40,23 @@ auto GetProcessListElementExport(const UINT index, ProcessElement * process) -> 
 
 auto GetModuleListElementExport(const UINT index, const DWORD process_id, ModuleElement * module) -> BOOL
 {
-	//
-	// Check if in bounds
-	//
-	if (index < 0 || index >= module_list.size())
-	{
-		return FALSE;
-	}
+	static std::vector<ModuleElement> module_list;
 
 	//
 	// Check if first request (load module list)
 	//
 	if (index == 0)
 	{
+		Logger::Log("Loading module list.");
 		module_list = ProcessUtils::GetModuleList(process_id);
+	}
+
+	//
+	// Check if in bounds
+	//
+	if (index < 0 || index >= module_list.size())
+	{
+		return FALSE;
 	}
 
 	//
@@ -71,20 +74,23 @@ auto GetModuleListElementExport(const UINT index, const DWORD process_id, Module
 
 auto GetManualModuleListElementExport(const UINT index, const DWORD process_id, ModuleElement * module) -> BOOL
 {
-	//
-	// Check if in bounds
-	//
-	if (index < 0 || index >= module_list.size())
-	{
-		return FALSE;
-	}
+	static std::vector<ModuleElement> module_list;
 
 	//
 	// Check if first request (load module list)
 	//
 	if (index == 0)
 	{
+		Logger::Log("Loading module list.");
 		module_list = ProcessUtils::GetModuleListManually(process_id);
+	}
+
+	//
+	// Check if in bounds
+	//
+	if (index < 0 || index >= module_list.size())
+	{
+		return FALSE;
 	}
 
 	//
@@ -102,20 +108,23 @@ auto GetManualModuleListElementExport(const UINT index, const DWORD process_id, 
 
 auto GetMemoryListElementExport(const UINT index, const DWORD process_id, MemoryElement * memory) -> BOOL
 {
-	//
-	// Check if in bounds
-	//
-	if (index < 0 || index >= memory_list.size())
-	{
-		return FALSE;
-	}
+	static std::vector<MemoryElement> memory_list;
 
 	//
 	// Check if first request (load memory list)
 	//
 	if (index == 0)
 	{
+		Logger::Log("Loading memory list.");
 		memory_list = ProcessUtils::GetMemoryList(process_id);
+	}
+
+	//
+	// Check if in bounds
+	//
+	if (index < 0 || index >= memory_list.size())
+	{
+		return FALSE;
 	}
 
 	//

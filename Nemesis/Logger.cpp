@@ -32,7 +32,6 @@ auto Logger::Log(std::wstring format, ...) -> VOID
 
 auto Logger::Log(std::string format, ...) -> VOID
 {
-
 	if (format.empty())
 		return;
 

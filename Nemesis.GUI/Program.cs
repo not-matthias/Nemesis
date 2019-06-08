@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Security.Principal;
 using System.Windows.Forms;
+using Process = System.Diagnostics.Process;
 
 namespace Nemesis
 {
