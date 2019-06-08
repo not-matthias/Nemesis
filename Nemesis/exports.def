@@ -10,9 +10,10 @@ EXPORTS
 	GetDriverListElementExport @7
 	GetProcessListElementExport @8
 	GetModuleListElementExport @9
-	GetMemoryListElementExport @10
+	GetManualModuleListElementExport @10
+	GetMemoryListElementExport @11
 
-	SaveDriverInformationExport @11
+	SaveDriverInformationExport @12
 
-	SetConfigValueExport @12
-	GetConfigValueExport @13
+	SetConfigValueExport @13
+	GetConfigValueExport @14

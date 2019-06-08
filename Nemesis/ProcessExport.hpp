@@ -73,6 +73,15 @@ auto GetProcessListElementExport(IN UINT index, OUT ProcessElement * process) ->
 auto GetModuleListElementExport(IN UINT index, IN DWORD process_id, OUT ModuleElement * module) -> BOOL;
 
 /**
+ * \brief Returns the manually enumerated module at the specified index.
+ * \param index the index in the list
+ * \param process_id the id of the process
+ * \param module the module at the specified index
+ * \return true if successful
+ */
+auto GetManualModuleListElementExport(IN UINT index, IN DWORD process_id, OUT ModuleElement * module) -> BOOL;
+
+/**
  * \brief Returns the memory at the specified index.
  * \param index the index in the list
  * \param process_id the id of the process
