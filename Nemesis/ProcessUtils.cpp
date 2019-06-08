@@ -189,24 +189,26 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 	//
 	// PEB
 	//
-	const auto peb_pointer = memory_source->ReadMemory(reinterpret_cast<DWORD_PTR>(pbi.PebBaseAddress), sizeof(structs::PEB)).get();
-	if (peb_pointer == nullptr)
+	const auto peb_memory = memory_source->ReadMemory(reinterpret_cast<DWORD_PTR>(pbi.PebBaseAddress), sizeof(structs::PEB));
+	const auto peb = std::reinterpret_pointer_cast<structs::PEB>(peb_memory);
+	
+	if (peb_memory == nullptr || peb == nullptr)
 	{
 		Logger::Log("Failed to read PEB from process.");
 		return std::vector<ModuleElement>();
 	}
-	const auto peb = reinterpret_cast<structs::PEB *>(peb_pointer);
 
 	//
 	// PEB_LDR_DATA
 	//
-	const auto peb_ldr_data_pointer = memory_source->ReadMemory(reinterpret_cast<DWORD_PTR>(peb->Ldr), sizeof(structs::PEB_LDR_DATA)).get();
-	if (peb_ldr_data_pointer == nullptr)
+	const auto peb_ldr_data_memory = memory_source->ReadMemory(reinterpret_cast<DWORD_PTR>(peb->Ldr), sizeof(structs::PEB_LDR_DATA));
+	const auto peb_ldr_data = std::reinterpret_pointer_cast<structs::PEB_LDR_DATA>(peb_ldr_data_memory);
+
+	if (peb_ldr_data_memory == nullptr || peb_ldr_data == nullptr)
 	{
 		Logger::Log("Failed to read module list from process.");
 		return std::vector<ModuleElement>();
 	}
-	const auto peb_ldr_data = reinterpret_cast<structs::PEB_LDR_DATA *>(peb_ldr_data_pointer);
 
 	//
 	// LIST_ENTRY
@@ -219,13 +221,14 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 		//
 		// LDR_DATA_TABLE_ENTRY
 		//
-		const auto list_entry_pointer = memory_source->ReadMemory(reinterpret_cast<DWORD_PTR>(ldr_current_node), sizeof(structs::LDR_DATA_TABLE_ENTRY)).get();
-		if (list_entry_pointer == nullptr)
+		const auto list_entry_memory = memory_source->ReadMemory(reinterpret_cast<DWORD_PTR>(ldr_current_node), sizeof(structs::LDR_DATA_TABLE_ENTRY));
+		const auto list_entry = std::reinterpret_pointer_cast<structs::LDR_DATA_TABLE_ENTRY>(list_entry_memory);
+
+		if (list_entry_memory == nullptr || list_entry == nullptr)
 		{
 			Logger::Log("Could not read list entry from LDR list.");
 			return std::vector<ModuleElement>();
 		}
-		const auto list_entry = reinterpret_cast<structs::LDR_DATA_TABLE_ENTRY *>(list_entry_pointer);
 
 		//
 		// Add the module to the list
@@ -269,9 +272,6 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 	{
 		CloseHandle(process_handle);
 	}
-
-	delete peb;
-	delete peb_ldr_data;
 
 
 	return modules;
