@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
+using MetroFramework.Controls;
 using MetroFramework.Forms;
 using Nemesis.Forms.Utils.Memory;
 using Nemesis.Forms.Utils.Module;
@@ -70,69 +71,42 @@ namespace Nemesis.Forms
         }
 
         /// <summary>
-        /// Shows the context menu at the cursor position.
+        /// Refresh both list views.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ModuleListView_MouseUp(object sender, MouseEventArgs e)
+        private void RefreshButton_Click(object sender, EventArgs e)
         {
-            if (e.Button != MouseButtons.Right) return;
-
-            //
-            // Check if intersecting
-            //
-            if ((moduleListView.FocusedItem == null || !moduleListView.FocusedItem.Bounds.Contains(e.Location)))
-                return;
-
-            moduleContextMenu.Show(Cursor.Position);
+            LoadData();
         }
 
         /// <summary>
-        /// Shows the context menu at the cursor position.
+        /// Dump either a module or memory.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void MemoryListView_MouseUp(object sender, MouseEventArgs e)
+        private void DumpButton_Click(object sender, EventArgs e)
         {
-            if (e.Button != MouseButtons.Right) return;
+            if (moduleListView.SelectedItems.Count <= 0 && memoryListView.SelectedItems.Count <= 0) return;
 
-            //
-            // Check if intersecting
-            //
-            if (memoryListView.FocusedItem == null || !memoryListView.FocusedItem.Bounds.Contains(e.Location))
-                return;
+            switch (tabControl.SelectedIndex)
+            {
+                // Modules
+                case 0:
+                    if (moduleListView.SelectedItems[0].Tag is ModuleListItem module)
+                    {
+                        DumpModule(module);
+                    }
+                    break;
 
-            memoryContextMenu.Show(Cursor.Position);
-        }
-
-        /// <summary>
-        /// Dumps the selected module when context menu item gets clicked.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ModuleContextMenu_Click(object sender, EventArgs e)
-        {
-            if (moduleListView.SelectedItems.Count == 0) return;
-            if (!(moduleListView.SelectedItems[0].Tag is ModuleListItem module)) return;
-
-            moduleContextMenu.Close();
-
-            DumpModule(module);
-        }
-        
-        /// <summary>
-        /// Dumps the selected memory when context menu item gets clicked.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void MemoryContextMenu_Click(object sender, EventArgs e)
-        {
-            if (memoryListView.SelectedItems.Count == 0) return;
-            if (!(memoryListView.SelectedItems[0].Tag is MemoryListItem memory)) return;
-
-            memoryContextMenu.Close();
-
-            DumpMemory(memory);
+                // Memory
+                case 1:
+                    if (memoryListView.SelectedItems[0].Tag is MemoryListItem memory)
+                    {
+                        DumpMemory(memory);
+                    }
+                    break;
+            }
         }
 
         /// <summary>
@@ -166,7 +140,7 @@ namespace Nemesis.Forms
             //
             // Dump module
             //
-            if (!NemesisApi.DumpModule(_processId, (IntPtr) module.BaseAddress, path))
+            if (!NemesisApi.DumpModule(_processId, (IntPtr)module.BaseAddress, path))
             {
                 MessageBox.Show("Failed to dump module.");
             }
@@ -207,7 +181,7 @@ namespace Nemesis.Forms
             //
             // Dump module
             //
-            if (!NemesisApi.DumpMemory(_processId, (IntPtr) memory.BaseAddress, (uint) memory.RegionSize, path))
+            if (!NemesisApi.DumpMemory(_processId, (IntPtr)memory.BaseAddress, (uint)memory.RegionSize, path))
             {
                 MessageBox.Show("Failed to dump module.");
             }
@@ -216,5 +190,6 @@ namespace Nemesis.Forms
                 MessageBox.Show("Successfully dumped the module.");
             }
         }
+
     }
 }

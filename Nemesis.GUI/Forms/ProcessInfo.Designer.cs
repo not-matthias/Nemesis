@@ -31,7 +31,6 @@ namespace Nemesis.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.metroTabPage2 = new MetroFramework.Controls.MetroTabPage();
             this.memoryLabel = new MetroFramework.Controls.MetroLabel();
             this.memoryListView = new Nemesis.Forms.Utils.Memory.MemoryListView();
@@ -41,15 +40,11 @@ namespace Nemesis.Forms
             this.columnBase = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabControl = new MetroFramework.Controls.MetroTabControl();
-            this.moduleContextMenu = new MetroFramework.Controls.MetroContextMenu(this.components);
-            this.dumpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.memoryContextMenu = new MetroFramework.Controls.MetroContextMenu(this.components);
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.refreshButton = new MetroFramework.Controls.MetroButton();
+            this.dumpButton = new MetroFramework.Controls.MetroButton();
             this.metroTabPage2.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
             this.tabControl.SuspendLayout();
-            this.moduleContextMenu.SuspendLayout();
-            this.memoryContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // metroTabPage2
@@ -90,7 +85,6 @@ namespace Nemesis.Forms
             this.memoryListView.Text = "MemoryListView";
             this.memoryListView.UseCompatibleStateImageBehavior = false;
             this.memoryListView.View = System.Windows.Forms.View.Details;
-            this.memoryListView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MemoryListView_MouseUp);
             // 
             // metroTabPage1
             // 
@@ -134,7 +128,6 @@ namespace Nemesis.Forms
             this.moduleListView.Text = "ModuleListView";
             this.moduleListView.UseCompatibleStateImageBehavior = false;
             this.moduleListView.View = System.Windows.Forms.View.Details;
-            this.moduleListView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ModuleListView_MouseUp);
             // 
             // columnBase
             // 
@@ -159,39 +152,33 @@ namespace Nemesis.Forms
             this.tabControl.TabIndex = 0;
             this.tabControl.UseSelectable = true;
             // 
-            // moduleContextMenu
+            // refreshButton
             // 
-            this.moduleContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.dumpToolStripMenuItem});
-            this.moduleContextMenu.Name = "moduleContextMenu";
-            this.moduleContextMenu.Size = new System.Drawing.Size(108, 26);
+            this.refreshButton.Location = new System.Drawing.Point(450, 316);
+            this.refreshButton.Name = "refreshButton";
+            this.refreshButton.Size = new System.Drawing.Size(75, 23);
+            this.refreshButton.TabIndex = 4;
+            this.refreshButton.Text = "Refresh";
+            this.refreshButton.UseSelectable = true;
+            this.refreshButton.Click += new System.EventHandler(this.RefreshButton_Click);
             // 
-            // dumpToolStripMenuItem
+            // dumpButton
             // 
-            this.dumpToolStripMenuItem.Name = "dumpToolStripMenuItem";
-            this.dumpToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
-            this.dumpToolStripMenuItem.Text = "Dump";
-            this.dumpToolStripMenuItem.Click += new System.EventHandler(this.ModuleContextMenu_Click);
-            // 
-            // memoryContextMenu
-            // 
-            this.memoryContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem1});
-            this.memoryContextMenu.Name = "moduleContextMenu";
-            this.memoryContextMenu.Size = new System.Drawing.Size(108, 26);
-            this.memoryContextMenu.Click += new System.EventHandler(this.MemoryContextMenu_Click);
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(107, 22);
-            this.toolStripMenuItem1.Text = "Dump";
+            this.dumpButton.Location = new System.Drawing.Point(531, 316);
+            this.dumpButton.Name = "dumpButton";
+            this.dumpButton.Size = new System.Drawing.Size(75, 23);
+            this.dumpButton.TabIndex = 3;
+            this.dumpButton.Text = "Dump";
+            this.dumpButton.UseSelectable = true;
+            this.dumpButton.Click += new System.EventHandler(this.DumpButton_Click);
             // 
             // ProcessInformation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(633, 333);
+            this.ClientSize = new System.Drawing.Size(633, 355);
+            this.Controls.Add(this.refreshButton);
+            this.Controls.Add(this.dumpButton);
             this.Controls.Add(this.tabControl);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -203,8 +190,6 @@ namespace Nemesis.Forms
             this.metroTabPage2.ResumeLayout(false);
             this.metroTabPage1.ResumeLayout(false);
             this.tabControl.ResumeLayout(false);
-            this.moduleContextMenu.ResumeLayout(false);
-            this.memoryContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -219,11 +204,9 @@ namespace Nemesis.Forms
         private MemoryListView memoryListView;
         private MetroFramework.Controls.MetroLabel moduleLabel;
         private MetroFramework.Controls.MetroLabel memoryLabel;
-        private MetroFramework.Controls.MetroContextMenu moduleContextMenu;
-        private System.Windows.Forms.ToolStripMenuItem dumpToolStripMenuItem;
-        private MetroFramework.Controls.MetroContextMenu memoryContextMenu;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ColumnHeader columnBase;
         private System.Windows.Forms.ColumnHeader columnName;
+        private MetroFramework.Controls.MetroButton refreshButton;
+        private MetroFramework.Controls.MetroButton dumpButton;
     }
 }

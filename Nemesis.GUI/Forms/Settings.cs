@@ -34,6 +34,7 @@ namespace Nemesis.Forms
                 Config.SetValue("memory_source", "user_mode");
 
                 Config.SetValue("save_base_addresses", "Off");
+                Config.SetValue("manual_module_list", "Off");
             }
 
             //
@@ -74,6 +75,8 @@ namespace Nemesis.Forms
         /// </summary>
         public static void Initialize()
         {
+            // TODO: Read header from file
+
             var memorySourceName = Config.GetValue("memory_source");
             if (memorySourceName != null)
             {
@@ -106,6 +109,7 @@ namespace Nemesis.Forms
             Config.SetValue("memory_source", memoryComboBox.Text);
 
             Config.SetValue("save_base_addresses", saveOffsetsToggle.Text);
+            Config.SetValue("manual_module_list", manualModuleList.Text);
 
             //
             // Change the settings

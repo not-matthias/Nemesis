@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
 using Nemesis.Utils;
 
 namespace Nemesis.Forms.Utils.Module
@@ -23,7 +24,7 @@ namespace Nemesis.Forms.Utils.Module
         /// <returns>True if successful</returns>
         public bool LoadModules(int processId)
         {
-            var modules = NemesisApi.GetModuleList(processId);
+            var modules = Config.GetValue("manual_module_list") == "On" ? NemesisApi.GetModuleList(processId) : NemesisApi.GetManualModuleList(processId);
 
             //
             // Check if empty

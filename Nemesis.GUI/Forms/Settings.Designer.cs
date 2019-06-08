@@ -49,17 +49,17 @@
             this.metroTabPage2 = new MetroFramework.Controls.MetroTabPage();
             this.colorComboBox = new MetroFramework.Controls.MetroComboBox();
             this.themeComboBox = new MetroFramework.Controls.MetroComboBox();
-            this.metroTabPage4 = new MetroFramework.Controls.MetroTabPage();
-            this.metroLabel8 = new MetroFramework.Controls.MetroLabel();
-            this.saveOffsetsToggle = new MetroFramework.Controls.MetroToggle();
             this.metroTabPage3 = new MetroFramework.Controls.MetroTabPage();
             this.memoryComboBox = new MetroFramework.Controls.MetroComboBox();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
             this.settingStyleManager = new MetroFramework.Components.MetroStyleManager(this.components);
+            this.metroLabel8 = new MetroFramework.Controls.MetroLabel();
+            this.saveOffsetsToggle = new MetroFramework.Controls.MetroToggle();
+            this.metroLabel9 = new MetroFramework.Controls.MetroLabel();
+            this.manualModuleList = new MetroFramework.Controls.MetroToggle();
             this.metroTabControl1.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
             this.metroTabPage2.SuspendLayout();
-            this.metroTabPage4.SuspendLayout();
             this.metroTabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.settingStyleManager)).BeginInit();
             this.SuspendLayout();
@@ -257,7 +257,6 @@
             // metroTabControl1
             // 
             this.metroTabControl1.Controls.Add(this.metroTabPage1);
-            this.metroTabControl1.Controls.Add(this.metroTabPage4);
             this.metroTabControl1.Controls.Add(this.metroTabPage2);
             this.metroTabControl1.Controls.Add(this.metroTabPage3);
             this.metroTabControl1.Location = new System.Drawing.Point(23, 63);
@@ -334,43 +333,12 @@
             this.themeComboBox.UseSelectable = true;
             this.themeComboBox.SelectedIndexChanged += new System.EventHandler(this.ThemeComboBox_SelectedIndexChanged);
             // 
-            // metroTabPage4
-            // 
-            this.metroTabPage4.Controls.Add(this.metroLabel8);
-            this.metroTabPage4.Controls.Add(this.saveOffsetsToggle);
-            this.metroTabPage4.HorizontalScrollbarBarColor = true;
-            this.metroTabPage4.HorizontalScrollbarHighlightOnWheel = false;
-            this.metroTabPage4.HorizontalScrollbarSize = 10;
-            this.metroTabPage4.Location = new System.Drawing.Point(4, 38);
-            this.metroTabPage4.Name = "metroTabPage4";
-            this.metroTabPage4.Size = new System.Drawing.Size(544, 211);
-            this.metroTabPage4.TabIndex = 3;
-            this.metroTabPage4.Text = "Driver";
-            this.metroTabPage4.VerticalScrollbarBarColor = true;
-            this.metroTabPage4.VerticalScrollbarHighlightOnWheel = false;
-            this.metroTabPage4.VerticalScrollbarSize = 10;
-            // 
-            // metroLabel8
-            // 
-            this.metroLabel8.AutoSize = true;
-            this.metroLabel8.Location = new System.Drawing.Point(2, 18);
-            this.metroLabel8.Name = "metroLabel8";
-            this.metroLabel8.Size = new System.Drawing.Size(169, 19);
-            this.metroLabel8.TabIndex = 3;
-            this.metroLabel8.Text = "Save driver base addresses:";
-            // 
-            // saveOffsetsToggle
-            // 
-            this.saveOffsetsToggle.AutoSize = true;
-            this.saveOffsetsToggle.Location = new System.Drawing.Point(177, 20);
-            this.saveOffsetsToggle.Name = "saveOffsetsToggle";
-            this.saveOffsetsToggle.Size = new System.Drawing.Size(80, 17);
-            this.saveOffsetsToggle.TabIndex = 2;
-            this.saveOffsetsToggle.Text = "Off";
-            this.saveOffsetsToggle.UseSelectable = true;
-            // 
             // metroTabPage3
             // 
+            this.metroTabPage3.Controls.Add(this.metroLabel9);
+            this.metroTabPage3.Controls.Add(this.manualModuleList);
+            this.metroTabPage3.Controls.Add(this.metroLabel8);
+            this.metroTabPage3.Controls.Add(this.saveOffsetsToggle);
             this.metroTabPage3.Controls.Add(this.memoryComboBox);
             this.metroTabPage3.HorizontalScrollbarBarColor = true;
             this.metroTabPage3.HorizontalScrollbarHighlightOnWheel = false;
@@ -379,7 +347,7 @@
             this.metroTabPage3.Name = "metroTabPage3";
             this.metroTabPage3.Size = new System.Drawing.Size(544, 211);
             this.metroTabPage3.TabIndex = 2;
-            this.metroTabPage3.Text = "Memory";
+            this.metroTabPage3.Text = "Miscellaneous";
             this.metroTabPage3.VerticalScrollbarBarColor = true;
             this.metroTabPage3.VerticalScrollbarHighlightOnWheel = false;
             this.metroTabPage3.VerticalScrollbarSize = 10;
@@ -399,6 +367,44 @@
             // settingStyleManager
             // 
             this.settingStyleManager.Owner = null;
+            // 
+            // metroLabel8
+            // 
+            this.metroLabel8.AutoSize = true;
+            this.metroLabel8.Location = new System.Drawing.Point(3, 61);
+            this.metroLabel8.Name = "metroLabel8";
+            this.metroLabel8.Size = new System.Drawing.Size(169, 19);
+            this.metroLabel8.TabIndex = 5;
+            this.metroLabel8.Text = "Save driver base addresses:";
+            // 
+            // saveOffsetsToggle
+            // 
+            this.saveOffsetsToggle.AutoSize = true;
+            this.saveOffsetsToggle.Location = new System.Drawing.Point(178, 63);
+            this.saveOffsetsToggle.Name = "saveOffsetsToggle";
+            this.saveOffsetsToggle.Size = new System.Drawing.Size(80, 17);
+            this.saveOffsetsToggle.TabIndex = 4;
+            this.saveOffsetsToggle.Text = "Off";
+            this.saveOffsetsToggle.UseSelectable = true;
+            // 
+            // metroLabel9
+            // 
+            this.metroLabel9.AutoSize = true;
+            this.metroLabel9.Location = new System.Drawing.Point(3, 89);
+            this.metroLabel9.Name = "metroLabel9";
+            this.metroLabel9.Size = new System.Drawing.Size(148, 19);
+            this.metroLabel9.TabIndex = 7;
+            this.metroLabel9.Text = "Use manual module list:";
+            // 
+            // manualModuleList
+            // 
+            this.manualModuleList.AutoSize = true;
+            this.manualModuleList.Location = new System.Drawing.Point(178, 91);
+            this.manualModuleList.Name = "manualModuleList";
+            this.manualModuleList.Size = new System.Drawing.Size(80, 17);
+            this.manualModuleList.TabIndex = 6;
+            this.manualModuleList.Text = "Off";
+            this.manualModuleList.UseSelectable = true;
             // 
             // Settings
             // 
@@ -420,9 +426,8 @@
             this.metroTabPage1.ResumeLayout(false);
             this.metroTabPage1.PerformLayout();
             this.metroTabPage2.ResumeLayout(false);
-            this.metroTabPage4.ResumeLayout(false);
-            this.metroTabPage4.PerformLayout();
             this.metroTabPage3.ResumeLayout(false);
+            this.metroTabPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.settingStyleManager)).EndInit();
             this.ResumeLayout(false);
 
@@ -454,8 +459,9 @@
         private MetroFramework.Controls.MetroTabPage metroTabPage3;
         private MetroFramework.Controls.MetroComboBox memoryComboBox;
         private MetroFramework.Components.MetroStyleManager settingStyleManager;
-        private MetroFramework.Controls.MetroTabPage metroTabPage4;
-        private MetroFramework.Controls.MetroToggle saveOffsetsToggle;
         private MetroFramework.Controls.MetroLabel metroLabel8;
+        private MetroFramework.Controls.MetroToggle saveOffsetsToggle;
+        private MetroFramework.Controls.MetroLabel metroLabel9;
+        private MetroFramework.Controls.MetroToggle manualModuleList;
     }
 }
