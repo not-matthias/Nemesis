@@ -36,7 +36,7 @@ auto FileWriter::WriteToFile(Module * module) -> BOOL
 	// DOS Header
 	//
 	DWORD file_offset = 0, write_size = sizeof(IMAGE_DOS_HEADER);
-	if (!WriteMemoryToFile(file_offset, write_size, module->dos_header))
+	if (!WriteMemoryToFile(file_offset, write_size, std::reinterpret_pointer_cast<BYTE>(module->dos_header)))
 	{
 		CloseHandle(file_handle);
 		return FALSE;
@@ -66,7 +66,7 @@ auto FileWriter::WriteToFile(Module * module) -> BOOL
 	{
 		write_size = sizeof(IMAGE_NT_HEADERS32);
 
-		if (!WriteMemoryToFile(file_offset, write_size, module->nt_header32))
+		if (!WriteMemoryToFile(file_offset, write_size, std::reinterpret_pointer_cast<BYTE>(module->nt_header32)))
 		{
 			CloseHandle(file_handle);
 			return FALSE;
@@ -78,7 +78,7 @@ auto FileWriter::WriteToFile(Module * module) -> BOOL
 	{
 		write_size = sizeof(IMAGE_NT_HEADERS64);
 
-		if (!WriteMemoryToFile(file_offset, write_size, module->nt_header64))
+		if (!WriteMemoryToFile(file_offset, write_size, std::reinterpret_pointer_cast<BYTE>(module->nt_header64)))
 		{
 			CloseHandle(file_handle);
 			return FALSE;
@@ -93,7 +93,8 @@ auto FileWriter::WriteToFile(Module * module) -> BOOL
 	write_size = sizeof(IMAGE_SECTION_HEADER);
 	for (WORD i = 0; i < module->GetSectionCount(); i++)
 	{
-		if (!WriteMemoryToFile(file_offset, write_size, &module->sections[i].section_header))
+		// maybe & needed
+		if (!WriteMemoryToFile(file_offset, write_size, std::reinterpret_pointer_cast<BYTE>(module->sections[i].section_header)))
 		{
 			CloseHandle(file_handle);
 			return FALSE;
@@ -111,18 +112,18 @@ auto FileWriter::WriteToFile(Module * module) -> BOOL
 		// 
 		// Raw data not found
 		//
-		if (module->sections[i].section_header.PointerToRawData == NULL)
+		if (module->sections[i].section_header->PointerToRawData == NULL)
 			continue;
 
 		//
 		// PointerToRawData > dwFileOffset => Padding needed
 		//
-		if (module->sections[i].section_header.PointerToRawData > file_offset)
+		if (module->sections[i].section_header->PointerToRawData > file_offset)
 		{
 			//
 			// Calculate the padding
 			//
-			write_size = module->sections[i].section_header.PointerToRawData - file_offset;
+			write_size = module->sections[i].section_header->PointerToRawData - file_offset;
 
 			//
 			// Write the padding
@@ -141,7 +142,7 @@ auto FileWriter::WriteToFile(Module * module) -> BOOL
 		//
 		write_size = module->sections[i].buffer_size;
 
-		if (!WriteMemoryToFile(module->sections[i].section_header.PointerToRawData, write_size, module->sections[i].buffer.get()))
+		if (!WriteMemoryToFile(module->sections[i].section_header->PointerToRawData, write_size, module->sections[i].buffer))
 		{
 			CloseHandle(file_handle);
 			return FALSE;
@@ -153,12 +154,12 @@ auto FileWriter::WriteToFile(Module * module) -> BOOL
 		//
 		// DataSize < SizeOfRawData => Padding needed
 		//
-		if (module->sections[i].buffer_size < module->sections[i].section_header.SizeOfRawData)
+		if (module->sections[i].buffer_size < module->sections[i].section_header->SizeOfRawData)
 		{
 			//
 			// Calculate the padding
 			//
-			write_size = module->sections[i].section_header.SizeOfRawData - module->sections[i].buffer_size;
+			write_size = module->sections[i].section_header->SizeOfRawData - module->sections[i].buffer_size;
 
 			//
 			// Write the padding
@@ -219,7 +220,7 @@ auto FileWriter::WriteToFile(MemoryElement * memory) -> BOOL
 	//
 	// Write the memory_buffer to the file
 	//
-	if (!WriteMemoryToFile(0, memory->memory_size, memory->memory_buffer.get()))
+	if (!WriteMemoryToFile(0, memory->memory_size, std::reinterpret_pointer_cast<BYTE>(memory->memory_buffer)))
 	{
 		CloseHandle(file_handle);
 		return FALSE;
@@ -239,7 +240,7 @@ auto FileWriter::WriteToFile(MemoryElement * memory) -> BOOL
 	return TRUE;
 }
 
-auto FileWriter::WriteMemoryToFile(const LONG offset, const DWORD size, const LPCVOID buffer) const -> BOOL
+auto FileWriter::WriteMemoryToFile(const LONG offset, const DWORD size, const std::shared_ptr<BYTE> buffer) const -> BOOL
 {
 	DWORD number_of_bytes_written = 0;
 
@@ -262,7 +263,7 @@ auto FileWriter::WriteMemoryToFile(const LONG offset, const DWORD size, const LP
 	//
 	// Write to the file
 	//
-	if (!WriteFile(file_handle, buffer, size, &number_of_bytes_written, nullptr))
+	if (!WriteFile(file_handle, buffer.get(), size, &number_of_bytes_written, nullptr))
 	{
 		return FALSE;
 	}
@@ -272,7 +273,7 @@ auto FileWriter::WriteMemoryToFile(const LONG offset, const DWORD size, const LP
 
 auto FileWriter::WriteZeroMemoryToFile(const LONG offset, const DWORD size) const -> BOOL
 {
-	const auto buffer = calloc(size, 1);
+	const std::shared_ptr<BYTE> buffer(new BYTE[size], [](const BYTE* memory) {delete[] memory; });
 
 	//
 	// Check the memory_buffer
@@ -289,11 +290,6 @@ auto FileWriter::WriteZeroMemoryToFile(const LONG offset, const DWORD size) cons
 	{
 		return FALSE;
 	}
-
-	//
-	// Free Memory
-	//
-	free(buffer);
 
 	return TRUE;
 }

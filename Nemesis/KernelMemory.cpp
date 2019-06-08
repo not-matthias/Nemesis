@@ -19,7 +19,7 @@ KernelMemory::~KernelMemory()
 	}
 }
 
-auto KernelMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size) -> std::shared_ptr<BYTE *>
+auto KernelMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size) -> std::shared_ptr<BYTE>
 {
 	//
 	// Checks
@@ -43,7 +43,8 @@ auto KernelMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size) 
 	//
 	if (DeviceIoControl(driver_handle, IOCTL_READ_REQUEST, &read_request, sizeof(read_request), &read_request, sizeof(read_request), nullptr, nullptr))
 	{
-		return std::make_shared<BYTE *>(read_request.buffer_address);
+		const auto buffer = std::shared_ptr<BYTE>(read_request.buffer_address, [](BYTE* p) {delete[] p; });
+		return buffer;
 	}
 	else
 	{

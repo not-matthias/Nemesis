@@ -77,7 +77,7 @@ public:
 	 * \param buffer 
 	 * \return true if successful
 	 */
-	auto WriteMemoryToFile(LONG offset, DWORD size, LPCVOID buffer) const -> BOOL;
+	auto WriteMemoryToFile(LONG offset, DWORD size, std::shared_ptr<BYTE> buffer) const -> BOOL;
 
 	/**
 	 * \brief Writes zero memory to the file.

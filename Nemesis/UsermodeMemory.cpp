@@ -21,19 +21,19 @@ UsermodeMemory::~UsermodeMemory()
 	}
 }
 
-auto UsermodeMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size) -> std::shared_ptr<BYTE*>
+auto UsermodeMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size) -> std::shared_ptr<BYTE>
 {
 	if (process_handle == INVALID_HANDLE_VALUE)
 		return nullptr;
 
-	const auto buffer = new BYTE[size];
+	const auto buffer = std::shared_ptr<BYTE>(new BYTE[size], [](const BYTE* memory) {delete[] memory; });
 	SIZE_T bytes_read;
 	DWORD old_protect;
 
 	// 
 	// ReadProcessMemory
 	// 
-	if (!ReadProcessMemory(process_handle, reinterpret_cast<LPCVOID>(start_address), buffer, size, &bytes_read))
+	if (!ReadProcessMemory(process_handle, reinterpret_cast<LPCVOID>(start_address), buffer.get(), size, &bytes_read))
 	{
 		Logger::Log("Failed to read process memory.");
 
@@ -49,7 +49,7 @@ auto UsermodeMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size
 		// 
 		// ReadProcessMemory
 		// 
-		if (!ReadProcessMemory(process_handle, reinterpret_cast<LPCVOID>(start_address), buffer, size, &bytes_read))
+		if (!ReadProcessMemory(process_handle, reinterpret_cast<LPCVOID>(start_address), buffer.get(), size, &bytes_read))
 		{
 			Logger::Log("Failed to read process memory.");
 		}
@@ -57,7 +57,7 @@ auto UsermodeMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size
 		VirtualProtectEx(process_handle, reinterpret_cast<LPVOID>(start_address), size, old_protect, &old_protect);
 	}
 
-	return std::make_shared<BYTE *>(buffer);
+	return buffer;
 }
 
 auto UsermodeMemory::IsValid() -> BOOL

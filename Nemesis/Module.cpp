@@ -29,9 +29,6 @@ Module::Module(ProcessMemory * process_memory, const DWORD_PTR base_address)
 
 Module::~Module()
 {
-	delete dos_stub;
-	delete dos_header; // Note: nt headers get set from the dos header (so you delete them too, once you delete the dos header)
-
 	sections.clear();
 }
 
@@ -43,18 +40,18 @@ auto Module::Initialize() -> BOOL
 	//
 	// Read the header from the Memory
 	//
-	//if (!ReadHeader())
-	//{
-	//	return FALSE;
-	//}
+	if (!ReadHeader())
+	{
+		return FALSE;
+	}
 
 	//
 	// Read the header from the file
 	//
-	if (!ReadHeaderFromFile())
-	{
-		return FALSE;
-	}
+	//if (!ReadHeaderFromFile())
+	//{
+	//	return FALSE;
+	//}
 
 	//
 	// Set the sections from the Memory
@@ -86,7 +83,7 @@ auto Module::ReadHeader() -> BOOL
 	//
 	// Set the pe header
 	//
-	SetHeader(reinterpret_cast<BYTE *>(header_memory.get()), header_size);
+	SetHeader(header_memory, header_size);
 
 	return TRUE;
 }
@@ -123,30 +120,31 @@ auto Module::ReadHeaderFromFile() -> BOOL
 	//
 	// Set the pe header
 	//
-	SetHeader(reinterpret_cast<BYTE *>(header_memory.get()), header_size);
+	SetHeader(header_memory, header_size);
 
 	return TRUE;
 }
 
 
-auto Module::SetHeader(BYTE * header_memory, const DWORD header_size) -> VOID
+auto Module::SetHeader(const std::shared_ptr<BYTE> & header_memory, const DWORD header_size) -> VOID
 {
 	Logger::Log("Setting the headers.");
 
-	dos_header = reinterpret_cast<PIMAGE_DOS_HEADER>(header_memory);
+	dos_header = std::reinterpret_pointer_cast<IMAGE_DOS_HEADER>(header_memory);
 
 	//
 	// Malformed PE
 	//
 	if (dos_header->e_lfanew > 0 && dos_header->e_lfanew < static_cast<LONG>(header_size))
 	{
-		nt_header32 = reinterpret_cast<PIMAGE_NT_HEADERS32>(reinterpret_cast<DWORD_PTR>(dos_header) + dos_header->e_lfanew);
-		nt_header64 = reinterpret_cast<PIMAGE_NT_HEADERS64>(reinterpret_cast<DWORD_PTR>(dos_header) + dos_header->e_lfanew);
+		const std::shared_ptr<BYTE> nt_header(header_memory, reinterpret_cast<BYTE*>(dos_header.get()) + dos_header->e_lfanew);
+		nt_header32 = std::reinterpret_pointer_cast<IMAGE_NT_HEADERS32>(nt_header);
+		nt_header64 = std::reinterpret_pointer_cast<IMAGE_NT_HEADERS64>(nt_header);
 
 		if (dos_header->e_lfanew <= static_cast<LONG>(sizeof(IMAGE_DOS_HEADER)))
 		{
 			dos_stub_size = dos_header->e_lfanew - sizeof(IMAGE_DOS_HEADER);
-			dos_stub = reinterpret_cast<BYTE*>(reinterpret_cast<DWORD_PTR>(dos_header) + sizeof(IMAGE_DOS_HEADER));
+			dos_stub = std::shared_ptr<BYTE>(header_memory, reinterpret_cast<BYTE*>(dos_header.get()) + sizeof(IMAGE_DOS_HEADER));
 		}
 		else if (dos_header->e_lfanew >= static_cast<LONG>(sizeof(IMAGE_DOS_HEADER)))
 		{
@@ -159,7 +157,7 @@ auto Module::SetSections() -> VOID
 {
 	Logger::Log("Setting the sections.");
 
-	auto section_header = IMAGE_FIRST_SECTION(nt_header32);
+	auto section_header = IMAGE_FIRST_SECTION(nt_header32.get());
 	Section section;
 
 	sections.clear();
@@ -167,13 +165,16 @@ auto Module::SetSections() -> VOID
 
 	for (WORD i = 0; i < GetSectionCount(); i++)
 	{
+		IMAGE_SECTION_HEADER image_section_header{ 0 };
+
 		//
 		// Read section
 		//
-		if (memcpy_s(&section.section_header, sizeof(IMAGE_SECTION_HEADER), section_header, sizeof(IMAGE_SECTION_HEADER)) != 0)
+		if (memcpy_s(&image_section_header, sizeof(IMAGE_SECTION_HEADER), section_header, sizeof(IMAGE_SECTION_HEADER)) != 0)
 		{
 			std::cout << "Failed to read section." << std::endl;
 		}
+		section.section_header = std::make_shared<IMAGE_SECTION_HEADER>(image_section_header);
 
 		//
 		// Set the initial memory_size
@@ -183,7 +184,7 @@ auto Module::SetSections() -> VOID
 		// 
 		// Calculate the offset
 		// 
-		const DWORD_PTR read_offset = base_address + section_header->VirtualAddress;
+		const auto read_offset = base_address + section_header->VirtualAddress;
 
 		//
 		// Read the section
@@ -224,7 +225,7 @@ auto Module::SetSectionSize(Section & section, const DWORD_PTR section_pointer) 
 	while (current_offset >= section_pointer)
 	{
 		const auto buffer = process_memory->ReadMemory(current_offset, current_read_size);
-		const auto code_byte_count = GetInstructionByteCount(reinterpret_cast<BYTE *>(buffer.get()), current_read_size);
+		const auto code_byte_count = GetInstructionByteCount(buffer, current_read_size);
 
 		if (code_byte_count != 0)
 		{
@@ -344,7 +345,7 @@ auto Module::AlignSectionHeaders() -> VOID
 	//
 	std::sort(sections.begin(), sections.end(), [](const Section & a, const Section & b) -> bool
 	{
-		return a.section_header.PointerToRawData < b.section_header.PointerToRawData;
+		return a.section_header->PointerToRawData < b.section_header->PointerToRawData;
 	});
 
 	//
@@ -359,15 +360,15 @@ auto Module::AlignSectionHeaders() -> VOID
 	for (WORD i = 0; i < GetSectionCount(); i++)
 	{
 		// VirtualAddress and VirtualSize
-		sections[i].section_header.VirtualAddress = AlignValue(sections[i].section_header.VirtualAddress, section_alignment);
-		sections[i].section_header.Misc.VirtualSize = AlignValue(sections[i].section_header.Misc.VirtualSize, section_alignment);
+		sections[i].section_header->VirtualAddress = AlignValue(sections[i].section_header->VirtualAddress, section_alignment);
+		sections[i].section_header->Misc.VirtualSize = AlignValue(sections[i].section_header->Misc.VirtualSize, section_alignment);
 
 		// PointerToRawData and SizeOfRawData
-		sections[i].section_header.PointerToRawData = AlignValue(new_file_size, file_alignment);
-		sections[i].section_header.SizeOfRawData = AlignValue(sections[i].buffer_size, file_alignment);
+		sections[i].section_header->PointerToRawData = AlignValue(new_file_size, file_alignment);
+		sections[i].section_header->SizeOfRawData = AlignValue(sections[i].buffer_size, file_alignment);
 
 		// NewFileSize
-		new_file_size = sections[i].section_header.PointerToRawData + sections[i].section_header.SizeOfRawData;
+		new_file_size = sections[i].section_header->PointerToRawData + sections[i].section_header->SizeOfRawData;
 	}
 
 	//
@@ -375,7 +376,7 @@ auto Module::AlignSectionHeaders() -> VOID
 	//
 	std::sort(sections.begin(), sections.end(), [](const Section & a, const Section & b) -> bool
 	{
-		return a.section_header.VirtualAddress < b.section_header.VirtualAddress;
+		return a.section_header->VirtualAddress < b.section_header->VirtualAddress;
 	});
 }
 
@@ -459,21 +460,21 @@ auto Module::RemoveIat() -> VOID
 	{
 		for (WORD i = 0; i < GetSectionCount(); i++)
 		{
-			if ((sections[i].section_header.VirtualAddress <= iat_search_address) &&
-				((sections[i].section_header.VirtualAddress + sections[i].section_header.Misc.VirtualSize) >
+			if ((sections[i].section_header->VirtualAddress <= iat_search_address) &&
+				((sections[i].section_header->VirtualAddress + sections[i].section_header->Misc.VirtualSize) >
 					iat_search_address))
 			{
 				//
 				// Section must be read and writable
 				//
-				sections[i].section_header.Characteristics |= IMAGE_SCN_MEM_READ | IMAGE_SCN_MEM_WRITE;
+				sections[i].section_header->Characteristics |= IMAGE_SCN_MEM_READ | IMAGE_SCN_MEM_WRITE;
 			}
 		}
 	}
 }
 
 
-auto Module::GetInstructionByteCount(const BYTE * data, const DWORD size) -> DWORD
+auto Module::GetInstructionByteCount(const std::shared_ptr<BYTE> & data, const DWORD size) -> DWORD
 {
 	//
 	// Check if null
@@ -488,7 +489,7 @@ auto Module::GetInstructionByteCount(const BYTE * data, const DWORD size) -> DWO
 	//
 	for (int i = (size - 1); i >= 0; i--)
 	{
-		if (data[i] != 0)
+		if (data.get()[i] != 0)
 		{
 			return i + 1;
 		}
@@ -548,11 +549,11 @@ auto Module::GetImageSize() -> DWORD
 	DWORD last_virtual_offset = 0, last_virtual_size = 0;
 	for (WORD i = 0; i < GetSectionCount(); i++)
 	{
-		if ((sections[i].section_header.VirtualAddress + sections[i].section_header.Misc.VirtualSize) > (last_virtual_offset
+		if ((sections[i].section_header->VirtualAddress + sections[i].section_header->Misc.VirtualSize) > (last_virtual_offset
 			+ last_virtual_size))
 		{
-			last_virtual_offset = sections[i].section_header.VirtualAddress;
-			last_virtual_size = sections[i].section_header.Misc.VirtualSize;
+			last_virtual_offset = sections[i].section_header->VirtualAddress;
+			last_virtual_size = sections[i].section_header->Misc.VirtualSize;
 		}
 	}
 

@@ -48,7 +48,7 @@ public:
 	 * \param size the buffer size
 	 * \return the memory buffer
 	 */
-	virtual auto ReadMemory(DWORD_PTR start_address, SIZE_T size) -> std::shared_ptr<BYTE *> = 0;
+	virtual auto ReadMemory(DWORD_PTR start_address, SIZE_T size) -> std::shared_ptr<BYTE> = 0;
 
 
 	//

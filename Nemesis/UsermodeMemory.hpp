@@ -50,7 +50,7 @@ public:
 	 * \param size the buffer size
 	 * \return the memory buffer
 	 */
-	auto ReadMemory(DWORD_PTR start_address, SIZE_T size) -> std::shared_ptr<BYTE*> override;
+	auto ReadMemory(DWORD_PTR start_address, SIZE_T size) -> std::shared_ptr<BYTE> override;
 
 
 	//

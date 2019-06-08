@@ -27,7 +27,7 @@ public:
 	/**
 	 * \brief The dos stub memory.
 	 */
-	BYTE * dos_stub;
+	std::shared_ptr<BYTE> dos_stub;
 
 	/**
 	 * \brief The dos stub size.
@@ -38,17 +38,17 @@ public:
 	/**
 	 * \brief The dos header of a module.
 	 */
-	PIMAGE_DOS_HEADER dos_header;
+	std::shared_ptr<IMAGE_DOS_HEADER> dos_header;
 
 	/**
 	 * \brief The 32 bit nt header of a module.
 	 */
-	PIMAGE_NT_HEADERS32 nt_header32;
+	std::shared_ptr<IMAGE_NT_HEADERS32> nt_header32;
 
 	/**
 	 * \brief The 64 bit nt header of a module.
 	 */
-	PIMAGE_NT_HEADERS64 nt_header64;
+	std::shared_ptr<IMAGE_NT_HEADERS64> nt_header64;
 
 	/**
 	 * \brief Contains the sections of a module.
@@ -80,7 +80,7 @@ private:
 	 * \param header_memory the header memory
 	 * \param header_size the header memory size
 	 */
-	auto SetHeader(BYTE * header_memory, DWORD header_size) -> VOID;
+	auto SetHeader(const std::shared_ptr<BYTE> & header_memory, DWORD header_size) -> VOID;
 
 	/**
 	 * \brief Sets the sections.
@@ -180,7 +180,7 @@ public:
 	 * \param size the size of the buffer
 	 * \return the instruction count
 	 */
-	static auto GetInstructionByteCount(const BYTE * data, DWORD size) -> DWORD;
+	static auto GetInstructionByteCount(const std::shared_ptr<BYTE> & data, DWORD size) -> DWORD;
 
 	/**
 	 * \brief Aligns the value.

@@ -7,20 +7,20 @@ struct Section
 	/**
 	 * \brief The section header struct.
 	 */
-	IMAGE_SECTION_HEADER section_header{};
+	std::shared_ptr<IMAGE_SECTION_HEADER> section_header;
 
 	/**
 	 * \brief The memory of the section.
 	 */
-	std::shared_ptr<BYTE *> buffer = nullptr;
+	std::shared_ptr<BYTE> buffer;
 
 	/**
 	 * \brief The size of the section.
 	 */
-	DWORD buffer_size = NULL;
+	DWORD buffer_size;
 
 	/**
 	 * \brief The initial size of the section.
 	 */
-	DWORD initial_size = NULL;
+	DWORD initial_size;
 };

@@ -53,5 +53,5 @@ public:
 	 * \param size the buffer size
 	 * \return the buffer
 	 */
-	auto Read(LONG offset, DWORD size) -> std::shared_ptr<BYTE *>;
+	auto Read(LONG offset, DWORD size) -> std::shared_ptr<BYTE>;
 };
