@@ -17,10 +17,10 @@ struct Section
 	/**
 	 * \brief The size of the section.
 	 */
-	DWORD buffer_size;
+	DWORD buffer_size = NULL;
 
 	/**
 	 * \brief The initial size of the section.
 	 */
-	DWORD initial_size;
+	DWORD initial_size = NULL;
 };

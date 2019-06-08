@@ -69,7 +69,7 @@ auto GetModuleListElementExport(const UINT index, const DWORD process_id, Module
 	return TRUE;
 }
 
-auto GetModuleListManualElementExport(const UINT index, const DWORD process_id, ModuleElement * module) -> BOOL
+auto GetManualModuleListElementExport(const UINT index, const DWORD process_id, ModuleElement * module) -> BOOL
 {
 	//
 	// Check if in bounds
