@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using Nemesis.Utils;
 
 namespace Nemesis.Forms.Utils.Module
@@ -24,7 +23,7 @@ namespace Nemesis.Forms.Utils.Module
         /// <returns>True if successful</returns>
         public bool LoadModules(int processId)
         {
-            var modules = Config.GetValue("manual_module_list") == "On" ? NemesisApi.GetModuleList(processId) : NemesisApi.GetManualModuleList(processId);
+            var modules = Config.GetValue("manual_module_list") == "On" ? NemesisApi.GetManualModuleList(processId) : NemesisApi.GetModuleList(processId);
 
             //
             // Check if empty
@@ -44,7 +43,7 @@ namespace Nemesis.Forms.Utils.Module
                 //
                 // Create a new ProcessListItem
                 //
-                var processListItem = new ModuleListItem(module.ImageBase,  module.ImageSize, module.ModuleName, module.ModulePath);
+                var processListItem = new ModuleListItem(module.ImageBase, module.ImageSize, module.ModuleName, module.ModulePath);
 
                 //
                 // Add it to the ListView
