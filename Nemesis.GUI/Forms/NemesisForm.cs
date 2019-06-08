@@ -33,19 +33,18 @@ namespace Nemesis.Forms
             //
             processListView.LoadProcesses();
             driverListView.LoadDrivers();
-
-            //
-            // Initialize the settings
-            //
-            Settings.Initialize();
         }
 
         /// <summary>
-        /// Refreshes the process list.
+        /// Refreshes the process and driver list.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void RefreshButton_Click(object sender, EventArgs e) => processListView.LoadProcesses();
+        private void RefreshButton_Click(object sender, EventArgs e)
+        {
+            processListView.LoadProcesses();
+            driverListView.LoadDrivers();
+        }
 
         /// <summary>
         /// Dumps the selected process.

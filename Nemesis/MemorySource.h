@@ -8,36 +8,17 @@
 
 class MemorySource
 {
-	//
-	//
-	// Variables
-	//
-	//
-
-	/**
-	 * \brief The current memory source.
-	 */
-	static std::string current_memory_source;
-
-public:
-
 	/**
 	 * \brief All the memory sources.
 	 */
 	static std::vector<std::string> memory_sources;
 
-
+public:
 	//
 	//
 	// Important functions
 	//
 	//
-
-	/**
-	 * \brief Set the new current memory source.
-	 * \param memory_source_name the new memory source
-	 */
-	static auto SetMemorySource(const std::string & memory_source_name) -> VOID;
 
 	/**
 	 * \brief Returns the memory source.

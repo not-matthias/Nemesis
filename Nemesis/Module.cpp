@@ -4,6 +4,7 @@
 #include "Logger.hpp"
 #include "Module.hpp"
 #include "ProcessUtils.hpp"
+#include "ConfigExport.hpp"
 
 Module::Module(ProcessMemory * process_memory)
 {
@@ -40,7 +41,7 @@ auto Module::Initialize() -> BOOL
 	//
 	// Read the header from the Memory
 	//
-	if (!ReadHeader())
+	if (config.Get("read_header_from_file") != "On" && !ReadHeader())
 	{
 		return FALSE;
 	}
@@ -48,10 +49,10 @@ auto Module::Initialize() -> BOOL
 	//
 	// Read the header from the file
 	//
-	//if (!ReadHeaderFromFile())
-	//{
-	//	return FALSE;
-	//}
+	if (config.Get("read_header_from_file") == "On" && !ReadHeaderFromFile())
+	{
+		return FALSE;
+	}
 
 	//
 	// Set the sections from the Memory

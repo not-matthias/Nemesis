@@ -1,6 +1,6 @@
 EXPORTS
-	GetMemorySourcesExport @1
-	SetMemorySourceExport @2
+	SetConfigValueExport @1
+	GetConfigValueExport @2
 
 	DumpProcessExport @3
 	DumpModuleExport @4
@@ -13,7 +13,6 @@ EXPORTS
 	GetManualModuleListElementExport @10
 	GetMemoryListElementExport @11
 
-	SaveDriverInformationExport @12
-
-	SetConfigValueExport @13
-	GetConfigValueExport @14
+	GetMemorySourcesExport @12
+	
+	SaveDriverInformationExport @13

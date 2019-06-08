@@ -50,13 +50,15 @@
             this.colorComboBox = new MetroFramework.Controls.MetroComboBox();
             this.themeComboBox = new MetroFramework.Controls.MetroComboBox();
             this.metroTabPage3 = new MetroFramework.Controls.MetroTabPage();
+            this.metroLabel9 = new MetroFramework.Controls.MetroLabel();
+            this.manualModuleList = new MetroFramework.Controls.MetroToggle();
+            this.metroLabel8 = new MetroFramework.Controls.MetroLabel();
+            this.saveOffsetsToggle = new MetroFramework.Controls.MetroToggle();
             this.memoryComboBox = new MetroFramework.Controls.MetroComboBox();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
             this.settingStyleManager = new MetroFramework.Components.MetroStyleManager(this.components);
-            this.metroLabel8 = new MetroFramework.Controls.MetroLabel();
-            this.saveOffsetsToggle = new MetroFramework.Controls.MetroToggle();
-            this.metroLabel9 = new MetroFramework.Controls.MetroLabel();
-            this.manualModuleList = new MetroFramework.Controls.MetroToggle();
+            this.metroLabel10 = new MetroFramework.Controls.MetroLabel();
+            this.headerFromFile = new MetroFramework.Controls.MetroToggle();
             this.metroTabControl1.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
             this.metroTabPage2.SuspendLayout();
@@ -257,8 +259,8 @@
             // metroTabControl1
             // 
             this.metroTabControl1.Controls.Add(this.metroTabPage1);
-            this.metroTabControl1.Controls.Add(this.metroTabPage2);
             this.metroTabControl1.Controls.Add(this.metroTabPage3);
+            this.metroTabControl1.Controls.Add(this.metroTabPage2);
             this.metroTabControl1.Location = new System.Drawing.Point(23, 63);
             this.metroTabControl1.Name = "metroTabControl1";
             this.metroTabControl1.SelectedIndex = 2;
@@ -335,6 +337,8 @@
             // 
             // metroTabPage3
             // 
+            this.metroTabPage3.Controls.Add(this.metroLabel10);
+            this.metroTabPage3.Controls.Add(this.headerFromFile);
             this.metroTabPage3.Controls.Add(this.metroLabel9);
             this.metroTabPage3.Controls.Add(this.manualModuleList);
             this.metroTabPage3.Controls.Add(this.metroLabel8);
@@ -352,21 +356,24 @@
             this.metroTabPage3.VerticalScrollbarHighlightOnWheel = false;
             this.metroTabPage3.VerticalScrollbarSize = 10;
             // 
-            // memoryComboBox
+            // metroLabel9
             // 
-            this.memoryComboBox.FormattingEnabled = true;
-            this.memoryComboBox.ItemHeight = 23;
-            this.memoryComboBox.Location = new System.Drawing.Point(3, 18);
-            this.memoryComboBox.Name = "memoryComboBox";
-            this.memoryComboBox.PromptText = "Memory Source";
-            this.memoryComboBox.Size = new System.Drawing.Size(161, 29);
-            this.memoryComboBox.TabIndex = 2;
-            this.memoryComboBox.UseSelectable = true;
-            this.memoryComboBox.SelectedIndexChanged += new System.EventHandler(this.MemoryComboBox_SelectedIndexChanged);
+            this.metroLabel9.AutoSize = true;
+            this.metroLabel9.Location = new System.Drawing.Point(3, 89);
+            this.metroLabel9.Name = "metroLabel9";
+            this.metroLabel9.Size = new System.Drawing.Size(148, 19);
+            this.metroLabel9.TabIndex = 7;
+            this.metroLabel9.Text = "Use manual module list:";
             // 
-            // settingStyleManager
+            // manualModuleList
             // 
-            this.settingStyleManager.Owner = null;
+            this.manualModuleList.AutoSize = true;
+            this.manualModuleList.Location = new System.Drawing.Point(178, 91);
+            this.manualModuleList.Name = "manualModuleList";
+            this.manualModuleList.Size = new System.Drawing.Size(80, 17);
+            this.manualModuleList.TabIndex = 6;
+            this.manualModuleList.Text = "Off";
+            this.manualModuleList.UseSelectable = true;
             // 
             // metroLabel8
             // 
@@ -387,24 +394,39 @@
             this.saveOffsetsToggle.Text = "Off";
             this.saveOffsetsToggle.UseSelectable = true;
             // 
-            // metroLabel9
+            // memoryComboBox
             // 
-            this.metroLabel9.AutoSize = true;
-            this.metroLabel9.Location = new System.Drawing.Point(3, 89);
-            this.metroLabel9.Name = "metroLabel9";
-            this.metroLabel9.Size = new System.Drawing.Size(148, 19);
-            this.metroLabel9.TabIndex = 7;
-            this.metroLabel9.Text = "Use manual module list:";
+            this.memoryComboBox.FormattingEnabled = true;
+            this.memoryComboBox.ItemHeight = 23;
+            this.memoryComboBox.Location = new System.Drawing.Point(3, 18);
+            this.memoryComboBox.Name = "memoryComboBox";
+            this.memoryComboBox.PromptText = "Memory Source";
+            this.memoryComboBox.Size = new System.Drawing.Size(161, 29);
+            this.memoryComboBox.TabIndex = 2;
+            this.memoryComboBox.UseSelectable = true;
             // 
-            // manualModuleList
+            // settingStyleManager
             // 
-            this.manualModuleList.AutoSize = true;
-            this.manualModuleList.Location = new System.Drawing.Point(178, 91);
-            this.manualModuleList.Name = "manualModuleList";
-            this.manualModuleList.Size = new System.Drawing.Size(80, 17);
-            this.manualModuleList.TabIndex = 6;
-            this.manualModuleList.Text = "Off";
-            this.manualModuleList.UseSelectable = true;
+            this.settingStyleManager.Owner = null;
+            // 
+            // metroLabel10
+            // 
+            this.metroLabel10.AutoSize = true;
+            this.metroLabel10.Location = new System.Drawing.Point(3, 118);
+            this.metroLabel10.Name = "metroLabel10";
+            this.metroLabel10.Size = new System.Drawing.Size(141, 19);
+            this.metroLabel10.TabIndex = 9;
+            this.metroLabel10.Text = "Read header from file:";
+            // 
+            // headerFromFile
+            // 
+            this.headerFromFile.AutoSize = true;
+            this.headerFromFile.Location = new System.Drawing.Point(178, 120);
+            this.headerFromFile.Name = "headerFromFile";
+            this.headerFromFile.Size = new System.Drawing.Size(80, 17);
+            this.headerFromFile.TabIndex = 8;
+            this.headerFromFile.Text = "Off";
+            this.headerFromFile.UseSelectable = true;
             // 
             // Settings
             // 
@@ -463,5 +485,7 @@
         private MetroFramework.Controls.MetroToggle saveOffsetsToggle;
         private MetroFramework.Controls.MetroLabel metroLabel9;
         private MetroFramework.Controls.MetroToggle manualModuleList;
+        private MetroFramework.Controls.MetroLabel metroLabel10;
+        private MetroFramework.Controls.MetroToggle headerFromFile;
     }
 }

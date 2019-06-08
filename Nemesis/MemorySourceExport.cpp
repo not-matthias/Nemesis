@@ -32,23 +32,3 @@ auto GetMemorySourcesExport(MemorySources * memory_sources) -> VOID
 		std::copy(memory_source.begin(), memory_source.end(), memory_sources->memory_sources[i++]);
 	}
 }
-
-auto SetMemorySourceExport(const char * memory_source_name) -> BOOL
-{
-	auto memory_sources = MemorySource::GetMemorySources();
-
-	//
-	// Check if memory source exists
-	//
-	if (std::find(memory_sources.begin(), memory_sources.end(), memory_source_name) == memory_sources.end())
-	{
-		return FALSE;
-	}
-
-	//
-	// Memory source does exist
-	//
-	MemorySource::SetMemorySource(memory_source_name);
-
-	return TRUE;
-}

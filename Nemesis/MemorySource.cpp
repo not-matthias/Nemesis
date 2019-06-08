@@ -3,17 +3,17 @@
 #include "KernelMemory.hpp"
 #include "MemorySource.h"
 #include "UsermodeMemory.hpp"
+#include "ConfigExport.hpp"
 
-std::string MemorySource::current_memory_source;
 std::vector<std::string> MemorySource::memory_sources = {"kernel_mode", "user_mode"};
-
-auto MemorySource::SetMemorySource(const std::string & memory_source_name) -> VOID
-{
-	current_memory_source = memory_source_name;
-}
 
 auto MemorySource::GetMemorySource(const DWORD process_id) -> std::shared_ptr<IMemorySource>
 {
+	//
+	// Get memory source from config (to survive restarts)
+	//
+	const auto current_memory_source = config.Get("memory_source");
+
 	// 
 	// Kernel Memory
 	// 

@@ -101,9 +101,6 @@ namespace Nemesis.Utils
         [DllImport("Nemesis.dll")]
         protected static extern void GetMemorySourcesExport([In] [Out] ref MemorySource structure);
 
-        [DllImport("Nemesis.dll")]
-        protected static extern bool SetMemorySourceExport([In] string memorySource);
-
 
         [DllImport("Nemesis.dll")]
         protected static extern bool GetDriverListElementExport([In] uint index, [In] [Out] ref Driver structure);
@@ -179,16 +176,6 @@ namespace Nemesis.Utils
         public static bool DumpDriver(IntPtr baseAddress, string fileName)
         {
             return DumpDriverExport(baseAddress, fileName);
-        }
-
-        /// <summary>
-        /// Sets the memory source in Nemesis.
-        /// </summary>
-        /// <param name="memorySource">The new memory source name</param>
-        /// <returns>True if successful</returns>
-        public static bool SetMemorySource(string memorySource)
-        {
-            return SetMemorySourceExport(memorySource);
         }
 
         /// <summary>

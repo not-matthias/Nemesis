@@ -50,8 +50,9 @@ namespace Nemesis.Forms
             createFolderToggle.Checked = Config.GetValue("create_process_folder") == "On";
             createTimestampFolderToggle.Checked = Config.GetValue("create_timestamp_folder") == "On";
             askForLocationToggle.Checked = Config.GetValue("ask_for_location") == "On";
-
             saveOffsetsToggle.Checked = Config.GetValue("save_base_addresses") == "On";
+            manualModuleList.Checked = Config.GetValue("manual_module_list") == "On";
+            headerFromFile.Checked = Config.GetValue("read_header_from_file") == "On";
 
             //
             // Fill the combo boxes
@@ -60,30 +61,10 @@ namespace Nemesis.Forms
             colorComboBox.Items.AddRange(new object[]
                 {"Default", "Black", "White", "Silver", "Blue", "Green", "Lime", "Teal", "Orange", "Brown", "Pink", "Magenta", "Purple", "Red", "Yellow"});
             memoryComboBox.Items.AddRange(NemesisApi.GetMemorySources().ToArray());
-
-            //
-            // Set the combo box values
-            //
             themeComboBox.SelectedIndex = GetItemIndex(themeComboBox, Config.GetValue("theme"));
             colorComboBox.SelectedIndex = GetItemIndex(colorComboBox, Config.GetValue("style"));
             memoryComboBox.SelectedIndex = GetItemIndex(memoryComboBox, Config.GetValue("memory_source"));
         }
-
-
-        /// <summary>
-        /// Sets the config in the Nemesis dll.
-        /// </summary>
-        public static void Initialize()
-        {
-            // TODO: Read header from file
-
-            var memorySourceName = Config.GetValue("memory_source");
-            if (memorySourceName != null)
-            {
-                NemesisApi.SetMemorySource(memorySourceName);
-            }
-        }
-
 
         /// <summary>
         /// Saves the settings to the config.
@@ -97,27 +78,23 @@ namespace Nemesis.Forms
             //
             Config.SetValue("dump_location", dumpLocation.Text);
             Config.SetValue("file_name", fileName.Text);
-
             Config.SetValue("custom_dump_location", customDumpLocationToggle.Text);
             Config.SetValue("create_process_folder", createFolderToggle.Text);
             Config.SetValue("create_timestamp_folder", createTimestampFolderToggle.Text);
             Config.SetValue("ask_for_location", askForLocationToggle.Text);
-
             Config.SetValue("theme", themeComboBox.Text);
             Config.SetValue("style", colorComboBox.Text);
-
             Config.SetValue("memory_source", memoryComboBox.Text);
-
             Config.SetValue("save_base_addresses", saveOffsetsToggle.Text);
             Config.SetValue("manual_module_list", manualModuleList.Text);
+            Config.SetValue("read_header_from_file", headerFromFile.Text);
+            Config.SetValue("memory_source", memoryComboBox.Text);
 
             //
-            // Change the settings
+            // Set the nemesis config
             //
-            if (!NemesisApi.SetMemorySource(Config.GetValue("memory_source")))
-            {
-                MessageBox.Show("Failed to set new memory source.");
-            }
+            NemesisApi.SetConfigValue("read_header_from_file", headerFromFile.Text);
+            NemesisApi.SetConfigValue("memory_source", memoryComboBox.Text);
 
             Close();
         }
@@ -229,19 +206,6 @@ namespace Nemesis.Forms
             StyleExtension.SetColorStyle(StyleExtension.GetMetroColorStyle(colorComboBox.Text));
 
             Refresh();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void MemoryComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (!NemesisApi.SetMemorySource(memoryComboBox.Text))
-            {
-                MessageBox.Show("Failed to set new memory source.", "Error");
-            }
         }
 
         /// <summary>
