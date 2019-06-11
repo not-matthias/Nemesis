@@ -99,7 +99,6 @@ NTSTATUS CopyVirtualMemory(const HANDLE process_id, const PVOID source_address, 
 		if (!NT_SUCCESS(status = MmCopyVirtualMemory(source_process, source_address, target_process, target_address, buffer_size, KernelMode, &bytes_copied)))
 		{
 			DbgPrint("Failed to read virtual memory.\n");
-			goto EXIT;
 		}
 		else
 		{
