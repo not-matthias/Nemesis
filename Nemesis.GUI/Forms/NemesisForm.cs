@@ -17,6 +17,11 @@ namespace Nemesis.Forms
         private readonly Dictionary<int, ProcessInformation> _processInformationList = new Dictionary<int, ProcessInformation>();
 
         /// <summary>
+        /// The settings page (declared once to prevent loading times).
+        /// </summary>
+        private readonly Settings _settings = new Settings();
+
+        /// <summary>
         /// Sets the styles and loads list data.
         /// </summary>
         public NemesisForm()
@@ -233,9 +238,7 @@ namespace Nemesis.Forms
         /// <param name="e"></param>
         private void SettingsButton_Click(object sender, EventArgs e)
         {
-            var settings = new Settings();
-            settings.ShowDialog();
-            settings.Dispose();
+            _settings.ShowDialog();
         }
 
         /// <summary>
@@ -287,12 +290,14 @@ namespace Nemesis.Forms
                     DumpButton_Click(null, null);
 
                     return true;
+
                 //
                 // Ctrl+R = Refresh
                 //
                 case Keys.Control | Keys.R:
                     RefreshButton_Click(null, null);
                     break;
+
                 //
                 // Ctrl+Alt+S
                 //
