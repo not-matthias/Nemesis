@@ -1,6 +1,6 @@
 # Nemesis
 
-A customizable process dumper library.
+A customizable process dumper.
 
 ![alt](https://user-images.githubusercontent.com/26800596/59287543-22d42680-8c72-11e9-8f27-c4c6f132850a.png)
 
