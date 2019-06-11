@@ -2,7 +2,7 @@
 
 A customizable process dumper library.
 
-![alt](https://user-images.githubusercontent.com/26800596/55280408-94fcc680-5325-11e9-945b-912a16b1ed5d.jpg)
+![alt](https://user-images.githubusercontent.com/26800596/59287543-22d42680-8c72-11e9-8f27-c4c6f132850a.png)
 
 ## Features
 
