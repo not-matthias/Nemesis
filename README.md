@@ -47,11 +47,22 @@ If you want to dump it with physical memory or via a hypervisor? Simply add a ne
 
 ## Exports
 
-Nemesis is also available as a dump library. If you want to implement a dumper, but don't want to mess with low level stuff, simply load the dll and use the following imports:
+Nemesis is also available as a dump library. If you want to implement a dumper, but don't want to mess with low level stuff, simply load the dll and use the following imports.
 
-- [GetMemorySourcesExport](https://github.com/not-matthias/Nemesis/blob/master/Nemesis/MemorySourceExport.h#L20)
+### ConfigExport
 
-- [SetMemorySourceExport](https://github.com/not-matthias/Nemesis/blob/master/Nemesis/MemorySourceExport.h#L27)
+
+- [SetConfigValueExport](https://github.com/not-matthias/Nemesis/blob/master/Nemesis/ConfigExport.hpp#L9)
+
+- [GetConfigValueExport](https://github.com/not-matthias/Nemesis/blob/master/Nemesis/ConfigExport.hpp#L11)
+
+### DriverExport
+
+- [GetDriverListElementExport](https://github.com/not-matthias/Nemesis/blob/master/Nemesis/DriverExport.hpp#L31)
+
+- [SaveDriverInformationExport](https://github.com/not-matthias/Nemesis/blob/master/Nemesis/DriverExport.hpp#L39)
+
+### DumpExport
 
 - [DumpProcessExport](https://github.com/not-matthias/Nemesis/blob/master/Nemesis/DumpExport.hpp#L11)
 
@@ -61,21 +72,25 @@ Nemesis is also available as a dump library. If you want to implement a dumper, 
 
 - [DumpDriverExport](https://github.com/not-matthias/Nemesis/blob/master/Nemesis/DumpExport.hpp#L38)
 
-- [GetDriverListElementExport](https://github.com/not-matthias/Nemesis/blob/master/Nemesis/DriverExport.hpp#L31)
+### MemorySourceExport
 
-- [GetProcessListElementExport](https://github.com/not-matthias/Nemesis/blob/master/Nemesis/ProcessExport.hpp#L63)
+- [GetMemorySourcesExport](https://github.com/not-matthias/Nemesis/blob/master/Nemesis/MemorySourceExport.h#L16)
 
-- [GetModuleListElementExport](https://github.com/not-matthias/Nemesis/blob/master/Nemesis/ProcessExport.hpp#L72)
+### ProcessExport
 
-- [GetMemoryListElementExport](https://github.com/not-matthias/Nemesis/blob/master/Nemesis/ProcessExport.hpp#L81)
+- [GetProcessListElementExport](https://github.com/not-matthias/Nemesis/blob/master/Nemesis/ProcessExport.hpp#L64)
 
-- [SaveDriverInformationExport](https://github.com/not-matthias/Nemesis/blob/master/Nemesis/DriverExport.hpp#L39)
+- [GetModuleListElementExport](https://github.com/not-matthias/Nemesis/blob/master/Nemesis/ProcessExport.hpp#L73)
+
+- [GetManualModuleListElementExport](https://github.com/not-matthias/Nemesis/blob/master/Nemesis/ProcessExport.hpp#L82)
+
+- [GetMemoryListElementExport](https://github.com/not-matthias/Nemesis/blob/master/Nemesis/ProcessExport.hpp#L91)
 
 ### Keyboard Shortcuts
 
-<kbd>CTRL+D</kbd> - Dump the selected process
+<kbd>CTRL+D</kbd> - Dump the selected process or driver
 
-<kbd>CTRL+R</kbd> - Refresh the processes
+<kbd>CTRL+R</kbd> - Refresh the process and driver list
 
 <kbd>CTRL+ALT+S</kbd> - Open the settings
 
