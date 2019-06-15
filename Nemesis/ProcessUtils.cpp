@@ -167,7 +167,7 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 	// Get process handle
 	//
 	const auto process_handle = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, process_id);
-	if (process_handle == INVALID_HANDLE_VALUE)
+	if (process_handle == nullptr)
 	{
 		Logger::Log("Failed to get process handle.");
 		return std::vector<ModuleElement>();
