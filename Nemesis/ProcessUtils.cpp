@@ -291,7 +291,7 @@ auto ProcessUtils::GetMemoryList(const DWORD process_id) -> std::vector<MemoryEl
 	// Open the process
 	//
 	const auto process_handle = OpenProcess(PROCESS_ALL_ACCESS, false, process_id);
-	if (process_handle == INVALID_HANDLE_VALUE)
+	if (process_handle == nullptr)
 	{
 		return std::vector<MemoryElement>();
 	}
