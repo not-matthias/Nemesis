@@ -14,7 +14,7 @@ class FileReader
 	/**
 	 * \brief The path to the file.
 	 */
-	std::string path;
+	std::wstring path;
 
 	/**
 	 * \brief The handle to the file.
@@ -33,7 +33,7 @@ public:
 	 * \brief Stores the parameter.
 	 * \param path the path of the file
 	 */
-	explicit FileReader(std::string path);
+	explicit FileReader(std::wstring path);
 
 	/**
 	 * \brief The default destructor.

@@ -14,7 +14,7 @@ auto GetMemorySourcesExport(MemorySources * memory_sources) -> VOID
 		//
 		// Add a string to set the end
 		//
-		memory_source.append("|");
+		memory_source.append(L"|");
 
 		//
 		// Create the char array

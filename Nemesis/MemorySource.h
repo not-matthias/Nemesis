@@ -11,7 +11,7 @@ class MemorySource
 	/**
 	 * \brief All the memory sources.
 	 */
-	static std::vector<std::string> memory_sources;
+	static std::vector<std::wstring> memory_sources;
 
 public:
 	//
@@ -31,5 +31,5 @@ public:
 	 * \brief Returns all memory sources.
 	 * \return the memory sources
 	 */
-	static auto GetMemorySources() -> std::vector<std::string>;
+	static auto GetMemorySources() -> std::vector<std::wstring>;
 };

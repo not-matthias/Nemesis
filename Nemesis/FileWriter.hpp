@@ -16,7 +16,7 @@ class FileWriter
 	/**
 	 * \brief The name of the exported file.
 	 */
-	std::string file_name;
+	std::wstring file_name;
 
 	/**
 	 * \brief The handle to the file.
@@ -35,7 +35,7 @@ public:
 	 * \brief Stores the parameter.
 	 * \param file_name the name of the dump file
 	 */
-	explicit FileWriter(std::string file_name);
+	explicit FileWriter(std::wstring file_name);
 
 	/**
 	 * \brief The default destructor.

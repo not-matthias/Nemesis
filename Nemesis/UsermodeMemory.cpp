@@ -21,12 +21,13 @@ UsermodeMemory::~UsermodeMemory()
 	}
 }
 
+
 auto UsermodeMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size) -> std::shared_ptr<BYTE>
 {
 	if (process_handle == nullptr)
 		return nullptr;
 
-	const auto buffer = std::shared_ptr<BYTE>(new BYTE[size], [](const BYTE* memory) {delete[] memory; });
+	const auto buffer = std::shared_ptr<BYTE>(new BYTE[size], [](const BYTE * memory) { delete[] memory; });
 	SIZE_T bytes_read;
 	DWORD old_protect;
 
@@ -75,8 +76,8 @@ auto UsermodeMemory::IsValid() -> BOOL
 
 auto UsermodeMemory::GetBaseAddress() -> DWORD_PTR
 {
-	TCHAR file_name[MAX_PATH] = {};
-	TCHAR module_name[MAX_PATH];
+	WCHAR file_name[MAX_PATH] = {};
+	WCHAR module_name[MAX_PATH];
 	HMODULE * module_handle = nullptr;
 	DWORD needed;
 	DWORD modules;
@@ -100,7 +101,7 @@ auto UsermodeMemory::GetBaseAddress() -> DWORD_PTR
 	{
 		for (unsigned int i = 0; i < (needed / sizeof(HMODULE)); i++)
 		{
-			std::string std_file_name(file_name);
+			std::wstring std_file_name(file_name);
 
 			if (GetModuleBaseName(process_handle, module_handle[i], module_name, sizeof module_name) && std_file_name == module_name)
 			{

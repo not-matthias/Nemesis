@@ -41,7 +41,7 @@ auto Module::Initialize() -> BOOL
 	//
 	// Read the header from the Memory
 	//
-	if (config.Get("read_header_from_file") != "On" && !ReadHeader())
+	if (config.Get(L"read_header_from_file") != L"On" && !ReadHeader())
 	{
 		return FALSE;
 	}
@@ -49,7 +49,7 @@ auto Module::Initialize() -> BOOL
 	//
 	// Read the header from the file
 	//
-	if (config.Get("read_header_from_file") == "On" && !ReadHeaderFromFile())
+	if (config.Get(L"read_header_from_file") == L"On" && !ReadHeaderFromFile())
 	{
 		return FALSE;
 	}
@@ -166,7 +166,7 @@ auto Module::SetSections() -> VOID
 
 	for (WORD i = 0; i < GetSectionCount(); i++)
 	{
-		IMAGE_SECTION_HEADER image_section_header{ 0 };
+		IMAGE_SECTION_HEADER image_section_header{0};
 
 		//
 		// Read section

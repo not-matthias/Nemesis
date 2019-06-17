@@ -208,5 +208,5 @@ public:
 	 * \param process_id the target process id
 	 * \return the path to the main module
 	 */
-	static auto GetFilePath(DWORD process_id) -> std::string;
+	static auto GetFilePath(DWORD process_id) -> std::wstring;
 };

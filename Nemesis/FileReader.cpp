@@ -3,7 +3,7 @@
 #include "FileReader.hpp"
 #include "Logger.hpp"
 
-FileReader::FileReader(std::string path) : path(std::move(path))
+FileReader::FileReader(std::wstring path) : path(std::move(path))
 {
 }
 

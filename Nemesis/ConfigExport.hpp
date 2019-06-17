@@ -4,8 +4,8 @@
 
 #include "Config.hpp"
 
-inline Config config("Nemesis", "./Nemesis.ini");
+inline Config config(L"Nemesis", L"./Nemesis.ini");
 
-auto SetConfigValueExport(LPCSTR key, LPCSTR value) -> BOOL;
+auto SetConfigValueExport(LPCWSTR key, LPCWSTR value) -> BOOL;
 
-auto GetConfigValueExport(LPCSTR key) -> LPCSTR;
+auto GetConfigValueExport(LPCWSTR key) -> LPCWSTR;

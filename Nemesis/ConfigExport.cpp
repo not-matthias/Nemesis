@@ -8,7 +8,7 @@
  * \param value the specified value for the key
  * \return true if successful
  */
-auto SetConfigValueExport(const LPCSTR key, const LPCSTR value) -> BOOL
+auto SetConfigValueExport(const LPCWSTR key, const LPCWSTR value) -> BOOL
 {
 	return config.Set(key, value);
 }
@@ -18,7 +18,7 @@ auto SetConfigValueExport(const LPCSTR key, const LPCSTR value) -> BOOL
  * \param key the key of the value
  * \return the value
  */
-auto GetConfigValueExport(const LPCSTR key) -> LPCSTR
+auto GetConfigValueExport(const LPCWSTR key) -> LPCWSTR
 {
 	return config.Get(key).c_str();
 }

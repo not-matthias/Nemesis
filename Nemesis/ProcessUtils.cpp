@@ -104,7 +104,7 @@ auto ProcessUtils::GetModuleList(const DWORD process_id) -> std::vector<ModuleEl
 	{
 		for (unsigned long i = 0; i < (cb_needed / sizeof(HMODULE)); i++)
 		{
-			CHAR file_path[MAX_PATH];
+			WCHAR file_path[MAX_PATH];
 
 
 			//
@@ -134,10 +134,10 @@ auto ProcessUtils::GetModuleList(const DWORD process_id) -> std::vector<ModuleEl
 			module.base_address = module_info.lpBaseOfDll;
 			module.module_size = module_info.SizeOfImage;
 
-			std::string module_file_path(file_path);
+			std::wstring module_file_path(file_path);
 			std::copy(module_file_path.begin(), module_file_path.end(), reinterpret_cast<char*>(module.module_path));
 
-			const auto module_file_name = module_file_path.substr(module_file_path.find_last_of("/\\") + 1);
+			const auto module_file_name = module_file_path.substr(module_file_path.find_last_of(L"/\\") + 1);
 			std::copy(module_file_name.begin(), module_file_name.end(), reinterpret_cast<char*>(module.module_name));
 
 
@@ -329,9 +329,9 @@ auto ProcessUtils::GetMemoryList(const DWORD process_id) -> std::vector<MemoryEl
 	return memory_list;
 }
 
-auto ProcessUtils::GetFilePath(const DWORD process_id) -> std::string
+auto ProcessUtils::GetFilePath(const DWORD process_id) -> std::wstring
 {
-	std::string path(MAX_PATH, '\0');
+	std::wstring path(MAX_PATH, '\0');
 	DWORD length = 0;
 
 	//
@@ -340,7 +340,7 @@ auto ProcessUtils::GetFilePath(const DWORD process_id) -> std::string
 	const auto process_handle = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, process_id);
 	if (process_handle != nullptr)
 	{
-		if (!(length = GetModuleFileNameEx(process_handle, nullptr, const_cast<LPSTR>(path.data()), path.size())))
+		if (!(length = GetModuleFileNameEx(process_handle, nullptr, const_cast<LPWSTR>(path.data()), path.size())))
 		{
 			Logger::Log("Failed to get module file name.");
 		}
