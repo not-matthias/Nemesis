@@ -34,6 +34,7 @@
     <ClInclude Include="MemorySourceExport.hpp" />
     <ClInclude Include="ProcessExport.hpp" />
     <ClInclude Include="ProcessUtils.hpp" />
+    <ClInclude Include="SafeHandle.hpp" />
     <ClInclude Include="Section.hpp" />
     <ClInclude Include="ProcessMemory.hpp" />
     <ClInclude Include="UsermodeMemory.hpp" />
@@ -57,6 +58,7 @@
     <ClCompile Include="ProcessExport.cpp" />
     <ClCompile Include="ProcessUtils.cpp" />
     <ClCompile Include="ProcessMemory.cpp" />
+    <ClCompile Include="SafeHandle.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
