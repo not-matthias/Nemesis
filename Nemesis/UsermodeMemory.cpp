@@ -7,7 +7,7 @@ UsermodeMemory::UsermodeMemory(const DWORD process_id) : IMemorySource(process_i
 {
 	process_handle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, process_id);
 
-	if (process_handle == INVALID_HANDLE_VALUE)
+	if (process_handle == nullptr)
 	{
 		Logger::Log("Failed to open process.");
 	}
@@ -15,7 +15,7 @@ UsermodeMemory::UsermodeMemory(const DWORD process_id) : IMemorySource(process_i
 
 UsermodeMemory::~UsermodeMemory()
 {
-	if (process_handle != INVALID_HANDLE_VALUE)
+	if (process_handle != nullptr)
 	{
 		CloseHandle(process_handle);
 	}
@@ -23,7 +23,7 @@ UsermodeMemory::~UsermodeMemory()
 
 auto UsermodeMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size) -> std::shared_ptr<BYTE>
 {
-	if (process_handle == INVALID_HANDLE_VALUE)
+	if (process_handle == nullptr)
 		return nullptr;
 
 	const auto buffer = std::shared_ptr<BYTE>(new BYTE[size], [](const BYTE* memory) {delete[] memory; });
@@ -65,7 +65,7 @@ auto UsermodeMemory::IsValid() -> BOOL
 	//
 	// Check if handle is valid
 	//
-	if (process_handle == INVALID_HANDLE_VALUE)
+	if (process_handle == nullptr)
 	{
 		return FALSE;
 	}

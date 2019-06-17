@@ -15,7 +15,7 @@ class UsermodeMemory final : public IMemorySource
 	/**
 	 * \brief The process handle.
 	 */
-	HANDLE process_handle = INVALID_HANDLE_VALUE;
+	HANDLE process_handle = nullptr;
 
 public:
 
