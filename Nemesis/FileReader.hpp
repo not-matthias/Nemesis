@@ -3,6 +3,8 @@
 #include <string>
 #include <Windows.h>
 
+#include "SafeHandle.hpp"
+
 class FileReader
 {
 	//
@@ -19,7 +21,7 @@ class FileReader
 	/**
 	 * \brief The handle to the file.
 	 */
-	HANDLE file_handle = INVALID_HANDLE_VALUE;
+	SafeHandle file_handle = nullptr;
 
 public:
 

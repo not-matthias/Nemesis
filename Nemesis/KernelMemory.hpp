@@ -3,6 +3,7 @@
 #include <Windows.h>
 
 #include "IMemorySource.hpp"
+#include "SafeHandle.hpp"
 
 //
 //
@@ -82,13 +83,13 @@ class KernelMemory final : public IMemorySource
 	/**
 	 * \brief The driver handle.
 	 */
-	HANDLE driver_handle = INVALID_HANDLE_VALUE;
+	SafeHandle driver_handle = nullptr;
 
 public:
 
 	//
 	//
-	// Constructors/Destructors
+	// Constructor
 	//
 	//
 
@@ -97,11 +98,6 @@ public:
 	 * \param process_id the id of the process
 	 */
 	explicit KernelMemory(DWORD process_id);
-
-	/**
-	 * \brief Will close the driver handle.
-	 */
-	~KernelMemory();
 
 
 	//

@@ -26,8 +26,8 @@ auto FileWriter::WriteToFile(Module * module) -> BOOL
 	//
 	// Create the file
 	//
-	file_handle = CreateFile(file_name.c_str(), GENERIC_WRITE, FILE_SHARE_WRITE, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
-	if (file_handle == INVALID_HANDLE_VALUE)
+	file_handle = SafeHandle(CreateFile(file_name.c_str(), GENERIC_WRITE, FILE_SHARE_WRITE, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr));
+	if (!file_handle.IsValid())
 	{
 		return FALSE;
 	}
@@ -39,7 +39,6 @@ auto FileWriter::WriteToFile(Module * module) -> BOOL
 	DWORD file_offset = 0, write_size = sizeof(IMAGE_DOS_HEADER);
 	if (!WriteMemoryToFile(file_offset, write_size, std::reinterpret_pointer_cast<BYTE>(module->dos_header)))
 	{
-		CloseHandle(file_handle);
 		return FALSE;
 	}
 	file_offset += write_size;
@@ -53,7 +52,6 @@ auto FileWriter::WriteToFile(Module * module) -> BOOL
 		write_size = module->dos_stub_size;
 		if (!WriteMemoryToFile(file_offset, write_size, module->dos_stub))
 		{
-			CloseHandle(file_handle);
 			return FALSE;
 		}
 		file_offset += write_size;
@@ -69,7 +67,6 @@ auto FileWriter::WriteToFile(Module * module) -> BOOL
 
 		if (!WriteMemoryToFile(file_offset, write_size, std::reinterpret_pointer_cast<BYTE>(module->nt_header32)))
 		{
-			CloseHandle(file_handle);
 			return FALSE;
 		}
 
@@ -81,7 +78,6 @@ auto FileWriter::WriteToFile(Module * module) -> BOOL
 
 		if (!WriteMemoryToFile(file_offset, write_size, std::reinterpret_pointer_cast<BYTE>(module->nt_header64)))
 		{
-			CloseHandle(file_handle);
 			return FALSE;
 		}
 
@@ -97,7 +93,6 @@ auto FileWriter::WriteToFile(Module * module) -> BOOL
 		// maybe & needed
 		if (!WriteMemoryToFile(file_offset, write_size, std::reinterpret_pointer_cast<BYTE>(module->sections[i].section_header)))
 		{
-			CloseHandle(file_handle);
 			return FALSE;
 		}
 
@@ -131,7 +126,6 @@ auto FileWriter::WriteToFile(Module * module) -> BOOL
 			//
 			if (!WriteZeroMemoryToFile(file_offset, write_size))
 			{
-				CloseHandle(file_handle);
 				return FALSE;
 			}
 
@@ -145,7 +139,6 @@ auto FileWriter::WriteToFile(Module * module) -> BOOL
 
 		if (!WriteMemoryToFile(module->sections[i].section_header->PointerToRawData, write_size, module->sections[i].buffer))
 		{
-			CloseHandle(file_handle);
 			return FALSE;
 		}
 
@@ -167,7 +160,6 @@ auto FileWriter::WriteToFile(Module * module) -> BOOL
 			//
 			if (!WriteZeroMemoryToFile(file_offset, write_size))
 			{
-				CloseHandle(file_handle);
 				return FALSE;
 			}
 
@@ -193,16 +185,7 @@ auto FileWriter::WriteToFile(Module * module) -> BOOL
 	//
 	// Set EOL
 	//
-	SetEndOfFile(file_handle);
-
-
-	//
-	// Close the handle
-	//
-	if (file_handle != INVALID_HANDLE_VALUE)
-	{
-		CloseHandle(file_handle);
-	}
+	SetEndOfFile(file_handle.Get());
 
 	return TRUE;
 }
@@ -212,8 +195,8 @@ auto FileWriter::WriteToFile(MemoryElement * memory) -> BOOL
 	//
 	// Create the file
 	//
-	file_handle = CreateFile(file_name.c_str(), GENERIC_WRITE, FILE_SHARE_WRITE, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
-	if (file_handle == INVALID_HANDLE_VALUE)
+	file_handle = SafeHandle(CreateFile(file_name.c_str(), GENERIC_WRITE, FILE_SHARE_WRITE, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr));
+	if (!file_handle.IsValid())
 	{
 		return FALSE;
 	}
@@ -223,20 +206,13 @@ auto FileWriter::WriteToFile(MemoryElement * memory) -> BOOL
 	//
 	if (!WriteMemoryToFile(0, memory->memory_size, std::reinterpret_pointer_cast<BYTE>(memory->memory_buffer)))
 	{
-		CloseHandle(file_handle);
 		return FALSE;
 	}
 
 	//
 	// Set EOL
 	//
-	SetEndOfFile(file_handle);
-
-
-	//
-	// Close the handle
-	//
-	CloseHandle(file_handle);
+	SetEndOfFile(file_handle.Get());
 
 	return TRUE;
 }
@@ -248,7 +224,7 @@ auto FileWriter::WriteMemoryToFile(const LONG offset, const DWORD size, const st
 	//
 	// Some checks
 	//
-	if (file_handle == INVALID_HANDLE_VALUE || buffer == nullptr)
+	if (!file_handle.IsValid() || !buffer)
 	{
 		return FALSE;
 	}
@@ -256,7 +232,7 @@ auto FileWriter::WriteMemoryToFile(const LONG offset, const DWORD size, const st
 	//
 	// Set the file pointer
 	//
-	if (SetFilePointer(file_handle, offset, nullptr, FILE_BEGIN) == INVALID_SET_FILE_POINTER && GetLastError() != NO_ERROR)
+	if (SetFilePointer(file_handle.Get(), offset, nullptr, FILE_BEGIN) == INVALID_SET_FILE_POINTER && GetLastError() != NO_ERROR)
 	{
 		return FALSE;
 	}
@@ -264,7 +240,7 @@ auto FileWriter::WriteMemoryToFile(const LONG offset, const DWORD size, const st
 	//
 	// Write to the file
 	//
-	if (!WriteFile(file_handle, buffer.get(), size, &number_of_bytes_written, nullptr))
+	if (!WriteFile(file_handle.Get(), buffer.get(), size, &number_of_bytes_written, nullptr))
 	{
 		return FALSE;
 	}

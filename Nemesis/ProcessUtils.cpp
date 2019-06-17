@@ -3,6 +3,7 @@
 #include "Logger.hpp"
 #include "ProcessUtils.hpp"
 #include "MemorySource.h"
+#include "SafeHandle.hpp"
 
 auto ProcessUtils::GetProcessList() -> std::vector<ProcessElement>
 {
@@ -90,8 +91,8 @@ auto ProcessUtils::GetModuleList(const DWORD process_id) -> std::vector<ModuleEl
 	//
 	// Open the process
 	//
-	const auto process_handle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, process_id);
-	if (process_handle == INVALID_HANDLE_VALUE)
+	const auto process_handle = SafeHandle(OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, process_id));
+	if (!process_handle.IsValid())
 	{
 		Logger::Log("Failed to get process handle.");
 		return std::vector<ModuleElement>();
@@ -100,7 +101,7 @@ auto ProcessUtils::GetModuleList(const DWORD process_id) -> std::vector<ModuleEl
 	//
 	// Loop through the modules
 	//
-	if (EnumProcessModules(process_handle, module_handles, sizeof(module_handles), &cb_needed))
+	if (EnumProcessModules(process_handle.Get(), module_handles, sizeof(module_handles), &cb_needed))
 	{
 		for (unsigned long i = 0; i < (cb_needed / sizeof(HMODULE)); i++)
 		{
@@ -110,7 +111,7 @@ auto ProcessUtils::GetModuleList(const DWORD process_id) -> std::vector<ModuleEl
 			//
 			// Get the full path
 			//
-			if (!GetModuleFileNameEx(process_handle, module_handles[i], file_path, sizeof(file_path) / sizeof(CHAR)))
+			if (!GetModuleFileNameEx(process_handle.Get(), module_handles[i], file_path, sizeof(file_path) / sizeof(CHAR)))
 			{
 				Logger::Log("Failed to get file path.");
 				continue;
@@ -120,7 +121,7 @@ auto ProcessUtils::GetModuleList(const DWORD process_id) -> std::vector<ModuleEl
 			// Get module information
 			//
 			MODULEINFO module_info = {0};
-			if (!GetModuleInformation(process_handle, module_handles[i], &module_info, sizeof(module_info)))
+			if (!GetModuleInformation(process_handle.Get(), module_handles[i], &module_info, sizeof(module_info)))
 			{
 				Logger::Log("Failed to get module information.");
 				continue;
@@ -148,11 +149,6 @@ auto ProcessUtils::GetModuleList(const DWORD process_id) -> std::vector<ModuleEl
 		}
 	}
 
-	//
-	// Close the handle
-	//
-	CloseHandle(process_handle);
-
 	return modules;
 }
 
@@ -166,8 +162,8 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 	//
 	// Get process handle
 	//
-	const auto process_handle = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, process_id);
-	if (process_handle == nullptr)
+	const auto process_handle = SafeHandle(OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, process_id));
+	if (!process_handle.IsValid())
 	{
 		Logger::Log("Failed to get process handle.");
 		return std::vector<ModuleElement>();
@@ -177,10 +173,8 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 	// PROCESS_BASIC_INFORMATION
 	//
 	structs::PROCESS_BASIC_INFORMATION pbi = {0};
-	if (!NT_SUCCESS(NtQueryInformationProcess(process_handle, ProcessBasicInformation, &pbi, sizeof(pbi), nullptr)))
+	if (!NT_SUCCESS(NtQueryInformationProcess(process_handle.Get(), ProcessBasicInformation, &pbi, sizeof(pbi), nullptr)))
 	{
-		CloseHandle(process_handle);
-
 		Logger::Log("Could not get process information.");
 		return std::vector<ModuleElement>();
 	}
@@ -193,8 +187,6 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 
 	if (peb_memory == nullptr || peb == nullptr)
 	{
-		CloseHandle(process_handle);
-
 		Logger::Log("Failed to read PEB from process.");
 		return std::vector<ModuleElement>();
 	}
@@ -207,8 +199,6 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 
 	if (peb_ldr_data_memory == nullptr || peb_ldr_data == nullptr)
 	{
-		CloseHandle(process_handle);
-
 		Logger::Log("Failed to read module list from process.");
 		return std::vector<ModuleElement>();
 	}
@@ -229,8 +219,6 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 
 		if (list_entry_memory == nullptr || list_entry == nullptr)
 		{
-			CloseHandle(process_handle);
-
 			Logger::Log("Could not read list entry from LDR list.");
 			return std::vector<ModuleElement>();
 		}
@@ -271,15 +259,6 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 	}
 	while (ldr_list_head != ldr_current_node);
 
-
-	//
-	// Clean up
-	//
-	if (process_handle)
-	{
-		CloseHandle(process_handle);
-	}
-
 	return modules;
 }
 
@@ -290,8 +269,8 @@ auto ProcessUtils::GetMemoryList(const DWORD process_id) -> std::vector<MemoryEl
 	//
 	// Open the process
 	//
-	const auto process_handle = OpenProcess(PROCESS_ALL_ACCESS, false, process_id);
-	if (process_handle == nullptr)
+	const auto process_handle = SafeHandle(OpenProcess(PROCESS_ALL_ACCESS, false, process_id));
+	if (!process_handle.IsValid())
 	{
 		return std::vector<MemoryElement>();
 	}
@@ -302,7 +281,7 @@ auto ProcessUtils::GetMemoryList(const DWORD process_id) -> std::vector<MemoryEl
 	// Loop through the memory regions
 	// 
 	for (BYTE * memory_region_start = nullptr;
-	     VirtualQueryEx(process_handle, memory_region_start, &memory_basic_information, sizeof(MEMORY_BASIC_INFORMATION64));
+	     VirtualQueryEx(process_handle.Get(), memory_region_start, &memory_basic_information, sizeof(MEMORY_BASIC_INFORMATION64));
 	     memory_region_start += memory_basic_information.RegionSize)
 	{
 		//
@@ -320,12 +299,6 @@ auto ProcessUtils::GetMemoryList(const DWORD process_id) -> std::vector<MemoryEl
 		memory_list.push_back(memory);
 	}
 
-
-	//
-	// Close the handle
-	//
-	CloseHandle(process_handle);
-
 	return memory_list;
 }
 
@@ -337,15 +310,13 @@ auto ProcessUtils::GetFilePath(const DWORD process_id) -> std::wstring
 	//
 	// Get the path
 	//
-	const auto process_handle = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, process_id);
-	if (process_handle != nullptr)
+	const auto process_handle = SafeHandle(OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, process_id));
+	if (process_handle.IsValid())
 	{
-		if (!(length = GetModuleFileNameEx(process_handle, nullptr, const_cast<LPWSTR>(path.data()), path.size())))
+		if (!(length = GetModuleFileNameEx(process_handle.Get(), nullptr, const_cast<LPWSTR>(path.data()), path.size())))
 		{
 			Logger::Log("Failed to get module file name.");
 		}
-
-		CloseHandle(process_handle);
 	}
 	else
 	{

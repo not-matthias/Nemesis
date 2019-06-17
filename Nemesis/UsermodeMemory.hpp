@@ -3,6 +3,7 @@
 #include <Windows.h>
 
 #include "IMemorySource.hpp"
+#include "SafeHandle.hpp"
 
 class UsermodeMemory final : public IMemorySource
 {
@@ -15,13 +16,13 @@ class UsermodeMemory final : public IMemorySource
 	/**
 	 * \brief The process handle.
 	 */
-	HANDLE process_handle = nullptr;
+	SafeHandle process_handle = nullptr;
 
 public:
 
 	//
 	//
-	// Constructors/Destructors
+	// Constructor
 	//
 	//
 
@@ -30,12 +31,6 @@ public:
 	 * \param process_id the id of the process
 	 */
 	explicit UsermodeMemory(DWORD process_id);
-
-
-	/**
-	 * \brief Will close the process handle.
-	 */
-	virtual ~UsermodeMemory();
 
 
 	//

@@ -17,8 +17,8 @@ auto FileReader::Read(const LONG offset, const DWORD size) -> std::shared_ptr<BY
 	//
 	// Create the file
 	//
-	file_handle = CreateFile(path.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
-	if (file_handle == INVALID_HANDLE_VALUE)
+	file_handle = SafeHandle(CreateFile(path.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr));
+	if (!file_handle.IsValid())
 	{
 		return nullptr;
 	}
@@ -26,7 +26,7 @@ auto FileReader::Read(const LONG offset, const DWORD size) -> std::shared_ptr<BY
 	//
 	// Set the file pointer
 	//
-	if (SetFilePointer(file_handle, offset, nullptr, FILE_BEGIN) == INVALID_SET_FILE_POINTER && GetLastError() != NO_ERROR)
+	if (SetFilePointer(file_handle.Get(), offset, nullptr, FILE_BEGIN) == INVALID_SET_FILE_POINTER && GetLastError() != NO_ERROR)
 	{
 		return nullptr;
 	}
@@ -36,7 +36,7 @@ auto FileReader::Read(const LONG offset, const DWORD size) -> std::shared_ptr<BY
 	//
 	DWORD number_of_bytes_read = 0;
 	const auto buffer = std::shared_ptr<BYTE>(new BYTE[size], [](const BYTE * memory) { delete[] memory; });
-	if (!ReadFile(file_handle, buffer.get(), size, &number_of_bytes_read, nullptr))
+	if (!ReadFile(file_handle.Get(), buffer.get(), size, &number_of_bytes_read, nullptr))
 	{
 		return nullptr;
 	}
