@@ -7,12 +7,6 @@
 
 class FileReader
 {
-	//
-	//
-	// Variables
-	//
-	//
-
 	/**
 	 * \brief The path to the file.
 	 */
@@ -25,29 +19,11 @@ class FileReader
 
 public:
 
-	//
-	//
-	// Constructors/Destructors
-	//
-	//
-
 	/**
 	 * \brief Stores the parameter.
 	 * \param path the path of the file
 	 */
 	explicit FileReader(std::wstring path);
-
-	/**
-	 * \brief The default destructor.
-	 */
-	~FileReader();
-
-
-	//
-	//
-	// Functions
-	//
-	//
 
 	/**
 	 * \brief Reads from a file.

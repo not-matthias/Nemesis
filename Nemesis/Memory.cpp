@@ -3,15 +3,11 @@
 #include "Logger.hpp"
 #include "Memory.hpp"
 
-MemoryElement::MemoryElement(ProcessMemory * process_memory, const DWORD_PTR start_address, const DWORD size)
+MemoryElement::MemoryElement(ProcessMemory * process_memory, const DWORD_PTR start_address, const DWORD size) : process_memory(process_memory),
+                                                                                                                start_address(start_address),
+                                                                                                                memory_size(memory_size)
 {
-	this->process_memory = process_memory;
-	this->start_address = start_address;
-	this->memory_size = size;
 }
-
-MemoryElement::~MemoryElement() = default;
-
 
 auto MemoryElement::Initialize() -> BOOL
 {

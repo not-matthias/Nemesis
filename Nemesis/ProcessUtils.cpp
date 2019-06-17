@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "DriverUtils.hpp"
 #include "Logger.hpp"
 #include "ProcessUtils.hpp"
 #include "MemorySource.h"
@@ -12,29 +13,29 @@ auto ProcessUtils::GetProcessList() -> std::vector<ProcessElement>
 	//
 	// Allocate memory for the buffer
 	//
-	LPVOID buffer;
-	if (!(buffer = VirtualAlloc(nullptr, 1024 * 1024, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE)))
+	const auto unsafe_buffer = VirtualAlloc(nullptr, 1024 * 1024, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+	std::unique_ptr<BYTE, MemoryDisposer> buffer(static_cast<BYTE*>(unsafe_buffer), MemoryDisposer{});
+	if (!buffer)
 	{
-		return std::vector<ProcessElement>();
+		return {};
 	}
 
 	//
 	// Create the process info buffer
 	//
-	auto system_process_info = static_cast<PSYSTEM_PROCESS_INFORMATION>(buffer);
 
 	//
 	// Get the process list
 	//
-	if (!NT_SUCCESS(NtQuerySystemInformation(SystemProcessInformation, system_process_info, 1024 * 1024, NULL)))
+	if (!NT_SUCCESS(NtQuerySystemInformation(SystemProcessInformation, buffer.get(), 1024 * 1024, NULL)))
 	{
-		VirtualFree(buffer, 0, MEM_RELEASE);
-		return std::vector<ProcessElement>();
+		return {};
 	}
 
 	//
 	// Create the process list
 	//
+	auto system_process_info = reinterpret_cast<PSYSTEM_PROCESS_INFORMATION>(buffer.get())	;
 	while (system_process_info->NextEntryOffset)
 	{
 		//
@@ -73,21 +74,11 @@ auto ProcessUtils::GetProcessList() -> std::vector<ProcessElement>
 		);
 	}
 
-	// 
-	// Free the buffer
-	// 
-	VirtualFree(buffer, 0, MEM_RELEASE);
-
 	return processes;
 }
 
 auto ProcessUtils::GetModuleList(const DWORD process_id) -> std::vector<ModuleElement>
 {
-	std::vector<ModuleElement> modules;
-
-	HMODULE module_handles[1024];
-	DWORD cb_needed;
-
 	//
 	// Open the process
 	//
@@ -95,18 +86,22 @@ auto ProcessUtils::GetModuleList(const DWORD process_id) -> std::vector<ModuleEl
 	if (!process_handle.IsValid())
 	{
 		Logger::Log("Failed to get process handle.");
-		return std::vector<ModuleElement>();
+		return {};
 	}
 
 	//
 	// Loop through the modules
 	//
+	std::vector<ModuleElement> modules;
+	HMODULE module_handles[1024];
+	DWORD cb_needed;
 	if (EnumProcessModules(process_handle.Get(), module_handles, sizeof(module_handles), &cb_needed))
 	{
-		for (unsigned long i = 0; i < (cb_needed / sizeof(HMODULE)); i++)
+		modules.reserve(cb_needed / sizeof(HMODULE));
+
+		for (unsigned long i = 0; i < cb_needed / sizeof(HMODULE); i++)
 		{
 			WCHAR file_path[MAX_PATH];
-
 
 			//
 			// Get the full path
@@ -141,7 +136,6 @@ auto ProcessUtils::GetModuleList(const DWORD process_id) -> std::vector<ModuleEl
 			const auto module_file_name = module_file_path.substr(module_file_path.find_last_of(L"/\\") + 1);
 			std::copy(module_file_name.begin(), module_file_name.end(), reinterpret_cast<char*>(module.module_name));
 
-
 			//
 			// Add it to the list
 			//
@@ -155,7 +149,6 @@ auto ProcessUtils::GetModuleList(const DWORD process_id) -> std::vector<ModuleEl
 auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<ModuleElement>
 {
 	const auto memory_source = MemorySource::GetMemorySource(process_id);
-	std::vector<ModuleElement> modules;
 
 	Logger::Log("Creating module list manually.");
 
@@ -166,7 +159,7 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 	if (!process_handle.IsValid())
 	{
 		Logger::Log("Failed to get process handle.");
-		return std::vector<ModuleElement>();
+		return {};
 	}
 
 	//
@@ -176,7 +169,7 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 	if (!NT_SUCCESS(NtQueryInformationProcess(process_handle.Get(), ProcessBasicInformation, &pbi, sizeof(pbi), nullptr)))
 	{
 		Logger::Log("Could not get process information.");
-		return std::vector<ModuleElement>();
+		return {};
 	}
 
 	//
@@ -188,7 +181,7 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 	if (peb_memory == nullptr || peb == nullptr)
 	{
 		Logger::Log("Failed to read PEB from process.");
-		return std::vector<ModuleElement>();
+		return {};
 	}
 
 	//
@@ -200,7 +193,7 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 	if (peb_ldr_data_memory == nullptr || peb_ldr_data == nullptr)
 	{
 		Logger::Log("Failed to read module list from process.");
-		return std::vector<ModuleElement>();
+		return {};
 	}
 
 	//
@@ -209,6 +202,10 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 	const auto ldr_list_head = static_cast<LIST_ENTRY *>(peb_ldr_data->InLoadOrderModuleList.Flink);
 	auto ldr_current_node = peb_ldr_data->InLoadOrderModuleList.Flink;
 
+	// 
+	// Loop through the modules
+	// 
+	std::vector<ModuleElement> modules;
 	do
 	{
 		//
@@ -220,7 +217,7 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 		if (list_entry_memory == nullptr || list_entry == nullptr)
 		{
 			Logger::Log("Could not read list entry from LDR list.");
-			return std::vector<ModuleElement>();
+			return {};
 		}
 
 		//
@@ -264,15 +261,13 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 
 auto ProcessUtils::GetMemoryList(const DWORD process_id) -> std::vector<MemoryElement>
 {
-	std::vector<MemoryElement> memory_list;
-
 	//
 	// Open the process
 	//
 	const auto process_handle = SafeHandle(OpenProcess(PROCESS_ALL_ACCESS, false, process_id));
 	if (!process_handle.IsValid())
 	{
-		return std::vector<MemoryElement>();
+		return {};
 	}
 
 	MEMORY_BASIC_INFORMATION memory_basic_information;
@@ -280,6 +275,7 @@ auto ProcessUtils::GetMemoryList(const DWORD process_id) -> std::vector<MemoryEl
 	// 
 	// Loop through the memory regions
 	// 
+	std::vector<MemoryElement> memory_list;
 	for (BYTE * memory_region_start = nullptr;
 	     VirtualQueryEx(process_handle.Get(), memory_region_start, &memory_basic_information, sizeof(MEMORY_BASIC_INFORMATION64));
 	     memory_region_start += memory_basic_information.RegionSize)

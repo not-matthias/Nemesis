@@ -30,11 +30,6 @@ public:
 	 */
 	explicit IMemorySource(DWORD process_id);
 
-	/**
-	 * \brief Frees the resources.
-	 */
-	virtual ~IMemorySource() = default;
-
 
 	//
 	//

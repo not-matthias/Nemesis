@@ -123,11 +123,6 @@ public:
 	 */
 	Module(ProcessMemory * process_memory, DWORD_PTR base_address);
 
-	/**
-	 * \brief Deletes the section buffers.
-	 */
-	~Module();
-
 
 	//
 	//

@@ -22,7 +22,7 @@ public:
 
 	//
 	//
-	// Constructors/Destructors
+	// Constructor
 	//
 	//
 
@@ -31,11 +31,6 @@ public:
 	 * \param process_id the id of the process
 	 */
 	ProcessMemory(DWORD process_id);
-
-	/**
-	 * \brief Deletes the memory source.
-	 */
-	~ProcessMemory();
 
 
 	//

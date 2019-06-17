@@ -2,7 +2,6 @@
 
 #include "DriverExport.hpp"
 #include "DriverUtils.hpp"
-#include "Logger.hpp"
 
 auto GetDriverListElementExport(const UINT index, Driver * driver) -> BOOL
 {
@@ -25,7 +24,7 @@ auto GetDriverListElementExport(const UINT index, Driver * driver) -> BOOL
 		return FALSE;
 	}
 
-	*driver = driver_list.at(index);
+	*driver = driver_list[index];
 
 	return TRUE;
 }
@@ -34,20 +33,10 @@ auto SaveDriverInformationExport(const LPCSTR file_name) -> BOOL
 {
 	const auto driver_list = DriverUtils::GetDriverList();
 
-	std::ofstream output_file;
-
 	//
 	// Open file
 	//
-	try
-	{
-		output_file.open(file_name, std::ios::app);
-	}
-	catch (std::exception & e)
-	{
-		Logger::Log(e.what());
-		return FALSE;
-	}
+	std::ofstream output_file(file_name, std::ios::app);
 
 	//
 	// Write to file
@@ -58,11 +47,6 @@ auto SaveDriverInformationExport(const LPCSTR file_name) -> BOOL
 		output_file << " -> 0x" << driver.image_base;
 		output_file << " (" << std::hex << driver.image_size << ")" << std::endl;
 	}
-
-	//
-	// Close file
-	//
-	output_file.close();
 
 	return TRUE;
 }

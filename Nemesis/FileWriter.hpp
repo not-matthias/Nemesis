@@ -8,12 +8,6 @@
 
 class FileWriter
 {
-	//
-	//
-	// Variables
-	//
-	//
-
 	/**
 	 * \brief The name of the exported file.
 	 */
@@ -26,29 +20,11 @@ class FileWriter
 
 public:
 
-	//
-	//
-	// Constructors/Destructors
-	//
-	//
-
 	/**
 	 * \brief Stores the parameter.
 	 * \param file_name the name of the dump file
 	 */
 	explicit FileWriter(std::wstring file_name);
-
-	/**
-	 * \brief The default destructor.
-	 */
-	~FileWriter();
-
-
-	//
-	//
-	// Functions
-	//
-	//
 
 	/**
 	 * \brief Writes the module to the file.
@@ -63,13 +39,6 @@ public:
 	 * \return true if successful
 	 */
 	auto WriteToFile(MemoryElement * memory) -> BOOL;
-
-
-	//
-	//
-	// Helper functions
-	//
-	//
 
 	/**
 	 * \brief Writes the specified buffer to the file.

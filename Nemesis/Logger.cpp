@@ -12,14 +12,12 @@ auto Logger::Log(std::wstring format, ...) -> VOID
 	//
 	// Insert the prefix
 	//
-	std::wstring wide_prefix;
-	wide_prefix.assign(prefix.begin(), prefix.end());
-	format.insert(0, wide_prefix);
+	format.insert(format.begin(), prefix.begin(), prefix.end());
 
 	//
 	// Insert new line
 	//
-	format.append(L"\n");
+	format.push_back('\n');
 
 	//
 	// Print it

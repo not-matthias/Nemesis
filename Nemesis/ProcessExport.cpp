@@ -33,7 +33,7 @@ auto GetProcessListElementExport(const UINT index, ProcessElement * process) -> 
 		return FALSE;
 	}
 
-	*process = process_list.at(index);
+	*process = process_list[index];
 
 	return TRUE;
 }
@@ -67,7 +67,7 @@ auto GetModuleListElementExport(const UINT index, const DWORD process_id, Module
 		return FALSE;
 	}
 
-	*module = module_list.at(index);
+	*module = module_list[index];
 
 	return TRUE;
 }
@@ -101,7 +101,7 @@ auto GetManualModuleListElementExport(const UINT index, const DWORD process_id, 
 		return FALSE;
 	}
 
-	*module = module_list.at(index);
+	*module = module_list[index];
 
 	return TRUE;
 }
@@ -135,7 +135,7 @@ auto GetMemoryListElementExport(const UINT index, const DWORD process_id, Memory
 		return FALSE;
 	}
 
-	*memory = memory_list.at(index);
+	*memory = memory_list[index];
 
 	return TRUE;
 }

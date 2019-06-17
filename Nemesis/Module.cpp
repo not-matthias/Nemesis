@@ -6,31 +6,19 @@
 #include "ProcessUtils.hpp"
 #include "ConfigExport.hpp"
 
-Module::Module(ProcessMemory * process_memory)
+Module::Module(ProcessMemory * process_memory) : process_memory(process_memory),
+                                                 base_address(process_memory->GetBaseAddress()),
+                                                 dos_stub(nullptr),
+                                                 dos_stub_size(0),
+                                                 dos_header(nullptr),
+                                                 nt_header32(nullptr),
+                                                 nt_header64(nullptr)
 {
-	this->process_memory = process_memory;
-	this->base_address = process_memory->GetBaseAddress();
-	this->dos_stub_size = 0;
-	this->dos_stub = nullptr;
-	this->dos_header = nullptr;
-	this->nt_header32 = nullptr;
-	this->nt_header64 = nullptr;
 }
 
-Module::Module(ProcessMemory * process_memory, const DWORD_PTR base_address)
+Module::Module(ProcessMemory * process_memory, const DWORD_PTR base_address) : Module(process_memory)
 {
-	this->process_memory = process_memory;
 	this->base_address = base_address;
-	this->dos_stub = nullptr;
-	this->dos_stub_size = 0;
-	this->dos_header = nullptr;
-	this->nt_header32 = nullptr;
-	this->nt_header64 = nullptr;
-}
-
-Module::~Module()
-{
-	sections.clear();
 }
 
 
@@ -383,57 +371,40 @@ auto Module::AlignSectionHeaders() -> VOID
 
 auto Module::FixHeader() -> VOID
 {
-	const DWORD size = dos_header->e_lfanew + sizeof(DWORD) + sizeof(IMAGE_FILE_HEADER);
+	const auto fix_header = [this](auto header)
+	{
+		const DWORD size = dos_header->e_lfanew + sizeof(DWORD) + sizeof(IMAGE_FILE_HEADER);
+
+		//
+		// Remove import directories
+		//
+		header->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT].VirtualAddress = 0;
+		header->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT].Size = 0;
+
+		for (auto i = header->OptionalHeader.NumberOfRvaAndSizes; i < IMAGE_NUMBEROF_DIRECTORY_ENTRIES; i++)
+		{
+			header->OptionalHeader.DataDirectory[i].Size = 0;
+			header->OptionalHeader.DataDirectory[i].VirtualAddress = 0;
+		}
+
+		// 
+		// Set the sizes and base address
+		// 
+		header->OptionalHeader.NumberOfRvaAndSizes = IMAGE_NUMBEROF_DIRECTORY_ENTRIES;
+		header->FileHeader.SizeOfOptionalHeader = sizeof(IMAGE_OPTIONAL_HEADER32);
+		header->OptionalHeader.SizeOfImage = GetImageSize();
+		header->OptionalHeader.ImageBase = static_cast<DWORD>(base_address);
+		header->OptionalHeader.SizeOfHeaders = AlignValue(size + header->FileHeader.SizeOfOptionalHeader + (GetSectionCount() * sizeof(IMAGE_SECTION_HEADER)),
+		                                                  header->OptionalHeader.FileAlignment);
+	};
 
 	if (Is32Bit())
 	{
-		//
-		// Remove import directories
-		//
-		nt_header32->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT].VirtualAddress = 0;
-		nt_header32->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT].Size = 0;
-
-		for (auto i = nt_header32->OptionalHeader.NumberOfRvaAndSizes; i < IMAGE_NUMBEROF_DIRECTORY_ENTRIES; i++)
-		{
-			nt_header32->OptionalHeader.DataDirectory[i].Size = 0;
-			nt_header32->OptionalHeader.DataDirectory[i].VirtualAddress = 0;
-		}
-
-		// 
-		// Set the sizes and base address
-		// 
-		nt_header32->OptionalHeader.NumberOfRvaAndSizes = IMAGE_NUMBEROF_DIRECTORY_ENTRIES;
-		nt_header32->FileHeader.SizeOfOptionalHeader = sizeof(IMAGE_OPTIONAL_HEADER32);
-		nt_header32->OptionalHeader.SizeOfImage = GetImageSize();
-		nt_header32->OptionalHeader.ImageBase = static_cast<DWORD>(base_address);
-		nt_header32->OptionalHeader.SizeOfHeaders = AlignValue(size + nt_header32->FileHeader.SizeOfOptionalHeader +
-		                                                       (GetSectionCount() * sizeof(IMAGE_SECTION_HEADER)),
-		                                                       nt_header32->OptionalHeader.FileAlignment);
+		fix_header(nt_header32);
 	}
 	else
 	{
-		//
-		// Remove import directories
-		//
-		nt_header64->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT].VirtualAddress = 0;
-		nt_header64->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT].Size = 0;
-
-		for (auto i = nt_header64->OptionalHeader.NumberOfRvaAndSizes; i < IMAGE_NUMBEROF_DIRECTORY_ENTRIES; i++)
-		{
-			nt_header64->OptionalHeader.DataDirectory[i].Size = 0;
-			nt_header64->OptionalHeader.DataDirectory[i].VirtualAddress = 0;
-		}
-
-		// 
-		// Set the sizes and base address
-		// 
-		nt_header64->OptionalHeader.NumberOfRvaAndSizes = IMAGE_NUMBEROF_DIRECTORY_ENTRIES;
-		nt_header64->FileHeader.SizeOfOptionalHeader = sizeof(IMAGE_OPTIONAL_HEADER64);
-		nt_header64->OptionalHeader.SizeOfImage = GetImageSize();
-		nt_header64->OptionalHeader.ImageBase = static_cast<DWORD>(base_address);
-		nt_header64->OptionalHeader.SizeOfHeaders = AlignValue(size + nt_header64->FileHeader.SizeOfOptionalHeader +
-		                                                       (GetSectionCount() * sizeof(IMAGE_SECTION_HEADER)),
-		                                                       nt_header64->OptionalHeader.FileAlignment);
+		fix_header(nt_header64);
 	}
 }
 
@@ -507,41 +478,17 @@ auto Module::AlignValue(const DWORD bad_value, const DWORD align_to) -> DWORD
 
 auto Module::IsValidModule() const -> BOOL
 {
-	if (dos_header)
-	{
-		if (dos_header->e_magic == IMAGE_DOS_SIGNATURE)
-		{
-			if (nt_header32)
-			{
-				if (nt_header32->Signature == IMAGE_NT_SIGNATURE)
-				{
-					return true;
-				}
-			}
-		}
-	}
-
-	return false;
+	return dos_header && dos_header->e_magic == IMAGE_DOS_SIGNATURE && nt_header32 && nt_header32->Signature == IMAGE_NT_SIGNATURE;
 }
 
 auto Module::Is64Bit() const -> BOOL
 {
-	if (IsValidModule())
-	{
-		return (nt_header32->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR64_MAGIC);
-	}
-
-	return FALSE;
+	return IsValidModule() && (nt_header32->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR64_MAGIC);
 }
 
 auto Module::Is32Bit() const -> BOOL
 {
-	if (IsValidModule())
-	{
-		return (nt_header32->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR32_MAGIC);
-	}
-
-	return FALSE;
+	return IsValidModule() && (nt_header32->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR32_MAGIC);
 }
 
 

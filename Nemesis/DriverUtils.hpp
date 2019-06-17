@@ -25,6 +25,14 @@ typedef struct _RTL_PROCESS_MODULES
 	RTL_PROCESS_MODULE_INFORMATION Modules[1];
 } RTL_PROCESS_MODULES, *PRTL_PROCESS_MODULES;
 
+struct MemoryDisposer
+{
+	void operator()(const PVOID buffer) const
+	{
+		VirtualFree(buffer, 0, MEM_RELEASE);
+	}
+};
+
 class DriverUtils
 {
 public:

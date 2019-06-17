@@ -4,12 +4,10 @@
 #include "ProcessMemory.hpp"
 #include "UsermodeMemory.hpp"
 
-ProcessMemory::ProcessMemory(const DWORD process_id)
+ProcessMemory::ProcessMemory(const DWORD process_id) : process_id(process_id)
 {
-	this->process_id = process_id;
 }
 
-ProcessMemory::~ProcessMemory() = default;
 
 auto ProcessMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size) const -> std::shared_ptr<BYTE>
 {

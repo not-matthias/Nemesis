@@ -25,11 +25,6 @@ public:
 	explicit Config(std::wstring_view app_name, std::wstring_view file_name);
 
 	/**
-	 * \brief The default destructor.
-	 */
-	~Config();
-
-	/**
 	 * \brief Sets the key and value in the config.
 	 * \param key the specified key
 	 * \param value the specified value for the key

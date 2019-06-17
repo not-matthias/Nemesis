@@ -22,12 +22,17 @@ auto KernelMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size) 
 	}
 
 	//
+	// Create memory
+	//
+	const std::shared_ptr<BYTE> buffer(new BYTE[size], [](const BYTE * memory) { delete[] memory; });
+
+	//
 	// Create the struct
 	//
 	READ_REQUEST read_request;
 	read_request.process_id = process_id;
 	read_request.target_address = start_address;
-	read_request.buffer_address = new BYTE[size];
+	read_request.buffer_address = buffer.get();
 	read_request.buffer_size = size;
 
 	//
@@ -35,7 +40,6 @@ auto KernelMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size) 
 	//
 	if (DeviceIoControl(driver_handle.Get(), IOCTL_READ_REQUEST, &read_request, sizeof(read_request), &read_request, sizeof(read_request), nullptr, nullptr))
 	{
-		const auto buffer = std::shared_ptr<BYTE>(read_request.buffer_address, [](BYTE * p) { delete[] p; });
 		return buffer;
 	}
 	else

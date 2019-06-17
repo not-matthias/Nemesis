@@ -7,9 +7,6 @@ FileWriter::FileWriter(std::wstring file_name) : file_name(std::move(file_name))
 {
 }
 
-FileWriter::~FileWriter() = default;
-
-
 auto FileWriter::WriteToFile(Module * module) -> BOOL
 {
 	Logger::Log("Writing to the file '%s'.", file_name.data());
@@ -250,7 +247,7 @@ auto FileWriter::WriteMemoryToFile(const LONG offset, const DWORD size, const st
 
 auto FileWriter::WriteZeroMemoryToFile(const LONG offset, const DWORD size) const -> BOOL
 {
-	const std::shared_ptr<BYTE> buffer(new BYTE[size], [](const BYTE * memory) { delete[] memory; });
+	const std::shared_ptr<BYTE> buffer(new BYTE[size]{0}, [](const BYTE * memory) { delete[] memory; });
 
 	//
 	// Check the memory_buffer

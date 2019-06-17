@@ -4,31 +4,33 @@
 
 auto DriverUtils::GetDriverList() -> std::vector<Driver>
 {
-	std::vector<Driver> drivers;
-
 	//
 	// Allocate memory for the module list
 	//
 	const auto buffer = VirtualAlloc(nullptr, 1024 * 1024, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
-	const auto module_info = static_cast<PRTL_PROCESS_MODULES>(buffer);
+	std::unique_ptr<RTL_PROCESS_MODULES, MemoryDisposer> module_info(reinterpret_cast<PRTL_PROCESS_MODULES>(buffer), MemoryDisposer{});
 
 	//
 	// Check if the buffer is valid
 	//
 	if (!module_info)
 	{
-		return std::vector<Driver>();
+		return {};
 	}
 
 	//
 	// Query the system information (aka drivers)
 	//
-	if (!NT_SUCCESS(NtQuerySystemInformation(static_cast<SYSTEM_INFORMATION_CLASS>(11), module_info, 1024 * 1024, NULL))
-	)
+	if (!NT_SUCCESS(NtQuerySystemInformation(static_cast<SYSTEM_INFORMATION_CLASS>(11), module_info.get(), 1024 * 1024, NULL)))
 	{
-		VirtualFree(module_info, 0, MEM_RELEASE);
-		return std::vector<Driver>();
+		return {};
 	}
+
+	//
+	// Create driver list
+	//
+	std::vector<Driver> drivers;
+	drivers.reserve(module_info->number_of_modules);
 
 	//
 	// Loop through the drivers
@@ -44,19 +46,15 @@ auto DriverUtils::GetDriverList() -> std::vector<Driver>
 		driver.offset_to_file_name = module_info->Modules[i].offset_to_file_name;
 
 		const auto full_path_name = module_info->Modules[i].full_path_name;
-		std::string path_name(full_path_name, full_path_name + strlen(reinterpret_cast<const char*>(full_path_name)));
-		std::copy(path_name.begin(), path_name.end(), driver.full_path_name);
+		const auto string_size = std::strlen(reinterpret_cast<char const *>(full_path_name));
+		//std::copy(full_path_name[0], full_path_name[string_size], driver.full_path_name);
+		// TODO: Find proper way to do this.
 
 		//
 		// Add the driver to the list
 		//
 		drivers.push_back(driver);
 	}
-
-	//
-	// Free the buffer
-	//
-	VirtualFree(module_info, 0, MEM_RELEASE);
 
 	return drivers;
 }
