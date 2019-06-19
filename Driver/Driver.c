@@ -3,18 +3,8 @@
 #include "ntos.h"
 #include <ntdef.h>
 
-#define DEBUG
-
-//
-// IOCTLs
-//
 #define IOCTL_READ_REQUEST				CTL_CODE(FILE_DEVICE_UNKNOWN, 0x2222, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
 #define IOCTL_BASE_ADDRESS_REQUEST		CTL_CODE(FILE_DEVICE_UNKNOWN, 0x2223, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
-
-
-//
-// Structures
-//
 
 /**
  * \brief The struct for the kernel read request.
@@ -55,16 +45,16 @@ typedef struct _BASE_ADDRESS_REQUEST
 } BASE_ADDRESS_REQUEST, *PBASE_ADDRESS_REQUEST;
 
 
-//
-// Variables
-//
 UNICODE_STRING symbolic_link_name;
 
-
-//
-// Helper function
-//
-
+/**
+ * \brief Copies the specified memory into the target address.
+ * \param process_id The process id of the target process.	
+ * \param source_address The source buffer address.
+ * \param target_address The target buffer address.
+ * \param buffer_size The size of the specified buffer.
+ * \return STATUS_UNSUCCESSFUL or STATUS_SUCCESS
+ */
 NTSTATUS CopyVirtualMemory(const HANDLE process_id, const PVOID source_address, const PVOID target_address, const SIZE_T buffer_size)
 {
 	NTSTATUS status = STATUS_UNSUCCESSFUL;
@@ -117,9 +107,12 @@ EXIT:
 	return status;
 }
 
-//
-// Device Handler
-//
+/**
+ * \brief Handles the usermode requests. 
+ * \param device_object 
+ * \param irp 
+ * \return STATUS_SUCCESS or STATUS_INVALID_PARAMETER
+ */
 NTSTATUS DeviceControl(PDEVICE_OBJECT device_object, const PIRP irp)
 {
 	UNREFERENCED_PARAMETER(device_object);
@@ -214,10 +207,10 @@ NTSTATUS DeviceControl(PDEVICE_OBJECT device_object, const PIRP irp)
 	return status;
 }
 
-
-//
-// Unload the driver
-//
+/**
+ * \brief Deletes the symbolic link and device object.
+ * \param driver_object
+ */
 VOID DriverUnload(const PDRIVER_OBJECT driver_object)
 {
 	//
@@ -233,7 +226,12 @@ VOID DriverUnload(const PDRIVER_OBJECT driver_object)
 	DbgPrint("Driver unloaded.\n");
 }
 
-
+/**
+ * \brief Sets the io status to STATUS_NOT_SUPPORTED.
+ * \param device_object 
+ * \param irp 
+ * \return STATUS_NOT_SUPPORTED
+ */
 NTSTATUS UnsupportedDispatch(PDEVICE_OBJECT device_object, const PIRP irp)
 {
 	UNREFERENCED_PARAMETER(device_object);
@@ -243,6 +241,12 @@ NTSTATUS UnsupportedDispatch(PDEVICE_OBJECT device_object, const PIRP irp)
 	return irp->IoStatus.Status;
 }
 
+/**
+ * \brief Gets called whenever a handle to the driver has been created.
+ * \param device_object 
+ * \param irp 
+ * \return The io status of the irp
+ */
 NTSTATUS CreateDispatch(PDEVICE_OBJECT device_object, const PIRP irp)
 {
 	UNREFERENCED_PARAMETER(device_object);
@@ -251,6 +255,12 @@ NTSTATUS CreateDispatch(PDEVICE_OBJECT device_object, const PIRP irp)
 	return irp->IoStatus.Status;
 }
 
+/**
+ * \brief Gets called whenever the handle has been closed.
+ * \param device_object 
+ * \param irp 
+ * \return The io status of the irp
+ */
 NTSTATUS CloseDispatch(PDEVICE_OBJECT device_object, const PIRP irp)
 {
 	UNREFERENCED_PARAMETER(device_object);
@@ -259,9 +269,12 @@ NTSTATUS CloseDispatch(PDEVICE_OBJECT device_object, const PIRP irp)
 	return irp->IoStatus.Status;
 }
 
-//
-// Creates a new driver
-//
+/**
+ * \brief Initializes the driver (device object, symbolic link, major functions, ...)
+ * \param driver_object
+ * \param registry_path 
+ * \return STATUS_SUCCESS or STATUS_UNSUCCESSFUL 
+ */
 NTSTATUS DriverInitialize(PDRIVER_OBJECT driver_object, PUNICODE_STRING registry_path)
 {
 	UNREFERENCED_PARAMETER(registry_path);
@@ -321,9 +334,12 @@ NTSTATUS DriverInitialize(PDRIVER_OBJECT driver_object, PUNICODE_STRING registry
 	return STATUS_SUCCESS;
 }
 
-//
-// Entry Point
-//
+/**
+ * \brief Calls IoCreateDriver to create a new driver object.
+ * \param driver_object 
+ * \param registry_path 
+ * \return The status of IoCreateDriver
+ */
 NTSTATUS DriverEntry(PDRIVER_OBJECT driver_object, PUNICODE_STRING registry_path)
 {
 	UNREFERENCED_PARAMETER(driver_object);
