@@ -27,7 +27,6 @@ public:
 	 */
 	SafeHandle(HANDLE handle);
 
-
 	/**
 	 * \brief Returns the managed handle.
 	 * \return The managed handle.

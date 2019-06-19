@@ -7,12 +7,6 @@
 
 class UsermodeMemory final : public IMemorySource
 {
-	//
-	//
-	// Variables
-	//
-	//
-
 	/**
 	 * \brief The process handle.
 	 */
@@ -20,24 +14,11 @@ class UsermodeMemory final : public IMemorySource
 
 public:
 
-	//
-	//
-	// Constructor
-	//
-	//
-
 	/**
 	 * \brief Opens the process.
 	 * \param process_id the id of the process
 	 */
 	explicit UsermodeMemory(DWORD process_id);
-
-
-	//
-	//
-	// Important functions
-	//
-	//
 
 	/**
 	 * \brief Reads the memory from the process.
@@ -47,25 +28,11 @@ public:
 	 */
 	auto ReadMemory(DWORD_PTR start_address, SIZE_T size) -> std::shared_ptr<BYTE> override;
 
-
-	//
-	//
-	// Checks
-	//
-	//
-
 	/**
 	 * \brief Checks whether the memory source is valid.
 	 * \return true if valid
 	 */
 	auto IsValid() -> BOOL override;
-
-
-	//
-	//
-	// Getters
-	//
-	//
 
 	/**
 	 * \brief Returns the base address.

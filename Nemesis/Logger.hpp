@@ -4,24 +4,12 @@
 
 class Logger
 {
-	//
-	//
-	// Variables
-	//
-	//
-
 	/**
 	 * \brief Will be inserted at the beginning of the log.
 	 */
 	static std::string prefix;
 
 public:
-
-	//
-	//
-	// Important functions
-	//
-	//
 
 	/**
 	 * \brief Prints the specified wide string.

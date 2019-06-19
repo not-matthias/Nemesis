@@ -14,11 +14,6 @@ class MemorySource
 	static std::vector<std::wstring> memory_sources;
 
 public:
-	//
-	//
-	// Important functions
-	//
-	//
 
 	/**
 	 * \brief Returns the memory source.

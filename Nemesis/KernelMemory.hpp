@@ -5,12 +5,6 @@
 #include "IMemorySource.hpp"
 #include "SafeHandle.hpp"
 
-//
-//
-// IOCTLs
-//
-//
-
 /**
  * \brief The read request ioctl
  */
@@ -20,13 +14,6 @@
  * \brief The base address request ioctl
  */
 #define IOCTL_BASE_ADDRESS_REQUEST		CTL_CODE(FILE_DEVICE_UNKNOWN, 0x2223, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
-
-
-//
-//
-// Structures
-//
-//
 
 /**
  * \brief The struct for the kernel read request.
@@ -69,12 +56,6 @@ typedef struct _BASE_ADDRESS_REQUEST
 
 class KernelMemory final : public IMemorySource
 {
-	//
-	//
-	// Variables
-	//
-	//
-
 	/**
 	 * \brief The symbolic link for the driver.
 	 */
@@ -87,24 +68,11 @@ class KernelMemory final : public IMemorySource
 
 public:
 
-	//
-	//
-	// Constructor
-	//
-	//
-
 	/**
 	 * \brief Connects to the driver.
 	 * \param process_id the id of the process
 	 */
 	explicit KernelMemory(DWORD process_id);
-
-
-	//
-	//
-	// Important functions
-	//
-	//
 
 	/**
 	 * \brief Reads the memory from the process.
@@ -114,25 +82,11 @@ public:
 	 */
 	auto ReadMemory(DWORD_PTR start_address, SIZE_T size) -> std::shared_ptr<BYTE> override;
 
-
-	//
-	//
-	// Checks
-	//
-	//
-
 	/**
 	 * \brief Checks whether the memory source is valid.
 	 * \return true if valid
 	 */
 	auto IsValid() -> BOOL override;
-
-
-	//
-	//
-	// Getters
-	//
-	//
 
 	/**
 	 * \brief Returns the base address.

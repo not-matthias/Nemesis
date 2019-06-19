@@ -36,6 +36,7 @@ struct MemoryDisposer
 class DriverUtils
 {
 public:
+
 	/**
 	 * \brief Creates the driver list.
 	 * \return the driver list

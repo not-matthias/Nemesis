@@ -19,6 +19,7 @@ class Module
 	DWORD_PTR base_address;
 
 public:
+
 	/**
 	 * \brief The default file alignment constant.
 	 */
@@ -56,12 +57,6 @@ public:
 	std::vector<Section> sections;
 
 private:
-
-	//
-	//
-	// Init Functions
-	//
-	//
 
 	/**
 	 * \brief Reads the header from the memory.
@@ -104,12 +99,6 @@ private:
 
 public:
 
-	//
-	//
-	// Constructors/Destructors
-	//
-	//
-
 	/**
 	 * \brief Stores the parameters.
 	 * \param process_memory used for reading the memory
@@ -123,12 +112,6 @@ public:
 	 */
 	Module(ProcessMemory * process_memory, DWORD_PTR base_address);
 
-
-	//
-	//
-	// Important functions
-	//
-	//
 
 	/**
 	 * \brief Initializes the module.
@@ -163,12 +146,6 @@ public:
 	auto RemoveIat() -> VOID;
 
 
-	//
-	//
-	// Helper functions
-	//
-	//
-
 	/**
 	 * \brief Finds the instruction count in the data.
 	 * \param data the memory buffer
@@ -185,12 +162,6 @@ public:
 	 */
 	static auto AlignValue(DWORD bad_value, DWORD align_to) -> DWORD;
 
-
-	//
-	//
-	// Checks
-	//
-	//
 
 	/**
 	 * \brief Checks whether the module is valid.
@@ -210,12 +181,6 @@ public:
 	 */
 	auto Is32Bit() const -> BOOL;
 
-
-	//
-	//
-	// Getters
-	//
-	//
 
 	/**
 	 * \brief Returns the image size.

@@ -6,38 +6,18 @@
 
 class ProcessMemory
 {
-	//
-	//
-	// Variables
-	//
-	//
-
 	/**
 	 * \brief The id of the process.
 	 */
 	DWORD process_id;
 
-
 public:
-
-	//
-	//
-	// Constructor
-	//
-	//
 
 	/**
 	 * \brief Stores the parameters.
 	 * \param process_id the id of the process
 	 */
 	ProcessMemory(DWORD process_id);
-
-
-	//
-	//
-	// Important functions
-	//
-	//
 
 	/**
 	  * \brief Reads memory from the process. (e.g. float)
@@ -59,25 +39,11 @@ public:
 	 */
 	auto ReadMemory(DWORD_PTR start_address, SIZE_T size) const -> std::shared_ptr<BYTE>;
 
-
-	//
-	//
-	// Checks
-	//
-	//
-
 	/**
 	 * \brief Checks whether the memory is valid.
 	 * \return true if successful
 	 */
 	auto IsValid() const -> BOOL;
-
-
-	//
-	//
-	// Getters
-	//
-	//
 
 	/**
 	 * \brief Returns the base address.

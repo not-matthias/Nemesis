@@ -6,7 +6,6 @@ SafeHandle::SafeHandle(const HANDLE handle) : handle(handle, HandleDisposer{})
 {
 }
 
-
 auto SafeHandle::Get() const -> HANDLE
 {
 	return handle.get();

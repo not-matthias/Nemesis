@@ -5,11 +5,6 @@
 class IMemorySource
 {
 protected:
-	//
-	//
-	// Variables
-	//
-	//
 
 	/**
 	 * \brief The process id.
@@ -18,24 +13,11 @@ protected:
 
 public:
 
-	//
-	//
-	// Constructors/Destructors
-	//
-	//
-
 	/**
 	 * \brief Stores the parameters.
 	 * \param process_id the id of the process
 	 */
 	explicit IMemorySource(DWORD process_id);
-
-
-	//
-	//
-	// Important functions
-	//
-	//
 
 	/**
 	 * \brief Reads the memory from the process.
@@ -44,26 +26,12 @@ public:
 	 * \return the memory buffer
 	 */
 	virtual auto ReadMemory(DWORD_PTR start_address, SIZE_T size) -> std::shared_ptr<BYTE> = 0;
-
-
-	//
-	//
-	// Checks
-	//
-	//
-
+	
 	/**
 	 * \brief Checks whether the memory source is valid.
 	 * \return true if valid
 	 */
 	virtual auto IsValid() -> BOOL = 0;
-
-
-	//
-	//
-	// Getters
-	//
-	//
 
 	/**
 	 * \brief Returns the base address.
