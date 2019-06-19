@@ -2,6 +2,7 @@
 
 #include "Logger.hpp"
 #include "UsermodeMemory.hpp"
+#include "SmartMemory.hpp"
 
 UsermodeMemory::UsermodeMemory(const DWORD process_id) : IMemorySource(process_id)
 {
@@ -21,6 +22,7 @@ auto UsermodeMemory::ReadMemory(const DWORD_PTR start_address, const SIZE_T size
 		return nullptr;
 	}
 
+	//SmartMemory buffer(size);
 	const auto buffer = std::shared_ptr<BYTE>(new BYTE[size], [](const BYTE * memory) { delete[] memory; });
 	SIZE_T bytes_read;
 	DWORD old_protect;

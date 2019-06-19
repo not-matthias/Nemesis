@@ -3,14 +3,14 @@
 #include <Windows.h>
 
 #include "IMemorySource.hpp"
-#include "SafeHandle.hpp"
+#include "SmartHandle.hpp"
 
 class UsermodeMemory final : public IMemorySource
 {
 	/**
 	 * \brief The process handle.
 	 */
-	SafeHandle process_handle = nullptr;
+	SmartHandle process_handle = nullptr;
 
 public:
 

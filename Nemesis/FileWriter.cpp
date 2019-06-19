@@ -23,7 +23,7 @@ auto FileWriter::WriteToFile(Module * module) -> BOOL
 	//
 	// Create the file
 	//
-	file_handle = SafeHandle(CreateFile(file_name.c_str(), GENERIC_WRITE, FILE_SHARE_WRITE, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr));
+	file_handle = SmartHandle(CreateFile(file_name.c_str(), GENERIC_WRITE, FILE_SHARE_WRITE, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr));
 	if (!file_handle.IsValid())
 	{
 		return FALSE;
@@ -192,7 +192,7 @@ auto FileWriter::WriteToFile(MemoryElement * memory) -> BOOL
 	//
 	// Create the file
 	//
-	file_handle = SafeHandle(CreateFile(file_name.c_str(), GENERIC_WRITE, FILE_SHARE_WRITE, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr));
+	file_handle = SmartHandle(CreateFile(file_name.c_str(), GENERIC_WRITE, FILE_SHARE_WRITE, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr));
 	if (!file_handle.IsValid())
 	{
 		return FALSE;

@@ -24,4 +24,6 @@ public:
 	 * \param size The size of the buffer.
 	 */
 	SmartMemory(SIZE_T size);
+
+	auto get() -> BYTE*;
 };

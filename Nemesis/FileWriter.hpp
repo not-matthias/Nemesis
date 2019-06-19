@@ -4,7 +4,7 @@
 
 #include "Memory.hpp"
 #include "Module.hpp"
-#include "SafeHandle.hpp"
+#include "SmartHandle.hpp"
 
 class FileWriter
 {
@@ -16,7 +16,7 @@ class FileWriter
 	/**
 	 * \brief The handle to the file.
 	 */
-	SafeHandle file_handle = nullptr;
+	SmartHandle file_handle = nullptr;
 
 public:
 

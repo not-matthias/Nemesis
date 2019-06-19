@@ -14,7 +14,7 @@ auto FileReader::Read(const LONG offset, const DWORD size) -> std::shared_ptr<BY
 	//
 	// Create the file
 	//
-	file_handle = SafeHandle(CreateFile(path.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr));
+	file_handle = SmartHandle(CreateFile(path.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr));
 	if (!file_handle.IsValid())
 	{
 		return nullptr;

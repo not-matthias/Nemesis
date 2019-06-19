@@ -4,7 +4,7 @@
 #include "Logger.hpp"
 #include "ProcessUtils.hpp"
 #include "MemorySource.h"
-#include "SafeHandle.hpp"
+#include "SmartHandle.hpp"
 
 auto ProcessUtils::GetProcessList() -> std::vector<ProcessElement>
 {
@@ -82,7 +82,7 @@ auto ProcessUtils::GetModuleList(const DWORD process_id) -> std::vector<ModuleEl
 	//
 	// Open the process
 	//
-	const auto process_handle = SafeHandle(OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, process_id));
+	const auto process_handle = SmartHandle(OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, process_id));
 	if (!process_handle.IsValid())
 	{
 		Logger::Log("Failed to get process handle.");
@@ -155,7 +155,7 @@ auto ProcessUtils::GetModuleListManually(const DWORD process_id) -> std::vector<
 	//
 	// Get process handle
 	//
-	const auto process_handle = SafeHandle(OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, process_id));
+	const auto process_handle = SmartHandle(OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, process_id));
 	if (!process_handle.IsValid())
 	{
 		Logger::Log("Failed to get process handle.");
@@ -264,7 +264,7 @@ auto ProcessUtils::GetMemoryList(const DWORD process_id) -> std::vector<MemoryEl
 	//
 	// Open the process
 	//
-	const auto process_handle = SafeHandle(OpenProcess(PROCESS_ALL_ACCESS, false, process_id));
+	const auto process_handle = SmartHandle(OpenProcess(PROCESS_ALL_ACCESS, false, process_id));
 	if (!process_handle.IsValid())
 	{
 		return {};
@@ -306,7 +306,7 @@ auto ProcessUtils::GetFilePath(const DWORD process_id) -> std::wstring
 	//
 	// Get the path
 	//
-	const auto process_handle = SafeHandle(OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, process_id));
+	const auto process_handle = SmartHandle(OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, process_id));
 	if (process_handle.IsValid())
 	{
 		if (!(length = GetModuleFileNameEx(process_handle.Get(), nullptr, const_cast<LPWSTR>(path.data()), path.size())))

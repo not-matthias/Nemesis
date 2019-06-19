@@ -3,7 +3,7 @@
 #include <string>
 #include <Windows.h>
 
-#include "SafeHandle.hpp"
+#include "SmartHandle.hpp"
 
 class FileReader
 {
@@ -15,7 +15,7 @@ class FileReader
 	/**
 	 * \brief The handle to the file.
 	 */
-	SafeHandle file_handle = nullptr;
+	SmartHandle file_handle = nullptr;
 
 public:
 

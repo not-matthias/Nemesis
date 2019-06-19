@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "KernelMemory.hpp"
+#include "SmartMemory.hpp"
 
 KernelMemory::KernelMemory(const DWORD process_id) : IMemorySource(process_id)
 {

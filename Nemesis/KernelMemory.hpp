@@ -3,7 +3,7 @@
 #include <Windows.h>
 
 #include "IMemorySource.hpp"
-#include "SafeHandle.hpp"
+#include "SmartHandle.hpp"
 
 /**
  * \brief The read request ioctl
@@ -64,7 +64,7 @@ class KernelMemory final : public IMemorySource
 	/**
 	 * \brief The driver handle.
 	 */
-	SafeHandle driver_handle = nullptr;
+	SmartHandle driver_handle = nullptr;
 
 public:
 
