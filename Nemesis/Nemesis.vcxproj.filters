@@ -60,9 +60,6 @@
     <ClInclude Include="UsermodeMemory.hpp">
       <Filter>Header Files\Memory\Sources</Filter>
     </ClInclude>
-    <ClInclude Include="FileWriter.hpp">
-      <Filter>Header Files\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="Module.hpp">
       <Filter>Header Files\PortableExecutable</Filter>
     </ClInclude>
@@ -90,9 +87,6 @@
     <ClInclude Include="ProcessUtils.hpp">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="FileReader.hpp">
-      <Filter>Header Files\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="Config.hpp">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
@@ -102,7 +96,10 @@
     <ClInclude Include="ConfigExport.hpp">
       <Filter>Header Files\Exports</Filter>
     </ClInclude>
-    <ClInclude Include="SafeHandle.hpp">
+    <ClInclude Include="SmartHandle.hpp">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="SmartMemory.hpp">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
   </ItemGroup>
@@ -170,7 +167,10 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SafeHandle.cpp">
+    <ClCompile Include="SmartHandle.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="SmartMemory.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
   </ItemGroup>

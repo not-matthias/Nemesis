@@ -24,8 +24,6 @@
     <ClInclude Include="DriverExport.hpp" />
     <ClInclude Include="DriverUtils.hpp" />
     <ClInclude Include="DumpExport.hpp" />
-    <ClInclude Include="FileReader.hpp" />
-    <ClInclude Include="FileWriter.hpp" />
     <ClInclude Include="IMemorySource.hpp" />
     <ClInclude Include="KernelMemory.hpp" />
     <ClInclude Include="Logger.hpp" />
@@ -34,9 +32,10 @@
     <ClInclude Include="MemorySourceExport.hpp" />
     <ClInclude Include="ProcessExport.hpp" />
     <ClInclude Include="ProcessUtils.hpp" />
-    <ClInclude Include="SafeHandle.hpp" />
+    <ClInclude Include="SmartHandle.hpp" />
     <ClInclude Include="Section.hpp" />
     <ClInclude Include="ProcessMemory.hpp" />
+    <ClInclude Include="SmartMemory.hpp" />
     <ClInclude Include="UsermodeMemory.hpp" />
     <ClInclude Include="Module.hpp" />
   </ItemGroup>
@@ -58,7 +57,8 @@
     <ClCompile Include="ProcessExport.cpp" />
     <ClCompile Include="ProcessUtils.cpp" />
     <ClCompile Include="ProcessMemory.cpp" />
-    <ClCompile Include="SafeHandle.cpp" />
+    <ClCompile Include="SmartHandle.cpp" />
+    <ClCompile Include="SmartMemory.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

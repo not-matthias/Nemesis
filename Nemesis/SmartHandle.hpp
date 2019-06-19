@@ -11,12 +11,11 @@ struct HandleDisposer
 	}
 };
 
-class SafeHandle
+class SmartHandle
 {
 	/**
 	 * \brief The handle which should be managed.
 	 */
-	//std::unique_ptr<HANDLE, HandleDisposer> handle;
 	std::shared_ptr<VOID> handle;
 
 public:
@@ -25,7 +24,7 @@ public:
 	 * \brief Initializes the shared pointer.
 	 * \param handle The specified handle.
 	 */
-	SafeHandle(HANDLE handle);
+	SmartHandle(HANDLE handle);
 
 	/**
 	 * \brief Returns the managed handle.
