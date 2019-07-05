@@ -4,6 +4,27 @@ A customizable process dumper.
 
 ![alt](https://user-images.githubusercontent.com/26800596/59287543-22d42680-8c72-11e9-8f27-c4c6f132850a.png)
 
+## Usage
+
+Just select whatever you want (Process, Dll, Driver, ...) and click on the dump button. If it was successful, you can load the file into decompilers like [IDA Pro], [Ghidra] or [Binary Ninja]. Some of these programs are available for free but of course they won't be as good as the paid ones. Here's a short list of the different versions:
+
+Paid: 
+- [IDA Pro]
+- [Binary Ninja]
+
+Free:
+- [Ghidra]
+- [IDA Freeware]
+- [Binary Ninja Demo]
+
+[IDA Pro]: https://www.hex-rays.com/products/ida/index.shtml
+[Ghidra]: https://ghidra-sre.org/
+[Binary Ninja]: https://binary.ninja/
+[IDA Freeware]: https://www.hex-rays.com/products/ida/support/download_freeware.shtml
+[Binary Ninja Demo]: https://binary.ninja/demo/
+
+> Note: If you want another decompiler added, feel free to create a pull request or issue.
+
 ## Features
 
 ### General
