@@ -6,7 +6,7 @@ A customizable process dumper.
 
 ## Usage
 
-Just select whatever you want (Process, Dll, Driver, ...) and click on the dump button. If it was successful, you can load the file into decompilers like [IDA Pro], [Ghidra] or [Binary Ninja]. Some of these programs are available for free but of course they won't be as good as the paid ones. Here's a short list of the different versions:
+Just select whatever you want (Process, Dll, Driver, ...) and click on the dump button. If it was successful, you can load the file into decompilers like [IDA Pro], [Ghidra] or [Binary Ninja]. Some of these programs are available for free, but of course they won't be as good as the paid ones. Here's a short list of the different versions:
 
 Paid: 
 - [IDA Pro]
